@@ -1,4 +1,3 @@
-import TestLayout from "../../../layouts/testLayout";
 import Tablet from "@/components/Tablet";
 import { TabletProps } from "@/components/Tablet";
 
@@ -33,7 +32,6 @@ let blockData: BlockData = {
 };
 
   return (
-    <TestLayout>
       <div className="flex flex-column">
         {blockData.rows[0].tablets.map((tablet) => 
           {
@@ -45,8 +43,6 @@ let blockData: BlockData = {
             />
           }
         )}
-        
       </div>
-    </TestLayout>
   );
 }
