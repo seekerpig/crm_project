@@ -1,6 +1,6 @@
 import TestLayout from "../../../layouts/testLayout";
-import Tablet from "@/app/components/Tablet";
-import { TabletProps } from "@/app/components/Tablet";
+import Tablet from "@/components/Tablet";
+import { TabletProps } from "@/components/Tablet";
 
 export interface BlockData {
   rows: BlockRow[];
