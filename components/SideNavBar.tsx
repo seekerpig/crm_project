@@ -3,66 +3,16 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { FirebaseApp } from "firebase/app";
-import { User } from "firebase/auth";
 import {
-	signInWithGoogle,
 	signOut,
-	onAuthStateChanged
 } from "@/lib/firebase/auth.js";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 
+import { useAuth } from "@/app/context/AuthProvider";
 
-interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
-    user: {
-      app: null;
-      currentUser: null;
-  } | {
-      app: FirebaseApp;
-      user: object;
-      currentUser?: undefined;
-  } | {
-      app: FirebaseApp;
-      currentUser: User | null;
-      user?: undefined;
-  }
-}
-
-function useUserSession(initialUser: any) {
-	// The initialUser comes from the server via a server component
-	const [user, setUser] = useState(initialUser);
-	const router = useRouter()
-
-	useEffect(() => {
-		const unsubscribe = onAuthStateChanged((authUser: any) => {
-			setUser(authUser)
-		})
-
-		return () => unsubscribe()
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
-
-	useEffect(() => {
-		onAuthStateChanged((authUser: any) => {
-			if (user === undefined) return
-
-			// refresh when user changed to ease testing
-			if (user?.email !== authUser?.email) {
-				router.refresh()
-			}
-		})
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [user])
-
-	return user;
-}
-
-export function SideNavBar({ className, user }: SidebarProps) {
+export function SideNavBar(className: React.HTMLAttributes<HTMLDivElement>) {
   const pathname = usePathname();
-
-  const currentUser = useUserSession(user) ;
-
+  const currentUser = useAuth();
+  
   return (
     <div className={cn("pb-12", className)}>
       <div className="space-y-4 py-4">
@@ -148,7 +98,7 @@ export function SideNavBar({ className, user }: SidebarProps) {
                   <circle cx="8" cy="18" r="4" />
                   <path d="M12 18V2l7 4" />
                 </svg>
-                Invoice Management
+                Manage Invoices
               </Button>
             </Link>
             <Link href="/accountmanagement">
@@ -157,7 +107,7 @@ export function SideNavBar({ className, user }: SidebarProps) {
                   <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
                   <circle cx="12" cy="7" r="4" />
                 </svg>
-                Account Management
+                Manage Accounts
               </Button>
             </Link>
           </div>
@@ -165,16 +115,16 @@ export function SideNavBar({ className, user }: SidebarProps) {
         <div className="py-2">
           <h2 className="relative px-7 text-lg font-semibold tracking-tight hidd">User</h2>
           <div className="space-y-1 p-2">
-            <Link href="/logout" className={currentUser?.currentUser ? 'block' : 'hidden'}>
+            <div className={currentUser?.email ? 'block' : 'hidden'} onClick={signOut}>
               <Button variant="ghost" className="w-full justify-start">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 h-4 w-4">
                   <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
                   <circle cx="12" cy="7" r="4" />
                 </svg>
-                {currentUser?.currentUser?.displayName ? currentUser?.currentUser?.displayName : 'Error'}
+                {currentUser?.email ? currentUser?.email : 'Error'}
               </Button>
-            </Link>
-            <Link href="/login" className={currentUser?.currentUser ? 'hidden' : 'block'}>
+            </div>
+            <Link href="/login" className={currentUser?.email ? 'hidden' : 'block'}>
               <Button variant={`${pathname === "/login" ? "secondary" : "ghost"}`} className="w-full justify-start">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 h-4 w-4">
                   <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
