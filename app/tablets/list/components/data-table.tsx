@@ -13,6 +13,17 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
+// async function pushMockDataToFirebase(apps: TabletApplication[]) {
+//   apps.forEach(async (app: TabletApplication) => {
+//     try {
+//       await setDoc(doc(db, "tabletapplications", app.ApplicationID.toString()), app)
+//       console.log("Successfully added:" + app.ApplicationID);
+//     }
+//     catch (error) {
+//       console.log("Error adding mockdata" + error);
+//     }
+//   });
+// }
 
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});

@@ -1,23 +1,27 @@
-import { promises as fs } from "fs"
-import path from "path"
 import { Metadata } from "next"
 
 import { columns } from "./components/columns"
 import { DataTable } from "./components/data-table"
 import { TabletApplication } from "../../data/dataTypes"
+import { db } from "@/lib/firebase/firebase"
+import { collection, query, where, getDocs } from "firebase/firestore"
 
 export const metadata: Metadata = {
   title: "Tasks",
   description: "A task and issue tracker build using Tanstack Table.",
 }
 
-// Simulate a database read for tasks.
 async function getApplications() {
-  const data = await fs.readFile(
-    path.join(process.cwd(), "app/tablets/list/data/mockTabletApplications.json")
-  )
+  const q = query(collection(db, "tabletapplications"))
 
-  const tabletApplications: TabletApplication[] = JSON.parse(data.toString());
+  const querySnapshot = await getDocs(q);
+
+  var tabletApplications: TabletApplication[] = [];
+
+  querySnapshot.forEach((doc) => {
+    tabletApplications.push(doc.data() as TabletApplication);
+  });
+  //console.log(tabletApplications);
   return tabletApplications;
 }
 

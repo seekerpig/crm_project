@@ -45,12 +45,19 @@ export function DataTableViewOptions<TData>({
               typeof column.accessorFn !== "undefined" && column.getCanHide()
           )
           .map((column) => {
+            const handleCheckboxClick = (e: any) => {
+              // Prevent default behaviour of checkbox click
+              e.preventDefault();
+
+              // Toggle the visibility of the column
+              column.toggleVisibility(!column.getIsVisible());
+            }
             return (
               <DropdownMenuCheckboxItem
                 key={column.id}
                 className="capitalize"
                 checked={column.getIsVisible()}
-                onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                onClick = {handleCheckboxClick}
               >
                 {column.id}
               </DropdownMenuCheckboxItem>
