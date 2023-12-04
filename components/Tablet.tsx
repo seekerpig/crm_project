@@ -28,7 +28,7 @@ function Tablet(props: TabletProps) {
   }
 
   return (
-    <div className={Number(number) === 2 && block!=="D" ? 'ml-7 ' : Number(number) === 1 && block==="D" ? 'ml-7' : ''}>
+    <div className={Number(number) === 2 && block!=="D" ? 'ml-7 ' : Number(number) === 1 && block==="D" ? 'ml-7' : ' '}>
       <div className={`${statusColorClass} ${status === 'Not Available' ? 'w-[43px] h-[51px] px-3 pt-[25px]  m-2' : 'w-[43px] h-[51px] px-3 pt-[25px] pb-1 border border-zinc-700 bg-white rounded shadow flex-col justify-end items-center inline-flex m-2'}`}>
       {status !== 'Not Available' && (
         <div>

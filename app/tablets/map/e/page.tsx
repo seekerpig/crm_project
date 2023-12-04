@@ -1918,7 +1918,7 @@ const sortedTablets = tabletArray.sort((a, b) => {
 export default function TabletsMapViewBlockE() {
   return (
     <div className="w-full h-screen overflow-auto">
-      <div className="flex flex-col">
+      <div className="flex flex-col w-max">
         {(() => {
           let blkRowNumber: string
           let currentRow: string | null = null;
@@ -1928,10 +1928,10 @@ export default function TabletsMapViewBlockE() {
             blkRowNumber = tablet.Block + " " +tablet.Row_Number;
             if (currentRow === null || parseInt(tablet.Row_Number) !== parseInt(currentRow)) {
               if (rowItems.length > 0) {
-                rows.push(<div className="flex flex-row">{rowItems}</div>);
+                rows.push(<div className="flex flex-row ">{rowItems}</div>);
                 rowItems = [];
               }
-              rowItems.push(<h1 className="pt-5 font-bold flex-none w-10">{blkRowNumber}</h1>);
+              rowItems.push(<h1 className="sticky left-0 pt-5 font-bold flex-none w-10 bg-white">{blkRowNumber}</h1>);
               currentRow = tablet.Row_Number;
             }
             rowItems.push(<Tablet key={tablet.Tablet_Number} block={tablet.Block} row={parseInt(tablet.Row_Number)} number={parseInt(tablet.Column_Number)} status={tablet.Status} />);
