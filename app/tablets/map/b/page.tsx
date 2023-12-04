@@ -1,7 +1,4 @@
 import Tablet from "@/components/Tablet";
-import { TabletProps } from "@/components/Tablet";
-import { table } from "console";
-import { ReactElement, JSXElementConstructor, ReactNode, PromiseLikeOfReactNode, JSX } from "react";
 
 interface Tablet {
   Tablet_Number: string;
@@ -2226,7 +2223,7 @@ const sortedTablets = tabletArray.sort((a, b) => {
 
 export default function TabletsMapViewBlockB() {
   return (
-    <div className="w-full">
+    <div className="w-full h-screen overflow-auto">
       <div className="flex flex-col">
         {(() => {
           let blkRowNumber: string
@@ -2240,7 +2237,7 @@ export default function TabletsMapViewBlockB() {
                 rows.push(<div className="flex flex-row">{rowItems}</div>);
                 rowItems = [];
               }
-              rowItems.push(<h1 className="pt-5 font-bold">{blkRowNumber}</h1>);
+              rowItems.push(<h1 className="pt-5 font-bold flex-none w-10">{blkRowNumber}</h1>);
               currentRow = tablet.Row_Number;
             }
             rowItems.push(<Tablet key={tablet.Tablet_Number} block={tablet.Block} row={parseInt(tablet.Row_Number)} number={parseInt(tablet.Column_Number)} status={tablet.Status} />);

@@ -1,8 +1,1947 @@
+import Tablet from "@/components/Tablet";
+
+interface Tablet {
+  Tablet_Number: string;
+  Block: string;
+  Row_Number: string;
+  Column_Number: string;
+  Status: string;
+}
+
+
+const tabletArray: Tablet[] = 
+
+[{
+  "Tablet_Number": "E0101",
+  "Block": "E",
+  "Row_Number": "01",
+  "Column_Number": "01",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0103",
+  "Block": "E",
+  "Row_Number": "01",
+  "Column_Number": "03",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0105",
+  "Block": "E",
+  "Row_Number": "01",
+  "Column_Number": "05",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0107",
+  "Block": "E",
+  "Row_Number": "01",
+  "Column_Number": "07",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0109",
+  "Block": "E",
+  "Row_Number": "01",
+  "Column_Number": "09",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0111",
+  "Block": "E",
+  "Row_Number": "01",
+  "Column_Number": "11",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0113",
+  "Block": "E",
+  "Row_Number": "01",
+  "Column_Number": "13",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0115",
+  "Block": "E",
+  "Row_Number": "01",
+  "Column_Number": "15",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0117",
+  "Block": "E",
+  "Row_Number": "01",
+  "Column_Number": "17",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0119",
+  "Block": "E",
+  "Row_Number": "01",
+  "Column_Number": "19",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0121",
+  "Block": "E",
+  "Row_Number": "01",
+  "Column_Number": "21",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0123",
+  "Block": "E",
+  "Row_Number": "01",
+  "Column_Number": "23",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0125",
+  "Block": "E",
+  "Row_Number": "01",
+  "Column_Number": "25",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0127",
+  "Block": "E",
+  "Row_Number": "01",
+  "Column_Number": "27",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0129",
+  "Block": "E",
+  "Row_Number": "01",
+  "Column_Number": "29",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0131",
+  "Block": "E",
+  "Row_Number": "01",
+  "Column_Number": "31",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0133",
+  "Block": "E",
+  "Row_Number": "01",
+  "Column_Number": "33",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0135",
+  "Block": "E",
+  "Row_Number": "01",
+  "Column_Number": "35",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0137",
+  "Block": "E",
+  "Row_Number": "01",
+  "Column_Number": "37",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0202",
+  "Block": "E",
+  "Row_Number": "02",
+  "Column_Number": "02",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0204",
+  "Block": "E",
+  "Row_Number": "02",
+  "Column_Number": "04",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0206",
+  "Block": "E",
+  "Row_Number": "02",
+  "Column_Number": "06",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0208",
+  "Block": "E",
+  "Row_Number": "02",
+  "Column_Number": "08",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0210",
+  "Block": "E",
+  "Row_Number": "02",
+  "Column_Number": "10",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0212",
+  "Block": "E",
+  "Row_Number": "02",
+  "Column_Number": "12",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0214",
+  "Block": "E",
+  "Row_Number": "02",
+  "Column_Number": "14",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0216",
+  "Block": "E",
+  "Row_Number": "02",
+  "Column_Number": "16",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0218",
+  "Block": "E",
+  "Row_Number": "02",
+  "Column_Number": "18",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0220",
+  "Block": "E",
+  "Row_Number": "02",
+  "Column_Number": "20",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0222",
+  "Block": "E",
+  "Row_Number": "02",
+  "Column_Number": "22",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0224",
+  "Block": "E",
+  "Row_Number": "02",
+  "Column_Number": "24",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0226",
+  "Block": "E",
+  "Row_Number": "02",
+  "Column_Number": "26",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0228",
+  "Block": "E",
+  "Row_Number": "02",
+  "Column_Number": "28",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0230",
+  "Block": "E",
+  "Row_Number": "02",
+  "Column_Number": "30",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0232",
+  "Block": "E",
+  "Row_Number": "02",
+  "Column_Number": "32",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0234",
+  "Block": "E",
+  "Row_Number": "02",
+  "Column_Number": "34",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0236",
+  "Block": "E",
+  "Row_Number": "02",
+  "Column_Number": "36",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0301",
+  "Block": "E",
+  "Row_Number": "03",
+  "Column_Number": "01",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0303",
+  "Block": "E",
+  "Row_Number": "03",
+  "Column_Number": "03",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0305",
+  "Block": "E",
+  "Row_Number": "03",
+  "Column_Number": "05",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0307",
+  "Block": "E",
+  "Row_Number": "03",
+  "Column_Number": "07",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0309",
+  "Block": "E",
+  "Row_Number": "03",
+  "Column_Number": "09",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0311",
+  "Block": "E",
+  "Row_Number": "03",
+  "Column_Number": "11",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0313",
+  "Block": "E",
+  "Row_Number": "03",
+  "Column_Number": "13",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0315",
+  "Block": "E",
+  "Row_Number": "03",
+  "Column_Number": "15",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0317",
+  "Block": "E",
+  "Row_Number": "03",
+  "Column_Number": "17",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0319",
+  "Block": "E",
+  "Row_Number": "03",
+  "Column_Number": "19",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0321",
+  "Block": "E",
+  "Row_Number": "03",
+  "Column_Number": "21",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0323",
+  "Block": "E",
+  "Row_Number": "03",
+  "Column_Number": "23",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0325",
+  "Block": "E",
+  "Row_Number": "03",
+  "Column_Number": "25",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0327",
+  "Block": "E",
+  "Row_Number": "03",
+  "Column_Number": "27",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0329",
+  "Block": "E",
+  "Row_Number": "03",
+  "Column_Number": "29",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0331",
+  "Block": "E",
+  "Row_Number": "03",
+  "Column_Number": "31",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0333",
+  "Block": "E",
+  "Row_Number": "03",
+  "Column_Number": "33",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0335",
+  "Block": "E",
+  "Row_Number": "03",
+  "Column_Number": "35",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0337",
+  "Block": "E",
+  "Row_Number": "03",
+  "Column_Number": "37",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0402",
+  "Block": "E",
+  "Row_Number": "04",
+  "Column_Number": "02",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0404",
+  "Block": "E",
+  "Row_Number": "04",
+  "Column_Number": "04",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0406",
+  "Block": "E",
+  "Row_Number": "04",
+  "Column_Number": "06",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0408",
+  "Block": "E",
+  "Row_Number": "04",
+  "Column_Number": "08",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0410",
+  "Block": "E",
+  "Row_Number": "04",
+  "Column_Number": "10",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0412",
+  "Block": "E",
+  "Row_Number": "04",
+  "Column_Number": "12",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0414",
+  "Block": "E",
+  "Row_Number": "04",
+  "Column_Number": "14",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0416",
+  "Block": "E",
+  "Row_Number": "04",
+  "Column_Number": "16",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0418",
+  "Block": "E",
+  "Row_Number": "04",
+  "Column_Number": "18",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0420",
+  "Block": "E",
+  "Row_Number": "04",
+  "Column_Number": "20",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0422",
+  "Block": "E",
+  "Row_Number": "04",
+  "Column_Number": "22",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0424",
+  "Block": "E",
+  "Row_Number": "04",
+  "Column_Number": "24",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0426",
+  "Block": "E",
+  "Row_Number": "04",
+  "Column_Number": "26",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0428",
+  "Block": "E",
+  "Row_Number": "04",
+  "Column_Number": "28",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0430",
+  "Block": "E",
+  "Row_Number": "04",
+  "Column_Number": "30",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0432",
+  "Block": "E",
+  "Row_Number": "04",
+  "Column_Number": "32",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0434",
+  "Block": "E",
+  "Row_Number": "04",
+  "Column_Number": "34",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0436",
+  "Block": "E",
+  "Row_Number": "04",
+  "Column_Number": "36",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0501",
+  "Block": "E",
+  "Row_Number": "05",
+  "Column_Number": "01",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0503",
+  "Block": "E",
+  "Row_Number": "05",
+  "Column_Number": "03",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0505",
+  "Block": "E",
+  "Row_Number": "05",
+  "Column_Number": "05",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0507",
+  "Block": "E",
+  "Row_Number": "05",
+  "Column_Number": "07",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0509",
+  "Block": "E",
+  "Row_Number": "05",
+  "Column_Number": "09",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0511",
+  "Block": "E",
+  "Row_Number": "05",
+  "Column_Number": "11",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0513",
+  "Block": "E",
+  "Row_Number": "05",
+  "Column_Number": "13",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0515",
+  "Block": "E",
+  "Row_Number": "05",
+  "Column_Number": "15",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0517",
+  "Block": "E",
+  "Row_Number": "05",
+  "Column_Number": "17",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0519",
+  "Block": "E",
+  "Row_Number": "05",
+  "Column_Number": "19",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0521",
+  "Block": "E",
+  "Row_Number": "05",
+  "Column_Number": "21",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0523",
+  "Block": "E",
+  "Row_Number": "05",
+  "Column_Number": "23",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0525",
+  "Block": "E",
+  "Row_Number": "05",
+  "Column_Number": "25",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0527",
+  "Block": "E",
+  "Row_Number": "05",
+  "Column_Number": "27",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0529",
+  "Block": "E",
+  "Row_Number": "05",
+  "Column_Number": "29",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0531",
+  "Block": "E",
+  "Row_Number": "05",
+  "Column_Number": "31",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0533",
+  "Block": "E",
+  "Row_Number": "05",
+  "Column_Number": "33",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0535",
+  "Block": "E",
+  "Row_Number": "05",
+  "Column_Number": "35",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0537",
+  "Block": "E",
+  "Row_Number": "05",
+  "Column_Number": "37",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0602",
+  "Block": "E",
+  "Row_Number": "06",
+  "Column_Number": "02",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0604",
+  "Block": "E",
+  "Row_Number": "06",
+  "Column_Number": "04",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0606",
+  "Block": "E",
+  "Row_Number": "06",
+  "Column_Number": "06",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0608",
+  "Block": "E",
+  "Row_Number": "06",
+  "Column_Number": "08",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0610",
+  "Block": "E",
+  "Row_Number": "06",
+  "Column_Number": "10",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0612",
+  "Block": "E",
+  "Row_Number": "06",
+  "Column_Number": "12",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0614",
+  "Block": "E",
+  "Row_Number": "06",
+  "Column_Number": "14",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0616",
+  "Block": "E",
+  "Row_Number": "06",
+  "Column_Number": "16",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0618",
+  "Block": "E",
+  "Row_Number": "06",
+  "Column_Number": "18",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0620",
+  "Block": "E",
+  "Row_Number": "06",
+  "Column_Number": "20",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0622",
+  "Block": "E",
+  "Row_Number": "06",
+  "Column_Number": "22",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0624",
+  "Block": "E",
+  "Row_Number": "06",
+  "Column_Number": "24",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0626",
+  "Block": "E",
+  "Row_Number": "06",
+  "Column_Number": "26",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0628",
+  "Block": "E",
+  "Row_Number": "06",
+  "Column_Number": "28",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0630",
+  "Block": "E",
+  "Row_Number": "06",
+  "Column_Number": "30",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0632",
+  "Block": "E",
+  "Row_Number": "06",
+  "Column_Number": "32",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0634",
+  "Block": "E",
+  "Row_Number": "06",
+  "Column_Number": "34",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0636",
+  "Block": "E",
+  "Row_Number": "06",
+  "Column_Number": "36",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0701",
+  "Block": "E",
+  "Row_Number": "07",
+  "Column_Number": "01",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0703",
+  "Block": "E",
+  "Row_Number": "07",
+  "Column_Number": "03",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0705",
+  "Block": "E",
+  "Row_Number": "07",
+  "Column_Number": "05",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0707",
+  "Block": "E",
+  "Row_Number": "07",
+  "Column_Number": "07",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0709",
+  "Block": "E",
+  "Row_Number": "07",
+  "Column_Number": "09",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0711",
+  "Block": "E",
+  "Row_Number": "07",
+  "Column_Number": "11",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0713",
+  "Block": "E",
+  "Row_Number": "07",
+  "Column_Number": "13",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0715",
+  "Block": "E",
+  "Row_Number": "07",
+  "Column_Number": "15",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0717",
+  "Block": "E",
+  "Row_Number": "07",
+  "Column_Number": "17",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0719",
+  "Block": "E",
+  "Row_Number": "07",
+  "Column_Number": "19",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0721",
+  "Block": "E",
+  "Row_Number": "07",
+  "Column_Number": "21",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0723",
+  "Block": "E",
+  "Row_Number": "07",
+  "Column_Number": "23",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0725",
+  "Block": "E",
+  "Row_Number": "07",
+  "Column_Number": "25",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0727",
+  "Block": "E",
+  "Row_Number": "07",
+  "Column_Number": "27",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0729",
+  "Block": "E",
+  "Row_Number": "07",
+  "Column_Number": "29",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0731",
+  "Block": "E",
+  "Row_Number": "07",
+  "Column_Number": "31",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0733",
+  "Block": "E",
+  "Row_Number": "07",
+  "Column_Number": "33",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0735",
+  "Block": "E",
+  "Row_Number": "07",
+  "Column_Number": "35",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0737",
+  "Block": "E",
+  "Row_Number": "07",
+  "Column_Number": "37",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0802",
+  "Block": "E",
+  "Row_Number": "08",
+  "Column_Number": "02",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0804",
+  "Block": "E",
+  "Row_Number": "08",
+  "Column_Number": "04",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0806",
+  "Block": "E",
+  "Row_Number": "08",
+  "Column_Number": "06",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0808",
+  "Block": "E",
+  "Row_Number": "08",
+  "Column_Number": "08",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0810",
+  "Block": "E",
+  "Row_Number": "08",
+  "Column_Number": "10",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0812",
+  "Block": "E",
+  "Row_Number": "08",
+  "Column_Number": "12",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0814",
+  "Block": "E",
+  "Row_Number": "08",
+  "Column_Number": "14",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0816",
+  "Block": "E",
+  "Row_Number": "08",
+  "Column_Number": "16",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0818",
+  "Block": "E",
+  "Row_Number": "08",
+  "Column_Number": "18",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0820",
+  "Block": "E",
+  "Row_Number": "08",
+  "Column_Number": "20",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0822",
+  "Block": "E",
+  "Row_Number": "08",
+  "Column_Number": "22",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0824",
+  "Block": "E",
+  "Row_Number": "08",
+  "Column_Number": "24",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0826",
+  "Block": "E",
+  "Row_Number": "08",
+  "Column_Number": "26",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0828",
+  "Block": "E",
+  "Row_Number": "08",
+  "Column_Number": "28",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0830",
+  "Block": "E",
+  "Row_Number": "08",
+  "Column_Number": "30",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0832",
+  "Block": "E",
+  "Row_Number": "08",
+  "Column_Number": "32",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0834",
+  "Block": "E",
+  "Row_Number": "08",
+  "Column_Number": "34",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0836",
+  "Block": "E",
+  "Row_Number": "08",
+  "Column_Number": "36",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0901",
+  "Block": "E",
+  "Row_Number": "09",
+  "Column_Number": "01",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0903",
+  "Block": "E",
+  "Row_Number": "09",
+  "Column_Number": "03",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0905",
+  "Block": "E",
+  "Row_Number": "09",
+  "Column_Number": "05",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0907",
+  "Block": "E",
+  "Row_Number": "09",
+  "Column_Number": "07",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0909",
+  "Block": "E",
+  "Row_Number": "09",
+  "Column_Number": "09",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0911",
+  "Block": "E",
+  "Row_Number": "09",
+  "Column_Number": "11",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0913",
+  "Block": "E",
+  "Row_Number": "09",
+  "Column_Number": "13",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0915",
+  "Block": "E",
+  "Row_Number": "09",
+  "Column_Number": "15",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0917",
+  "Block": "E",
+  "Row_Number": "09",
+  "Column_Number": "17",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0919",
+  "Block": "E",
+  "Row_Number": "09",
+  "Column_Number": "19",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0921",
+  "Block": "E",
+  "Row_Number": "09",
+  "Column_Number": "21",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0923",
+  "Block": "E",
+  "Row_Number": "09",
+  "Column_Number": "23",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0925",
+  "Block": "E",
+  "Row_Number": "09",
+  "Column_Number": "25",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0927",
+  "Block": "E",
+  "Row_Number": "09",
+  "Column_Number": "27",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0929",
+  "Block": "E",
+  "Row_Number": "09",
+  "Column_Number": "29",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0931",
+  "Block": "E",
+  "Row_Number": "09",
+  "Column_Number": "31",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0933",
+  "Block": "E",
+  "Row_Number": "09",
+  "Column_Number": "33",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0935",
+  "Block": "E",
+  "Row_Number": "09",
+  "Column_Number": "35",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E0937",
+  "Block": "E",
+  "Row_Number": "09",
+  "Column_Number": "37",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1002",
+  "Block": "E",
+  "Row_Number": "10",
+  "Column_Number": "02",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1004",
+  "Block": "E",
+  "Row_Number": "10",
+  "Column_Number": "04",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1006",
+  "Block": "E",
+  "Row_Number": "10",
+  "Column_Number": "06",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1008",
+  "Block": "E",
+  "Row_Number": "10",
+  "Column_Number": "08",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1010",
+  "Block": "E",
+  "Row_Number": "10",
+  "Column_Number": "10",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1012",
+  "Block": "E",
+  "Row_Number": "10",
+  "Column_Number": "12",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1014",
+  "Block": "E",
+  "Row_Number": "10",
+  "Column_Number": "14",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1016",
+  "Block": "E",
+  "Row_Number": "10",
+  "Column_Number": "16",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1018",
+  "Block": "E",
+  "Row_Number": "10",
+  "Column_Number": "18",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1020",
+  "Block": "E",
+  "Row_Number": "10",
+  "Column_Number": "20",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1022",
+  "Block": "E",
+  "Row_Number": "10",
+  "Column_Number": "22",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1024",
+  "Block": "E",
+  "Row_Number": "10",
+  "Column_Number": "24",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1026",
+  "Block": "E",
+  "Row_Number": "10",
+  "Column_Number": "26",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1028",
+  "Block": "E",
+  "Row_Number": "10",
+  "Column_Number": "28",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1030",
+  "Block": "E",
+  "Row_Number": "10",
+  "Column_Number": "30",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1032",
+  "Block": "E",
+  "Row_Number": "10",
+  "Column_Number": "32",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1034",
+  "Block": "E",
+  "Row_Number": "10",
+  "Column_Number": "34",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1036",
+  "Block": "E",
+  "Row_Number": "10",
+  "Column_Number": "36",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1101",
+  "Block": "E",
+  "Row_Number": "11",
+  "Column_Number": "01",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1103",
+  "Block": "E",
+  "Row_Number": "11",
+  "Column_Number": "03",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1105",
+  "Block": "E",
+  "Row_Number": "11",
+  "Column_Number": "05",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1107",
+  "Block": "E",
+  "Row_Number": "11",
+  "Column_Number": "07",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1109",
+  "Block": "E",
+  "Row_Number": "11",
+  "Column_Number": "09",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1111",
+  "Block": "E",
+  "Row_Number": "11",
+  "Column_Number": "11",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1113",
+  "Block": "E",
+  "Row_Number": "11",
+  "Column_Number": "13",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1115",
+  "Block": "E",
+  "Row_Number": "11",
+  "Column_Number": "15",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1117",
+  "Block": "E",
+  "Row_Number": "11",
+  "Column_Number": "17",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1119",
+  "Block": "E",
+  "Row_Number": "11",
+  "Column_Number": "19",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1121",
+  "Block": "E",
+  "Row_Number": "11",
+  "Column_Number": "21",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1123",
+  "Block": "E",
+  "Row_Number": "11",
+  "Column_Number": "23",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1125",
+  "Block": "E",
+  "Row_Number": "11",
+  "Column_Number": "25",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1127",
+  "Block": "E",
+  "Row_Number": "11",
+  "Column_Number": "27",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1129",
+  "Block": "E",
+  "Row_Number": "11",
+  "Column_Number": "29",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1131",
+  "Block": "E",
+  "Row_Number": "11",
+  "Column_Number": "31",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1133",
+  "Block": "E",
+  "Row_Number": "11",
+  "Column_Number": "33",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1135",
+  "Block": "E",
+  "Row_Number": "11",
+  "Column_Number": "35",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1137",
+  "Block": "E",
+  "Row_Number": "11",
+  "Column_Number": "37",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1202",
+  "Block": "E",
+  "Row_Number": "12",
+  "Column_Number": "02",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1204",
+  "Block": "E",
+  "Row_Number": "12",
+  "Column_Number": "04",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1206",
+  "Block": "E",
+  "Row_Number": "12",
+  "Column_Number": "06",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1208",
+  "Block": "E",
+  "Row_Number": "12",
+  "Column_Number": "08",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1210",
+  "Block": "E",
+  "Row_Number": "12",
+  "Column_Number": "10",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1212",
+  "Block": "E",
+  "Row_Number": "12",
+  "Column_Number": "12",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1214",
+  "Block": "E",
+  "Row_Number": "12",
+  "Column_Number": "14",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1216",
+  "Block": "E",
+  "Row_Number": "12",
+  "Column_Number": "16",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1218",
+  "Block": "E",
+  "Row_Number": "12",
+  "Column_Number": "18",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1220",
+  "Block": "E",
+  "Row_Number": "12",
+  "Column_Number": "20",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1222",
+  "Block": "E",
+  "Row_Number": "12",
+  "Column_Number": "22",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1224",
+  "Block": "E",
+  "Row_Number": "12",
+  "Column_Number": "24",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1226",
+  "Block": "E",
+  "Row_Number": "12",
+  "Column_Number": "26",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1228",
+  "Block": "E",
+  "Row_Number": "12",
+  "Column_Number": "28",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1230",
+  "Block": "E",
+  "Row_Number": "12",
+  "Column_Number": "30",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1232",
+  "Block": "E",
+  "Row_Number": "12",
+  "Column_Number": "32",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1234",
+  "Block": "E",
+  "Row_Number": "12",
+  "Column_Number": "34",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1236",
+  "Block": "E",
+  "Row_Number": "12",
+  "Column_Number": "36",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1301",
+  "Block": "E",
+  "Row_Number": "13",
+  "Column_Number": "01",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1303",
+  "Block": "E",
+  "Row_Number": "13",
+  "Column_Number": "03",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1305",
+  "Block": "E",
+  "Row_Number": "13",
+  "Column_Number": "05",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1307",
+  "Block": "E",
+  "Row_Number": "13",
+  "Column_Number": "07",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1309",
+  "Block": "E",
+  "Row_Number": "13",
+  "Column_Number": "09",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1311",
+  "Block": "E",
+  "Row_Number": "13",
+  "Column_Number": "11",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1313",
+  "Block": "E",
+  "Row_Number": "13",
+  "Column_Number": "13",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1315",
+  "Block": "E",
+  "Row_Number": "13",
+  "Column_Number": "15",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1317",
+  "Block": "E",
+  "Row_Number": "13",
+  "Column_Number": "17",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1319",
+  "Block": "E",
+  "Row_Number": "13",
+  "Column_Number": "19",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1321",
+  "Block": "E",
+  "Row_Number": "13",
+  "Column_Number": "21",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1323",
+  "Block": "E",
+  "Row_Number": "13",
+  "Column_Number": "23",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1325",
+  "Block": "E",
+  "Row_Number": "13",
+  "Column_Number": "25",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1327",
+  "Block": "E",
+  "Row_Number": "13",
+  "Column_Number": "27",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1329",
+  "Block": "E",
+  "Row_Number": "13",
+  "Column_Number": "29",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1331",
+  "Block": "E",
+  "Row_Number": "13",
+  "Column_Number": "31",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1333",
+  "Block": "E",
+  "Row_Number": "13",
+  "Column_Number": "33",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1335",
+  "Block": "E",
+  "Row_Number": "13",
+  "Column_Number": "35",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1337",
+  "Block": "E",
+  "Row_Number": "13",
+  "Column_Number": "37",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1402",
+  "Block": "E",
+  "Row_Number": "14",
+  "Column_Number": "02",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1404",
+  "Block": "E",
+  "Row_Number": "14",
+  "Column_Number": "04",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1406",
+  "Block": "E",
+  "Row_Number": "14",
+  "Column_Number": "06",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1408",
+  "Block": "E",
+  "Row_Number": "14",
+  "Column_Number": "08",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1410",
+  "Block": "E",
+  "Row_Number": "14",
+  "Column_Number": "10",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1412",
+  "Block": "E",
+  "Row_Number": "14",
+  "Column_Number": "12",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1414",
+  "Block": "E",
+  "Row_Number": "14",
+  "Column_Number": "14",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1416",
+  "Block": "E",
+  "Row_Number": "14",
+  "Column_Number": "16",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1418",
+  "Block": "E",
+  "Row_Number": "14",
+  "Column_Number": "18",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1420",
+  "Block": "E",
+  "Row_Number": "14",
+  "Column_Number": "20",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1422",
+  "Block": "E",
+  "Row_Number": "14",
+  "Column_Number": "22",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1424",
+  "Block": "E",
+  "Row_Number": "14",
+  "Column_Number": "24",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1426",
+  "Block": "E",
+  "Row_Number": "14",
+  "Column_Number": "26",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1428",
+  "Block": "E",
+  "Row_Number": "14",
+  "Column_Number": "28",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1430",
+  "Block": "E",
+  "Row_Number": "14",
+  "Column_Number": "30",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1432",
+  "Block": "E",
+  "Row_Number": "14",
+  "Column_Number": "32",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1434",
+  "Block": "E",
+  "Row_Number": "14",
+  "Column_Number": "34",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1436",
+  "Block": "E",
+  "Row_Number": "14",
+  "Column_Number": "36",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1501",
+  "Block": "E",
+  "Row_Number": "15",
+  "Column_Number": "01",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1503",
+  "Block": "E",
+  "Row_Number": "15",
+  "Column_Number": "03",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1505",
+  "Block": "E",
+  "Row_Number": "15",
+  "Column_Number": "05",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1507",
+  "Block": "E",
+  "Row_Number": "15",
+  "Column_Number": "07",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1509",
+  "Block": "E",
+  "Row_Number": "15",
+  "Column_Number": "09",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1511",
+  "Block": "E",
+  "Row_Number": "15",
+  "Column_Number": "11",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1513",
+  "Block": "E",
+  "Row_Number": "15",
+  "Column_Number": "13",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1515",
+  "Block": "E",
+  "Row_Number": "15",
+  "Column_Number": "15",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1517",
+  "Block": "E",
+  "Row_Number": "15",
+  "Column_Number": "17",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1519",
+  "Block": "E",
+  "Row_Number": "15",
+  "Column_Number": "19",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1521",
+  "Block": "E",
+  "Row_Number": "15",
+  "Column_Number": "21",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1523",
+  "Block": "E",
+  "Row_Number": "15",
+  "Column_Number": "23",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1525",
+  "Block": "E",
+  "Row_Number": "15",
+  "Column_Number": "25",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1527",
+  "Block": "E",
+  "Row_Number": "15",
+  "Column_Number": "27",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1529",
+  "Block": "E",
+  "Row_Number": "15",
+  "Column_Number": "29",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1531",
+  "Block": "E",
+  "Row_Number": "15",
+  "Column_Number": "31",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1533",
+  "Block": "E",
+  "Row_Number": "15",
+  "Column_Number": "33",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1535",
+  "Block": "E",
+  "Row_Number": "15",
+  "Column_Number": "35",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1537",
+  "Block": "E",
+  "Row_Number": "15",
+  "Column_Number": "37",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1602",
+  "Block": "E",
+  "Row_Number": "16",
+  "Column_Number": "02",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1604",
+  "Block": "E",
+  "Row_Number": "16",
+  "Column_Number": "04",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1606",
+  "Block": "E",
+  "Row_Number": "16",
+  "Column_Number": "06",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1608",
+  "Block": "E",
+  "Row_Number": "16",
+  "Column_Number": "08",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1610",
+  "Block": "E",
+  "Row_Number": "16",
+  "Column_Number": "10",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1612",
+  "Block": "E",
+  "Row_Number": "16",
+  "Column_Number": "12",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1614",
+  "Block": "E",
+  "Row_Number": "16",
+  "Column_Number": "14",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1616",
+  "Block": "E",
+  "Row_Number": "16",
+  "Column_Number": "16",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1618",
+  "Block": "E",
+  "Row_Number": "16",
+  "Column_Number": "18",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1620",
+  "Block": "E",
+  "Row_Number": "16",
+  "Column_Number": "20",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1622",
+  "Block": "E",
+  "Row_Number": "16",
+  "Column_Number": "22",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1624",
+  "Block": "E",
+  "Row_Number": "16",
+  "Column_Number": "24",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1626",
+  "Block": "E",
+  "Row_Number": "16",
+  "Column_Number": "26",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1628",
+  "Block": "E",
+  "Row_Number": "16",
+  "Column_Number": "28",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1630",
+  "Block": "E",
+  "Row_Number": "16",
+  "Column_Number": "30",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1632",
+  "Block": "E",
+  "Row_Number": "16",
+  "Column_Number": "32",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1634",
+  "Block": "E",
+  "Row_Number": "16",
+  "Column_Number": "34",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1636",
+  "Block": "E",
+  "Row_Number": "16",
+  "Column_Number": "36",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1701",
+  "Block": "E",
+  "Row_Number": "17",
+  "Column_Number": "01",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1703",
+  "Block": "E",
+  "Row_Number": "17",
+  "Column_Number": "03",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1705",
+  "Block": "E",
+  "Row_Number": "17",
+  "Column_Number": "05",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1707",
+  "Block": "E",
+  "Row_Number": "17",
+  "Column_Number": "07",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1709",
+  "Block": "E",
+  "Row_Number": "17",
+  "Column_Number": "09",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1711",
+  "Block": "E",
+  "Row_Number": "17",
+  "Column_Number": "11",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1713",
+  "Block": "E",
+  "Row_Number": "17",
+  "Column_Number": "13",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1715",
+  "Block": "E",
+  "Row_Number": "17",
+  "Column_Number": "15",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1717",
+  "Block": "E",
+  "Row_Number": "17",
+  "Column_Number": "17",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1719",
+  "Block": "E",
+  "Row_Number": "17",
+  "Column_Number": "19",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1721",
+  "Block": "E",
+  "Row_Number": "17",
+  "Column_Number": "21",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1723",
+  "Block": "E",
+  "Row_Number": "17",
+  "Column_Number": "23",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1725",
+  "Block": "E",
+  "Row_Number": "17",
+  "Column_Number": "25",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1727",
+  "Block": "E",
+  "Row_Number": "17",
+  "Column_Number": "27",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1729",
+  "Block": "E",
+  "Row_Number": "17",
+  "Column_Number": "29",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1731",
+  "Block": "E",
+  "Row_Number": "17",
+  "Column_Number": "31",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1733",
+  "Block": "E",
+  "Row_Number": "17",
+  "Column_Number": "33",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1735",
+  "Block": "E",
+  "Row_Number": "17",
+  "Column_Number": "35",
+  "Status": "Available"
+}, {
+  "Tablet_Number": "E1737",
+  "Block": "E",
+  "Row_Number": "17",
+  "Column_Number": "37",
+  "Status": "Available"
+}] ;
+
+
+// Sort the array
+const sortedTablets = tabletArray.sort((a, b) => {
+  // Sort by Row_Number in descending order
+  const rowComparison = parseInt(b.Row_Number) - parseInt(a.Row_Number);
+  
+  // If Row_Numbers are equal, sort by Column_Number in ascending order
+  const columnComparison = parseInt(a.Column_Number) - parseInt(b.Column_Number);
+
+  return rowComparison || columnComparison;
+});
 
 export default function TabletsMapViewBlockE() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      Testing
-    </main>
+    <div className="w-full h-screen overflow-auto">
+      <div className="flex flex-col">
+        {(() => {
+          let blkRowNumber: string
+          let currentRow: string | null = null;
+          const rows: JSX.Element[] = [];
+          let rowItems: JSX.Element[] = []; // Initialize as an empty array
+          tabletArray.forEach((tablet, index) => {
+            blkRowNumber = tablet.Block + " " +tablet.Row_Number;
+            if (currentRow === null || parseInt(tablet.Row_Number) !== parseInt(currentRow)) {
+              if (rowItems.length > 0) {
+                rows.push(<div className="flex flex-row">{rowItems}</div>);
+                rowItems = [];
+              }
+              rowItems.push(<h1 className="pt-5 font-bold flex-none w-10">{blkRowNumber}</h1>);
+              currentRow = tablet.Row_Number;
+            }
+            rowItems.push(<Tablet key={tablet.Tablet_Number} block={tablet.Block} row={parseInt(tablet.Row_Number)} number={parseInt(tablet.Column_Number)} status={tablet.Status} />);
+            if (index === tabletArray.length - 1) {
+              rows.push(<div className="flex flex-row">{rowItems}</div>);
+            }
+          });
+          return rows;
+        })()}
+      </div>
+    </div>
   )
 }
