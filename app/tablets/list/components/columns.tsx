@@ -242,6 +242,9 @@ export const columns: ColumnDef<TabletApplication>[] = [
     cell: ({ row }) => {
       return <div>{row.getValue("Status")}</div>;
     },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
     enableSorting: false,
     enableHiding: false,
   },

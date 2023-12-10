@@ -85,16 +85,6 @@ async function generateInvoicesData(data: TabletApplication[]) {
 
 }
 
-async function generateApplicationsCombinedToFirebase(data: TabletApplication[]) {
-  console.log(data)
-  // try {
-  //   const id = "allapplications";
-  //   const applicationsDocRef = doc(db, "applications", )
-  // }
-  // catch (error) {
-  //   console.log("Error adding applications document into firebase");
-  //}
-}
 
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
@@ -155,7 +145,6 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   return (
     <div className="space-y-4">
       <Button onClick={() => generateInvoicesData(data as TabletApplication[])}> Generate Invoices to Firebase </Button>
-      <Button onClick={() => generateApplicationsCombinedToFirebase(data as TabletApplication[])}> Generate Applications Combined to Firebase </Button>
       <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>

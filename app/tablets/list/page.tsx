@@ -1,15 +1,9 @@
-import { Metadata } from "next"
-
 import { columns } from "./components/columns"
 import { DataTable } from "./components/data-table"
 import { TabletApplication } from "../../data/dataTypes"
 import { db } from "@/lib/firebase/firebase"
 import { collection, query, where, getDocs } from "firebase/firestore"
 
-export const metadata: Metadata = {
-  title: "Tasks",
-  description: "A task and issue tracker build using Tanstack Table.",
-}
 
 async function getApplications() {
   const q = query(collection(db, "tabletapplications"))
