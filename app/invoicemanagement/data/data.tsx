@@ -22,6 +22,10 @@ export const descriptions = [
   {
     value: "Purchase of Tablet (Special)",
     label: "Purchase of Tablet (Special)",
+  },
+  {
+    value: "Monthly Installment",
+    label: "Monthly Installment",
   }
 ]
 
