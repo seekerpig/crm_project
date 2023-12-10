@@ -1,13 +1,3 @@
-
-
-export interface Task {
-  id: String,
-  title: String,
-  status: String,
-  label: String,
-  priority: String,
-}
-
 export interface TabletApplication {
   ApplicationID: String,
   Tablet_Number: String,
@@ -47,5 +37,19 @@ export interface Tablet {
   ApplicationID?: String,
 }
 
-
+export interface Invoice {
+  InvoiceNo: String,
+  ApplicationID: String,
+  Dated: Date,
+  Terms: String,
+  Tablet_Number: String,
+  Payee_Name: String,
+  Payee_Address: String,
+  Description: "Purchase of Tablet Leasing (Normal)" | "Annual Fee for Maintenance of Ancestor Tablet" | "Purchase of Tablet (Special)",
+  Fiscal_Year: Number,
+  Receipt_No: String,
+  Amount: Number,
+  Year_Positioned: Number,
+  IsPaid: Boolean,
+}
 

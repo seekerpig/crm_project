@@ -18,7 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-import { TabletApplication } from "../../../data/dataTypes"
+import { Invoice } from "../../data/dataTypes"
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>
@@ -27,7 +27,7 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
-  const task : TabletApplication = row.original as TabletApplication;
+  const task : Invoice = row.original as Invoice;
 
   return (
     <DropdownMenu>

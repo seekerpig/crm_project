@@ -9,7 +9,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { DataTablePagination } from "../components/data-table-pagination";
 import { DataTableToolbar } from "../components/data-table-toolbar";
 import { Button } from "@/components/ui/button";
-import { TabletApplication, Invoice } from "@/app/data/dataTypes";
+import GenerateInvoiceModal  from "../components/generateInvoiceModal";
+
 
 import { db } from "@/lib/firebase/firebase";
 import { query, collection, getDocs, setDoc, doc } from "firebase/firestore"
@@ -30,71 +31,6 @@ interface DataTableProps<TData, TValue> {
 //   });
 // }
 
-function generateMockInvoice(application: TabletApplication) {
-  const invoiceTypes = [
-    "Purchase of Tablet Leasing (Normal)",
-    "Annual Fee for Maintenance of Ancestor Tablet",
-    "Purchase of Tablet (Special)"
-  ];
-
-  const randomInvoiceType = "Purchase of Tablet Leasing (Normal)";
-  const randomInvoiceNo = `INV-${Math.floor(Math.random() * 1000)}`;
-  const randomApplicationID = application.ApplicationID;
-  const randomDated = application.Leasing_Date;
-  const randomTerms = `${Math.floor(Math.random() * 30) + 1} Days`;
-  const randomTabletNumber =  application.Tablet_Number;
-  const randomPayeeName = application.Applicant_Name_English;
-  const randomPayeeAddress = application.Applicant_Address;
-  const randomFiscalYear = new Date().getFullYear();
-  const randomReceiptNo = `RCPT-${Math.floor(Math.random() * 1000)}`;
-  const randomAmount = 30;
-  const randomYearPositioned = new Date().getFullYear();
-  const randomIsPaid = true;
-
-  const mockInvoice: Invoice = {
-    InvoiceNo: randomInvoiceNo,
-    ApplicationID: randomApplicationID,
-    Dated: randomDated,
-    Terms: randomTerms,
-    Tablet_Number: randomTabletNumber,
-    Payee_Name: randomPayeeName,
-    Payee_Address: randomPayeeAddress,
-    Description: randomInvoiceType,
-    Fiscal_Year: randomFiscalYear,
-    Receipt_No: randomReceiptNo,
-    Amount: randomAmount,
-    Year_Positioned: randomYearPositioned,
-    IsPaid: randomIsPaid
-  };
-
-  return mockInvoice;
-}
-
-
-async function generateInvoicesData(data: TabletApplication[]) {
-  data.forEach(async application => {
-    try {
-      let invoice: Invoice = await generateMockInvoice(application);
-      await setDoc(doc(db, "invoices", invoice.InvoiceNo.toString()), invoice)
-      console.log("Successfully added:" + invoice.InvoiceNo);
-    }
-    catch (error) {
-      console.log("error added invoice to firebase");
-    }
-  });
-
-}
-
-async function generateApplicationsCombinedToFirebase(data: TabletApplication[]) {
-  console.log(data)
-  // try {
-  //   const id = "allapplications";
-  //   const applicationsDocRef = doc(db, "applications", )
-  // }
-  // catch (error) {
-  //   console.log("Error adding applications document into firebase");
-  //}
-}
 
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
@@ -154,8 +90,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 
   return (
     <div className="space-y-4">
-      <Button onClick={() => generateInvoicesData(data as TabletApplication[])}> Generate Invoices to Firebase </Button>
-      <Button onClick={() => generateApplicationsCombinedToFirebase(data as TabletApplication[])}> Generate Applications Combined to Firebase </Button>
+      <GenerateInvoiceModal/>
       <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>
