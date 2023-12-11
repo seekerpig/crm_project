@@ -392,7 +392,8 @@ export default async function TabletsMapViewBlockA() {
   
   return (
     <div className="w-full h-screen overflow-auto ">
-      <div className="my-1 sticky left-0 top-0 bg-white">
+      <div className="my-1 sticky left-0 top-0 bg-white/75">
+      <span className="bg-white text-black px-2 py-1 rounded-full ms-10 border border-black">Available</span>
       <span className="bg-green-500 text-black px-2 py-1 rounded-full ms-10 ">IPT</span>
       <span className="bg-yellow-500 text-black px-2 py-1 rounded-full ms-10 ">Reserved</span>
       <span className="bg-red-500 text-black px-2 py-1 rounded-full ms-10 ">Occupied</span>
@@ -417,7 +418,7 @@ export default async function TabletsMapViewBlockA() {
                 rowItems = [];
               }
               rowItems.push(
-                <h1 key={blkRowNumber} className="sticky left-0 pt-5 font-bold flex-none w-10 bg-white">
+                <h1 key={blkRowNumber} className="sticky left-0 pt-5 font-bold flex-none w-10 bg-white/75">
                   {blkRowNumber}
                 </h1>
               );
