@@ -1,6 +1,6 @@
 "use client";
 import { Tablet } from "@/app/data/dataTypes";
-import { TabletApplication } from "@/app/data/dataTypes";
+import { TabletApplication as TabletApplicationType} from "@/app/data/dataTypes";
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -9,12 +9,14 @@ import { Button } from "@/components/ui/button";
 import { db } from "@/lib/firebase/firebase";
 import { collection, query, where, getDocs, doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
+import TabletApplication from "./TabletApplication";
 
 function Tablet(props: Tablet) {
   const [newTablet, setNewTablet] = useState(props);
   const [status, setStatus] = useState(props.Status)
   const [statusColorClass, setNewStatusColorClass] = useState("");
 
+  const [applicationForm, setApplicationForm] = useState<TabletApplication | undefined>(undefined);
   
   useEffect(() => {
     switch (newTablet.Status.toString()) {
@@ -73,11 +75,10 @@ function Tablet(props: Tablet) {
     const q = query(collection(db, "tabletapplications"), where("Tablet_Number", "==", props.Tablet_Number), where("Status", "==", "Pending"));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
-      let application = doc.data() as TabletApplication;
-      console.log("application.Status", application.Status);
-      console.log("application", application);
-    });
+      setApplicationForm(doc.data() as TabletApplication);
 
+    });
+ 
   }
 
   return (
@@ -90,7 +91,7 @@ function Tablet(props: Tablet) {
               <div className={` ${props.Status === "Not Available" ? "w-[43px] h-[51px] px-3 pt-[25px] m-1" : `${statusColorClass} cursor-pointer w-[43px] h-[51px] px-3 pt-[25px] pb-1 border border-zinc-700 rounded shadow flex-col justify-end items-center inline-flex m-1 `}`}>{props.Status !== "Not Available" && <div>{props.Column_Number}</div>}</div>
             </div>
           </DialogTrigger>
-          <DialogContent className="w-full flex">
+          <DialogContent className="w-full flex sm:max-w-[650px] sm:max-h-[800px]">
             <DialogHeader className="w-full">
               <DialogTitle>
                 Selected tablet is currently {newTablet.Status}:{" "}
@@ -99,40 +100,32 @@ function Tablet(props: Tablet) {
                 </div>
               </DialogTitle>
               {/* if IPT or Occupied show the details */}
+              
           
               {newTablet.Status === "IPT" || newTablet.Status === "Occupied" ? (
-                  // <ApplicaitonForm />
-                <div className="w-full flex flex-col">
-                  <Label htmlFor="details" className="mt-3 mb-1">
-                    Details:
-                  </Label>
-                  <div className="w-full flex flex-row">
-                    <div className="w-1/2 flex flex-col">
-                      <Label htmlFor="applicationID" className="mt-3 mb-1">
-                        Application ID:
-                      </Label>
-                      <div className="w-full flex flex-row">
-                        <div className="w-full flex flex-col">
-                          <Label htmlFor="applicationID" className="mt-3 mb-1">
-                            {props.ApplicationID}
-                          </Label>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="w-1/2 flex flex-col">
-                      <Label htmlFor="applicationID" className="mt-3 mb-1">
-                        Application Name:
-                      </Label>
-                      <div className="w-full flex flex-row">
-                        <div className="w-full flex flex-col">
-                          <Label htmlFor="applicationID" className="mt-3 mb-1">
-                            {/* {props.ApplicationName} */}
-                          </Label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                  <TabletApplication
+                    ApplicationID={applicationForm?.ApplicationID || ""}
+                    Tablet_Number={applicationForm?.Tablet_Number || ""}
+                    Leasing_Date={applicationForm?.Leasing_Date || new Date()}
+                    Application_Type={applicationForm?.Application_Type || ""}
+                    Beneficiary1_Name_English={applicationForm?.Beneficiary1_Name_English || ""}
+                    Beneficiary1_Name_Chinese={applicationForm?.Beneficiary1_Name_Chinese || ""}
+                    Beneficiary2_Name_English={applicationForm?.Beneficiary2_Name_English || ""}
+                    Beneficiary2_Name_Chinese={applicationForm?.Beneficiary2_Name_Chinese || ""}
+                    Beneficiary3_Name_English={applicationForm?.Beneficiary3_Name_English || ""}
+                    Beneficiary3_Name_Chinese={applicationForm?.Beneficiary3_Name_Chinese || ""}
+                    Applicant_Name_English={applicationForm?.Applicant_Name_English || ""}
+                    Applicant_Name_Chinese={applicationForm?.Applicant_Name_Chinese || ""}
+                    Applicant_Gender={applicationForm?.Applicant_Gender || ""}
+                    Applicant_Address={applicationForm?.Applicant_Address || ""}
+                    Applicant_IdentifiedCode={applicationForm?.Applicant_IdentifiedCode || ""}
+                    Applicant_Relationship={applicationForm?.Applicant_Relationship || ""}
+                    Applicant_ContactNumber={applicationForm?.Applicant_ContactNumber || ""}
+                    Officer_In_Charge={applicationForm?.Officer_In_Charge || ""}
+                    Amount_Received={applicationForm?.Amount_Received || 0}
+                    Status={applicationForm?.Status || ""}
+                    Remarks={applicationForm?.Remarks || ""}
+                  />
               ) : (
                 <div className="w-full flex flex-col">
                   {/* if available can change status */}
