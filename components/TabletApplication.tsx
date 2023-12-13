@@ -10,15 +10,26 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { db } from "@/lib/firebase/firebase";
-import { collection, query, where, getDocs, doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
-function TabletApplication(props: TabletApplication) {
-  const [isEditing, setIsEditing] = useState(false);
+import { collection, query, where, getDocs, doc, setDoc, getDoc, updateDoc, addDoc } from "firebase/firestore";
+import { set } from "lodash";
 
-  const [application, setApplication] = useState(props);
 
-  useEffect(() => {
-    setApplication(props);
-  }, [props]);
+
+function TabletApplication(props: TabletApplication & { onSave: () => void } & {isEditable: boolean}) {
+  const { onSave, isEditable, ...initialApplication} = props;
+  const [isEditing, setIsEditing] = useState(isEditable);
+  const [application, setApplication] = useState({...initialApplication});
+
+  // useEffect(() => {
+  //   setApplication({...initialApplication});
+  //   if (application.ApplicationID === "") {
+  //     console.log(application.ApplicationID);
+  //     setIsEditing(true);
+  //   }
+  //   else{
+  //     setIsEditing(false);
+  //   }
+  // }, [application.ApplicationID, props]);
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -28,15 +39,32 @@ function TabletApplication(props: TabletApplication) {
     // Add logic to save the edited data to your database or state
     const data = {
       ...application,
+      Status: "Pending",
+      Leasing_Date: application.Leasing_Date.toString()
     };
-
-    try {
-      const tabletDocRef = doc(db, "tabletapplications", application.ApplicationID.toString());
-      await updateDoc(tabletDocRef, data);
-      console.log(`Document with ID ${application.ApplicationID.toString()} written successfully.`);
-    } catch (error) {
-      console.error("Error updating document: ", error);
+    
+    // edit the data
+    if (application.ApplicationID){
+      try {
+        const tabletDocRef = doc(db, "tabletapplications", application.ApplicationID.toString());
+        await updateDoc(tabletDocRef, data);
+        console.log(`Document with ID ${application.ApplicationID.toString()} written successfully.`);
+      } catch (error) {
+        console.error("Error updating document: ", error);
+      }
     }
+    // create new data
+    else{
+      try {
+        const docRef = await addDoc(collection(db, "tabletapplications"), data);
+        await updateDoc(docRef, { ApplicationID: docRef.id });  
+        props.onSave()
+        setApplication({ ...application, ApplicationID: docRef.id });
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+    }
+
     setIsEditing(false);
   };
 
@@ -44,11 +72,11 @@ function TabletApplication(props: TabletApplication) {
     <>
       {isEditing ? (
         <div>
-          <button onClick={handleSaveClick}>Save</button>
+          <Button onClick={handleSaveClick}>Save</Button>
         </div>
       ) : (
         <div>
-          <button onClick={handleEditClick}>Edit</button>
+          <Button onClick={handleEditClick}>Edit</Button>
         </div>
       )}
       <div className="overflow-y-auto ">
