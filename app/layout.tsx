@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 
 import { SideNavBar } from "@/components/SideNavBar";
 import { AuthProvider } from "./context/AuthProvider";
+import { Toaster } from "@/components/ui/toaster"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,6 +32,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               </div>
             </div>
           </div>
+          <Toaster />
         </AuthProvider>
       </body>
     </html>

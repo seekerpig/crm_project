@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState } from "react";
 
@@ -7,14 +7,16 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Invoice, TabletApplication } from "@/app/data/dataTypes";
+import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useToast } from "@/components/ui/use-toast";
 
 import { db } from "@/lib/firebase/firebase";
 import { collection, query, where, getDocs, doc, getDoc, writeBatch, addDoc, setDoc, updateDoc } from "firebase/firestore";
-import { Invoice, TabletApplication } from "@/app/data/dataTypes";
-import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 function GenerateInvoiceModal(props: any) {
   const { invoiceData } = props;
+  const { toast } = useToast();
 
   const currentYear = new Date().getFullYear();
 
@@ -22,6 +24,7 @@ function GenerateInvoiceModal(props: any) {
   const [price, setSelectedPrice] = useState(30);
   const [showTable, setShowTable] = useState(false);
   const [invoices, setInvoices] = useState([] as Invoice[]);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const handlePriceChange = (event: any) => {
     // Parse the input value as a float
@@ -90,17 +93,22 @@ function GenerateInvoiceModal(props: any) {
       console.log("Document data:", docSnap.data());
       let currentLatestInvoiceNumber: number = Number(docSnap.data().latestInvoiceNo);
       currentLatestInvoiceNumber++;
-      
+
       try {
         for (const invoice of invoices) {
-          invoice.InvoiceNo = selectedYear.toString().substring(2) + currentLatestInvoiceNumber.toString().padStart(3, '0');
+          invoice.InvoiceNo = selectedYear.toString().substring(2) + currentLatestInvoiceNumber.toString().padStart(3, "0");
           const invoiceDocRef = doc(db, "invoices", invoice.InvoiceNo.toString());
           setDoc(invoiceDocRef, invoice);
           currentLatestInvoiceNumber++;
         }
 
-        updateDoc(docRef, { latestInvoiceNo: currentLatestInvoiceNumber - 1});
+        updateDoc(docRef, { latestInvoiceNo: currentLatestInvoiceNumber - 1 });
         await batchedWrite.commit();
+
+        toast({
+          title: "Successful",
+          description: "Invoices were created successfully",
+        });
 
         console.log("Invoices added to database", invoices);
         setInvoices([]);
@@ -114,7 +122,7 @@ function GenerateInvoiceModal(props: any) {
       let currentLatestInvoiceNumber: number = 1;
       try {
         for (const invoice of invoices) {
-          invoice.InvoiceNo = selectedYear.toString().substring(2) + currentLatestInvoiceNumber.toString().padStart(3, '0');
+          invoice.InvoiceNo = selectedYear.toString().substring(2) + currentLatestInvoiceNumber.toString().padStart(3, "0");
           const invoiceDocRef = doc(db, "invoices", invoice.InvoiceNo.toString());
           setDoc(invoiceDocRef, invoice);
           currentLatestInvoiceNumber++;
@@ -130,10 +138,11 @@ function GenerateInvoiceModal(props: any) {
         console.error("Error adding invoices:", error.message);
       }
     }
+    setDialogOpen(false);
   }
 
   return (
-    <Dialog>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
         <Button onClick={() => setShowTable(false)}>Generate Invoice</Button>
       </DialogTrigger>
