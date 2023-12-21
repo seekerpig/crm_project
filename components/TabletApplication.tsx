@@ -13,52 +13,55 @@ import { db } from "@/lib/firebase/firebase";
 import { collection, query, where, getDocs, doc, setDoc, getDoc, updateDoc, addDoc } from "firebase/firestore";
 import { set } from "lodash";
 
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
-
-function TabletApplication(props: TabletApplication & { onSave: () => void } & {isEditable: boolean}) {
-  const { onSave, isEditable, ...initialApplication} = props;
+function TabletApplication(props: TabletApplication & { onSave: () => void } & { isEditable: boolean }) {
+  const { onSave, isEditable, ...initialApplication } = props;
   const [isEditing, setIsEditing] = useState(isEditable);
-  const [application, setApplication] = useState({...initialApplication});
-
-  // useEffect(() => {
-  //   setApplication({...initialApplication});
-  //   if (application.ApplicationID === "") {
-  //     console.log(application.ApplicationID);
-  //     setIsEditing(true);
-  //   }
-  //   else{
-  //     setIsEditing(false);
-  //   }
-  // }, [application.ApplicationID, props]);
+  const [application, setApplication] = useState({ ...initialApplication });
 
   const handleEditClick = () => {
     setIsEditing(true);
+  };
+
+  const [checkFields, setCheckFields] = useState(false);
+  const handleCheckFields = () => {
+    setCheckFields(true);
+    if (application.Applicant_Name_English != "" && application.Applicant_Name_English != "" && application.Applicant_Address!="" && application.Applicant_IdentifiedCode!="" && application.Applicant_Gender!="" && application.Applicant_Relationship!="" && application.Applicant_ContactNumber!="" && application.Officer_In_Charge!="" && Number(application.Amount_Received)>0 && application.Receipt_No!=""){
+      setCheckFields(false)
+      handleSaveClick()
+    }
   };
 
   const handleSaveClick = async () => {
     // Add logic to save the edited data to your database or state
     const data = {
       ...application,
-      Status: "Pending",
-      Leasing_Date: application.Leasing_Date.toString()
     };
-    
+
     // edit the data
-    if (application.ApplicationID){
+    if (application.ApplicationID) {
       try {
         const tabletDocRef = doc(db, "tabletapplications", application.ApplicationID.toString());
         await updateDoc(tabletDocRef, data);
         console.log(`Document with ID ${application.ApplicationID.toString()} written successfully.`);
+        // setApplication(application);
       } catch (error) {
         console.error("Error updating document: ", error);
       }
     }
     // create new data
-    else{
+    else {
+      const newdata = {
+        ...data,
+        Status: "Pending",
+        Leasing_Date: application.Leasing_Date.toString(),
+      };
       try {
-        const docRef = await addDoc(collection(db, "tabletapplications"), data);
-        await updateDoc(docRef, { ApplicationID: docRef.id });  
-        props.onSave()
+        const docRef = await addDoc(collection(db, "tabletapplications"), newdata);
+        await updateDoc(docRef, { ApplicationID: docRef.id });
+        props.onSave();
         setApplication({ ...application, ApplicationID: docRef.id });
       } catch (e) {
         console.error("Error adding document: ", e);
@@ -72,7 +75,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
     <>
       {isEditing ? (
         <div>
-          <Button onClick={handleSaveClick}>Save</Button>
+          <Button onClick={handleCheckFields}>Save</Button>
         </div>
       ) : (
         <div>
@@ -80,7 +83,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
         </div>
       )}
       <div className="overflow-y-auto ">
-        <table className="w-full ">
+        <table className="w-fullx">
           <tbody>
             <tr className="border border-gray-300">
               <td colSpan={1} className="border border-gray-300 p-1">
@@ -101,11 +104,11 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
             <tr className="h-5"></tr>
             <tr className="border border-gray-300 ">
               <td colSpan={1} className="border border-gray-300 p-1">
-                <strong>1) Beneficiary Name/英文名</strong>
+                <strong>1) Beneficiary Name/英文名*</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
-                  <input
+                  <Input
                     type="text"
                     value={application.Beneficiary1_Name_English as string}
                     onChange={(e) => {
@@ -115,6 +118,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 ) : (
                   <span>{application.Beneficiary1_Name_English}</span>
                 )}
+                {checkFields && application.Beneficiary1_Name_English == "" && <p className="text-sm text-red-500"> Please enter beneficiary name</p>}
               </td>
             </tr>
             <tr className="border border-gray-300">
@@ -123,7 +127,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
-                  <input
+                  <Input
                     type="text"
                     value={application.Beneficiary1_Name_Chinese as string}
                     onChange={(e) => {
@@ -141,7 +145,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
-                  <input
+                  <Input
                     type="text"
                     value={application.Beneficiary2_Name_English as string}
                     onChange={(e) => {
@@ -159,7 +163,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
-                  <input
+                  <Input
                     type="text"
                     value={application.Beneficiary2_Name_Chinese as string}
                     onChange={(e) => {
@@ -177,7 +181,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
-                  <input
+                  <Input
                     type="text"
                     value={application.Beneficiary3_Name_English as string}
                     onChange={(e) => {
@@ -195,7 +199,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
-                  <input
+                  <Input
                     type="text"
                     value={application.Beneficiary3_Name_Chinese as string}
                     onChange={(e) => {
@@ -210,11 +214,11 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
             <tr className="h-5"></tr>
             <tr className="border border-gray-300">
               <td colSpan={1} className="border border-gray-300 p-1">
-                <strong>Applicant Name/ 英文名</strong>
+                <strong>Applicant Name/ 英文名*</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
-                  <input
+                  <Input
                     type="text"
                     value={application.Applicant_Name_English as string}
                     onChange={(e) => {
@@ -224,6 +228,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 ) : (
                   <span>{application.Applicant_Name_English}</span>
                 )}
+                {checkFields && application.Applicant_Name_English == "" && <p className="text-sm text-red-500"> Please enter applicant name</p>}
               </td>
             </tr>
             <tr className="border border-gray-300">
@@ -232,7 +237,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
-                  <input
+                  <Input
                     type="text"
                     value={application.Applicant_Name_Chinese as string}
                     onChange={(e) => {
@@ -246,11 +251,11 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
             </tr>
             <tr className="border border-gray-300">
               <td colSpan={1} className="border border-gray-300 p-1">
-                <strong>Address/ 地址</strong>
+                <strong>Address/ 地址*</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
-                  <input
+                  <Input
                     type="text"
                     value={application.Applicant_Address as string}
                     onChange={(e) => {
@@ -260,15 +265,16 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 ) : (
                   <span>{application.Applicant_Address}</span>
                 )}
+                {checkFields && application.Applicant_Address == "" && <p className="text-sm text-red-500"> Please enter address</p>}
               </td>
             </tr>
             <tr className="border border-gray-300">
               <td colSpan={1} className="border border-gray-300 p-1">
-                <strong>Indentified Code /</strong>
+                <strong>Indentified Code /*</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
-                  <input
+                  <Input
                     type="text"
                     value={application.Applicant_IdentifiedCode as string}
                     onChange={(e) => {
@@ -278,15 +284,16 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 ) : (
                   <span>{application.Applicant_IdentifiedCode}</span>
                 )}
+                {checkFields && application.Applicant_IdentifiedCode == "" && <p className="text-sm text-red-500"> Please enter Identified Code</p>}
               </td>
             </tr>
             <tr className="border border-gray-300">
               <td colSpan={1} className="border border-gray-300 p-1">
-                <strong>Gender / 性别</strong>
+                <strong>Gender / 性别*</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
-                  <input
+                  <Input
                     type="text"
                     value={application.Applicant_Gender as string}
                     onChange={(e) => {
@@ -296,15 +303,16 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 ) : (
                   <span>{application.Applicant_Gender}</span>
                 )}
+                {checkFields && application.Applicant_Gender == "" && <p className="text-sm text-red-500"> Please specify Gender</p>}
               </td>
             </tr>
             <tr className="border border-gray-300">
               <td colSpan={1} className="border border-gray-300 p-1">
-                <strong>Relationship/与受益人的关</strong>
+                <strong>Relationship/与受益人的关*</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
-                  <input
+                  <Input
                     type="text"
                     value={application.Applicant_Relationship as string}
                     onChange={(e) => {
@@ -314,15 +322,16 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 ) : (
                   <span>{application.Applicant_Relationship}</span>
                 )}
+                {checkFields && application.Applicant_Relationship == "" && <p className="text-sm text-red-500"> Please specify relationship</p>}
               </td>
             </tr>
             <tr className="border border-gray-300">
               <td colSpan={1} className="border border-gray-300 p-1">
-                <strong>Telephone Nos/Home or Mobile</strong>
+                <strong>Telephone Nos/Home or Mobile*</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
-                  <input
+                  <Input
                     type="text"
                     value={application.Applicant_ContactNumber as string}
                     onChange={(e) => {
@@ -332,6 +341,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 ) : (
                   <span>{application.Applicant_ContactNumber}</span>
                 )}
+                {checkFields && application.Applicant_ContactNumber == "" && <p className="text-sm text-red-500"> Please enter contact number</p>}
               </td>
             </tr>
             <tr className="h-5"></tr>
@@ -342,11 +352,11 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
             </tr>
             <tr className="border border-gray-300">
               <td colSpan={1} className="border border-gray-300 p-1">
-                <strong>Officer in Charge/ 管理员姓名</strong>
+                <strong>Officer in Charge/ 管理员姓名*</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
-                  <input
+                  <Input
                     type="text"
                     value={application.Officer_In_Charge as string}
                     onChange={(e) => {
@@ -356,16 +366,17 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 ) : (
                   <span>{application.Officer_In_Charge}</span>
                 )}
+                {checkFields && application.Officer_In_Charge == "" && <p className="text-sm text-red-500"> Please enter officer in charge</p>}
               </td>
             </tr>
             <tr className="border border-gray-300">
               <td colSpan={1} className="border border-gray-300 p-1">
-                <strong>Amount received/收到金额</strong>
+                <strong>Amount received/收到金额*</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
-                  <input
-                    type="text"
+                  <Input
+                    type="Number"
                     value={application.Amount_Received.toString()}
                     onChange={(e) => {
                       setApplication({ ...application, Amount_Received: parseFloat(e.target.value) });
@@ -374,15 +385,16 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 ) : (
                   <span>{application.Amount_Received.toString()}</span>
                 )}
+                {checkFields && application.Amount_Received.valueOf() <= 0 && <p className="text-sm text-red-500"> Please enter valid amount</p>}
               </td>
             </tr>
             <tr className="border border-gray-300">
               <td colSpan={1} className="border border-gray-300 p-1">
-                <strong>Receipt Nos/收据号码</strong>
+                <strong>Receipt Nos/收据号码*</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
-                  <input
+                  <Input
                     type="text"
                     value={application.Receipt_No?.toString()}
                     onChange={(e) => {
@@ -392,6 +404,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 ) : (
                   <span>{application.Receipt_No}</span>
                 )}
+                {checkFields && application.Receipt_No == "" && <p className="text-sm text-red-500"> Please enter receipt number</p>}
               </td>
             </tr>
             <tr className="border border-gray-300">

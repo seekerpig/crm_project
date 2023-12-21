@@ -126,6 +126,7 @@ function Tablet(props: Tablet) {
                   Amount_Received={applicationForm?.Amount_Received || 0}
                   Status={applicationForm?.Status || ""}
                   Remarks={applicationForm?.Remarks || ""}
+                  Receipt_No={applicationForm?.Receipt_No || ""}
                   onSave={handleSaveTablet}
                   isEditable={false}
                 />
@@ -197,6 +198,7 @@ function Tablet(props: Tablet) {
                   Amount_Received={applicationForm?.Amount_Received || 0}
                   Status={applicationForm?.Status || ""}
                   Remarks={applicationForm?.Remarks || ""}
+                  Receipt_No={applicationForm?.Receipt_No || ""}
                   onSave={handleSaveTablet}
                   isEditable={true}
                 />
@@ -225,6 +227,7 @@ function Tablet(props: Tablet) {
                   Amount_Received={applicationForm?.Amount_Received || 0}
                   Status={applicationForm?.Status || ""}
                   Remarks={applicationForm?.Remarks || ""}
+                  Receipt_No={applicationForm?.Receipt_No || ""}
                   onSave={handleSaveTablet}
                   isEditable={true}
                 />
@@ -252,6 +255,7 @@ function Tablet(props: Tablet) {
                   Amount_Received={applicationForm?.Amount_Received || 0}
                   Status={applicationForm?.Status || ""}
                   Remarks={applicationForm?.Remarks || ""}
+                  Receipt_No={applicationForm?.Receipt_No || ""}
                   onSave={handleSaveTablet}
                   isEditable={true}
                 />
