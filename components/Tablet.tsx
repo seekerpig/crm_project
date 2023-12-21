@@ -72,15 +72,28 @@ function Tablet(props: Tablet) {
   }
 
   //create fetch applicationtablet and check status if archived or head
+
   async function fetchApplicationTablet() {
     console.log("fetchApplicationTablet");
     // might change to application id instead of tablet number
     const q = query(collection(db, "tabletapplications"), where("Tablet_Number", "==", props.Tablet_Number), where("Status", "==", "Pending"));
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      setApplicationForm(doc.data() as TabletApplication);
-    });
-    console.log(applicationForm?.ApplicationID);
+    try {
+      const querySnapshot = await getDocs(q);
+  
+      querySnapshot.forEach((doc) => {
+        setApplicationForm(doc.data() as TabletApplication);
+      });
+  
+
+    } catch (error) {
+      console.error("Error fetching tablet application: ", error);
+    }
+  
+  }
+
+
+  function updateApplication(application: TabletApplication): void {
+    setApplicationForm(application);
   }
 
   return (
@@ -129,6 +142,7 @@ function Tablet(props: Tablet) {
                   Receipt_No={applicationForm?.Receipt_No || ""}
                   onSave={handleSaveTablet}
                   isEditable={false}
+                  updateApplication={updateApplication}
                 />
               ) : (
                 <div className="w-full flex flex-col">
@@ -201,6 +215,7 @@ function Tablet(props: Tablet) {
                   Receipt_No={applicationForm?.Receipt_No || ""}
                   onSave={handleSaveTablet}
                   isEditable={true}
+                  updateApplication={updateApplication}
                 />
               )}
               {/* if select Occupied a form to fill in */}
@@ -230,6 +245,7 @@ function Tablet(props: Tablet) {
                   Receipt_No={applicationForm?.Receipt_No || ""}
                   onSave={handleSaveTablet}
                   isEditable={true}
+                  updateApplication={updateApplication}
                 />
               )}
               {(status === "Occupied (N)" && applicationForm?.ApplicationID == undefined) && (
@@ -258,6 +274,7 @@ function Tablet(props: Tablet) {
                   Receipt_No={applicationForm?.Receipt_No || ""}
                   onSave={handleSaveTablet}
                   isEditable={true}
+                  updateApplication={updateApplication}
                 />
               )}
             </DialogHeader>

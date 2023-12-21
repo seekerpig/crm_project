@@ -16,8 +16,8 @@ import { set } from "lodash";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-function TabletApplication(props: TabletApplication & { onSave: () => void } & { isEditable: boolean }) {
-  const { onSave, isEditable, ...initialApplication } = props;
+function TabletApplication(props: TabletApplication & { onSave: () => void } & { isEditable: boolean } & { updateApplication: (application: TabletApplication) => void }) {
+  const { onSave, updateApplication, isEditable, ...initialApplication } = props;
   const [isEditing, setIsEditing] = useState(isEditable);
   const [application, setApplication] = useState({ ...initialApplication });
 
@@ -47,6 +47,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
         await updateDoc(tabletDocRef, data);
         console.log(`Document with ID ${application.ApplicationID.toString()} written successfully.`);
         // setApplication(application);
+        props.updateApplication(application);
       } catch (error) {
         console.error("Error updating document: ", error);
       }
@@ -83,7 +84,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
         </div>
       )}
       <div className="overflow-y-auto ">
-        <table className="w-fullx">
+        <table className="w-full">
           <tbody>
             <tr className="border border-gray-300">
               <td colSpan={1} className="border border-gray-300 p-1">
@@ -293,13 +294,26 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
-                  <Input
-                    type="text"
-                    value={application.Applicant_Gender as string}
-                    onChange={(e) => {
-                      setApplication({ ...application, Applicant_Gender: e.target.value as string });
-                    }}
-                  />
+                <Select value={application.Applicant_Gender as string} onValueChange={(e) => {
+                  setApplication({ ...application, Applicant_Gender: e as string });
+                }}>
+                  {/* Select trigger button */}
+                  <SelectTrigger>
+                    {/* Display selected value or default text */}
+                    {application.Applicant_Gender || "Select Gender"}
+                  </SelectTrigger>
+
+                  {/* Select content/options */}
+                  <SelectContent>
+                    {/* Option for "Male" */}
+                    <SelectItem value="Male">Male</SelectItem>
+
+                    {/* Option for "Female" */}
+                    <SelectItem value="Female">Female</SelectItem>
+
+                    {/* Add more options as needed */}
+                  </SelectContent>
+                </Select>
                 ) : (
                   <span>{application.Applicant_Gender}</span>
                 )}
