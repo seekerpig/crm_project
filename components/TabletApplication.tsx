@@ -20,6 +20,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
   const { onSave, updateApplication, isEditable, ...initialApplication } = props;
   const [isEditing, setIsEditing] = useState(isEditable);
   const [application, setApplication] = useState({ ...initialApplication });
+  const [oldApplication, setOldApplication] = useState({ ...initialApplication });
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -63,6 +64,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
         await updateDoc(docRef, { ApplicationID: docRef.id });
         props.onSave();
         setApplication({ ...application, ApplicationID: docRef.id });
+        console.log(`Document with ID ${docRef.id} written successfully.`);
       } catch (e) {
         console.error("Error adding document: ", e);
       }
@@ -116,16 +118,53 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
     }
   }
 
+  const handleCopy = async () => {
+    
+    // Add logic to delete the data from your database or state
+    const data = {
+      ...oldApplication,
+      Status: "archive",
+    };
+    if (application.ApplicationID) {
+      try {
+        const tabletDocRef = doc(db, "tabletapplications", application.ApplicationID.toString());
+        await updateDoc(tabletDocRef, data);
+        console.log(`Document with ID ${application.ApplicationID.toString()} written successfully.`);
+        setOldApplication(application);
+        const newdata = {
+          ...application,
+          Status: "Pending",
+          Leasing_Date: application.Leasing_Date.toString(),
+          applicationID: "",
+        };
+        try {
+          const docRef = await addDoc(collection(db, "tabletapplications"), newdata);
+          await updateDoc(docRef, { ApplicationID: docRef.id });
+          console.log(`Document with ID ${docRef.id} written successfully.`);
+          setApplication({ ...application, ApplicationID: docRef.id });
+          props.onSave();
+        } catch (e) {
+          console.error("Error adding document: ", e);
+        }
+
+      } catch (error) {
+        console.error("Error copying document: ", error);
+      }
+    }
+  }
+
   return (
     <>
       {isEditing ? (
         <div>
-          <Button onClick={handleCheckFields}>Save</Button>
+          <Button onClick={handleCheckFields} className="me-3">Save</Button>
+          <Button onClick={handleCopy}>Save as New Form</Button>
         </div>
       ) : (
         <div>
           <Button onClick={handleEditClick} className="me-3">Edit</Button>
-          <Button onClick={handleDeleteClick}>Archive</Button>
+          <Button onClick={handleDeleteClick} className="me-3">Archive</Button>
+
         </div>
       )}
       <div className="overflow-y-auto ">
