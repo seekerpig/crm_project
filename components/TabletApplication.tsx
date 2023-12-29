@@ -33,7 +33,6 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
       handleSaveClick()
     }
   };
-
   const handleSaveClick = async () => {
     // Add logic to save the edited data to your database or state
     const data = {
@@ -72,6 +71,51 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
     setIsEditing(false);
   };
 
+  const handleDeleteClick = async () => {
+    // Add logic to delete the data from your database or state
+    if (application.ApplicationID) {
+      try {
+        const tabletDocRef = doc(db, "tabletapplications", application.ApplicationID.toString());
+        await updateDoc(tabletDocRef, { Status: "archive" });
+        console.log(`Document with ID ${application.ApplicationID.toString()} archive successfully.`);
+        
+        const data = {
+          ApplicationID: "",
+          Tablet_Number: application.Tablet_Number,
+          Leasing_Date: new Date(),
+          Application_Type: "",
+          Beneficiary1_Name_English: "",
+          Beneficiary1_Name_Chinese: "",
+          Beneficiary2_Name_English: "",
+          Beneficiary2_Name_Chinese: "",
+          Beneficiary3_Name_English: "",
+          Beneficiary3_Name_Chinese: "",
+          Applicant_Name_English: "",
+          Applicant_Name_Chinese: "",
+          Applicant_Gender: "",
+          Applicant_Address: "",
+          Applicant_IdentifiedCode: "",
+          Applicant_Relationship: "",
+          Applicant_ContactNumber: "",
+          SecondContact_Name_English: "",
+          SecondContact_Name_Chinese: "",
+          SecondContact_Address: "",
+          SecondContact_ContactNumber: "",
+          Officer_In_Charge: "",
+          Amount_Received: 0,
+          Receipt_No: "",
+          Payment_Comments: "",
+          Remarks: "",
+          Status: "",
+        };
+        setApplication(data);
+        props.updateApplication(data);
+      } catch (error) {
+        console.error("Error deleting document: ", error);
+      }
+    }
+  }
+
   return (
     <>
       {isEditing ? (
@@ -80,7 +124,8 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
         </div>
       ) : (
         <div>
-          <Button onClick={handleEditClick}>Edit</Button>
+          <Button onClick={handleEditClick} className="me-3">Edit</Button>
+          <Button onClick={handleDeleteClick}>Archive</Button>
         </div>
       )}
       <div className="overflow-y-auto ">

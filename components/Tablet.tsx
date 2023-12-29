@@ -92,8 +92,38 @@ function Tablet(props: Tablet) {
   }
 
 
-  function updateApplication(application: TabletApplication): void {
-    setApplicationForm(application);
+  async function updateApplication(application: TabletApplication) {
+    console.log("updateApplication", application.Status);
+    if (application.Status === "") {
+      console.log("updateApplication here", application.Status);
+      setApplicationForm(undefined);
+      handleStatusChange("Available");
+      const status = "Available";
+      let tablet: Tablet = {
+        Tablet_Number: newTablet.Tablet_Number,
+        Block: newTablet.Block,
+        Row_Number: newTablet.Row_Number,
+        Column_Number: newTablet.Column_Number,
+        Status: status,
+      };
+      const data = {
+        [props.Tablet_Number.toString()]: [status, ""],
+      };
+      const block = "Block" + props.Tablet_Number.charAt(0);
+  
+      try {
+        const tabletDocRef = doc(db, "tablets", block);
+        await updateDoc(tabletDocRef, data);
+        console.log(`Document with ID ${block} written successfully.`);
+        setNewTablet(tablet);
+      } catch (error) {
+        console.error("Error updating document: ", error);
+      }
+    }
+    else {
+      setApplicationForm(application);
+      setStatus(application.Status);
+    }
   }
 
   return (
