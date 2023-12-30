@@ -62,6 +62,13 @@ export default async function TabletsMapViewBlockA() {
   
   return (
     <div className="w-full h-screen overflow-auto">
+      <div className="my-1 sticky left-0 top-0 bg-white">
+      <span className="bg-white text-black px-2 py-1 rounded-full ms-10 border border-black">Available</span>
+      <span className="bg-green-500 text-black px-2 py-1 rounded-full ms-10 ">IPT</span>
+      <span className="bg-yellow-500 text-black px-2 py-1 rounded-full ms-10 ">Reserved</span>
+      <span className="bg-red-500 text-black px-2 py-1 rounded-full ms-10 ">Occupied</span>
+      <span className="bg-purple-500 text-black px-2 py-1 rounded-full ms-10 ">Blocked</span>
+      </div>
       <div className="flex flex-col w-max">
         {(() => {
           let blkRowNumber: string;
