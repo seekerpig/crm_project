@@ -62,8 +62,8 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
       try {
         const docRef = await addDoc(collection(db, "tabletapplications"), newdata);
         await updateDoc(docRef, { ApplicationID: docRef.id });
-        props.onSave();
         setApplication({ ...application, ApplicationID: docRef.id });
+        props.onSave();
         console.log(`Document with ID ${docRef.id} written successfully.`);
       } catch (e) {
         console.error("Error adding document: ", e);
@@ -119,7 +119,6 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
   }
 
   const handleCopy = async () => {
-    
     // Add logic to delete the data from your database or state
     const data = {
       ...oldApplication,
@@ -151,6 +150,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
         console.error("Error copying document: ", error);
       }
     }
+    setIsEditing(false);
   }
 
   return (
@@ -158,7 +158,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
       {isEditing ? (
         <div>
           <Button onClick={handleCheckFields} className="me-3">Save</Button>
-          <Button onClick={handleCopy}>Save as New Form</Button>
+          {application.ApplicationID !== "" && <Button onClick={handleCopy}>Save as New Form</Button>}
         </div>
       ) : (
         <div>

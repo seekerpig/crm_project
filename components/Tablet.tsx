@@ -10,6 +10,7 @@ import { db } from "@/lib/firebase/firebase";
 import { collection, query, where, getDocs, doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import TabletApplication from "./TabletApplication";
+import { set } from "lodash";
 
 function Tablet(props: Tablet) {
   const [newTablet, setNewTablet] = useState(props);
@@ -98,6 +99,7 @@ function Tablet(props: Tablet) {
       console.log("updateApplication here", application.Status);
       setApplicationForm(undefined);
       handleStatusChange("Available");
+  
       const status = "Available";
       let tablet: Tablet = {
         Tablet_Number: newTablet.Tablet_Number,
@@ -180,7 +182,7 @@ function Tablet(props: Tablet) {
                   <Label htmlFor="changeStatus" className="mt-3 mb-1">
                     Change Status to:
                   </Label>
-                  <Select defaultValue={newTablet.Status as string} onValueChange={(value: string) => handleStatusChange(value)}>
+                  <Select defaultValue={newTablet.Status as string} onValueChange={(value: string) => handleStatusChange(value)} value={status.toString()}>
                     <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder="Select a Status" />
                     </SelectTrigger>
