@@ -30,6 +30,10 @@ export const descriptions = [
   {
     value: "Installment Downpayment",
     label: "Installment Downpayment",
+  },
+  {
+    value: "Custom Payment",
+    label: "Custom Payment",
   }
 ]
 

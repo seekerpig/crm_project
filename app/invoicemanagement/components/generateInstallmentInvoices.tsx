@@ -157,7 +157,7 @@ function GenerateInstallmentInvoiceModal(props: any) {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button onClick={() => setShowTable(false)}>Generate Monthly Installment Invoice</Button>
+        <Button className="ml-3" variant="secondary" onClick={() => setShowTable(false)}>Generate Monthly Installment Invoice</Button>
       </DialogTrigger>
       <DialogContent className="w-full flex lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl overflow-y-scroll max-h-[80vh]">
         <DialogHeader className={`${showTable == false ? "w-full" : "hidden"}  `}>

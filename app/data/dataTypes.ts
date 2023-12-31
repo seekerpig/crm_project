@@ -50,7 +50,7 @@ export interface Invoice {
   Tablet_Number: String,
   Payee_Name: String,
   Payee_Address: String,
-  Description: "Purchase of Tablet Leasing (Normal)" | "Annual Fee for Maintenance of Ancestor Tablet" | "Purchase of Tablet (Special)" | "Monthly Installment" | "Installment Downpayment",
+  Description: "Purchase of Tablet Leasing (Normal)" | "Annual Fee for Maintenance of Ancestor Tablet" | "Purchase of Tablet (Special)" | "Monthly Installment" | "Installment Downpayment" | "Custom Payment",
   Fiscal_Year: Number,
   Receipt_No: String,
   Amount: Number,
