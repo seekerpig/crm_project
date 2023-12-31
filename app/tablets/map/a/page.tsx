@@ -3,8 +3,7 @@ import { db } from "@/lib/firebase/firebase";
 import { table } from "console";
 import { collection, query, where, getDocs, doc, setDoc, getDoc } from "firebase/firestore";
 import { Tablets } from "lucide-react";
-import {Tablet as TabletType} from '@/app/data/dataTypes';
-
+import { Tablet as TabletType } from "@/app/data/dataTypes";
 
 // const data = {
 //   E0101: [ 'Available', null ],
@@ -324,7 +323,6 @@ import {Tablet as TabletType} from '@/app/data/dataTypes';
 //   E1737: [ 'Available', null ]
 // }
 
-
 // async function pushDataToFirebase() {
 //   // Push the data to Firestore with specified document IDs
 //     try {
@@ -339,24 +337,24 @@ import {Tablet as TabletType} from '@/app/data/dataTypes';
 
 async function getTablets() {
   // create a query against the collection tablets where block = "A" in firestore
-// Reference to the specific document by ID
-let tablets: Tablet[] = [];
-const documentRef = doc(db, 'tablets', 'BlockA');
+  // Reference to the specific document by ID
+  let tablets: Tablet[] = [];
+  const documentRef = doc(db, "tablets", "BlockA");
 
-// Retrieve the document
-const documentSnapshot = await getDoc(documentRef);
+  // Retrieve the document
+  const documentSnapshot = await getDoc(documentRef);
 
-if (documentSnapshot.exists()) {
-  // Document found
-  const data = documentSnapshot.data();
-  // console.log('Document ID: BlockA, Data:', data);
+  if (documentSnapshot.exists()) {
+    // Document found
+    const data = documentSnapshot.data();
+    // console.log('Document ID: BlockA, Data:', data);
 
-  tablets = convertToTabletInterface(data);
-  return tablets;
-} else {
-  // Document not found
-  console.log('Document ID: BlockA not found');
-}
+    tablets = convertToTabletInterface(data);
+    return tablets;
+  } else {
+    // Document not found
+    console.log("Document ID: BlockA not found");
+  }
 }
 
 function convertToTabletInterface(data: any): Tablet[] {
@@ -371,11 +369,10 @@ function convertToTabletInterface(data: any): Tablet[] {
       Row_Number: rowNumber,
       Column_Number: columnNumber,
       Status: status,
-      AppID: appId || '', // Assuming AppID might be null in some cases
+      AppID: appId || "", // Assuming AppID might be null in some cases
     };
   });
 }
-
 
 export default async function TabletsMapViewBlockA() {
   let tablets = await getTablets().then((tablets) => {
@@ -389,15 +386,15 @@ export default async function TabletsMapViewBlockA() {
       return rowComparison || columnComparison;
     });
   });
-  
+
   return (
     <div className="w-full h-screen overflow-auto ">
       <div className="my-1 sticky left-0 top-0 bg-white/75">
-      <span className="bg-white text-black px-2 py-1 rounded-full ms-10 border border-black">Available</span>
-      <span className="bg-green-500 text-black px-2 py-1 rounded-full ms-10 ">IPT</span>
-      <span className="bg-yellow-500 text-black px-2 py-1 rounded-full ms-10 ">Reserved</span>
-      <span className="bg-red-500 text-black px-2 py-1 rounded-full ms-10 ">Occupied</span>
-      <span className="bg-purple-500 text-black px-2 py-1 rounded-full ms-10 ">Blocked</span>
+        <span className="bg-white text-black px-2 py-1 rounded-full ms-10 border border-black">Available</span>
+        <span className="bg-green-300 font-bold text-black px-2 py-1 rounded-full ms-10 ">IPT</span>
+        <span className="bg-yellow-200 font-bold text-black px-2 py-1 rounded-full ms-10 ">Reserved</span>
+        <span className="bg-red-300 font-bold text-black px-2 py-1 rounded-full ms-10 ">Occupied</span>
+        <span className="bg-purple-300 font-bold text-black px-2 py-1 rounded-full ms-10 ">Blocked</span>
       </div>
       {/* <button onClick={() => pushDataToFirebase()}>Push Data to Firebase</button> */}
       <div className="flex flex-col w-max">
@@ -424,7 +421,7 @@ export default async function TabletsMapViewBlockA() {
               );
               currentRow = tablet.Row_Number.toString();
             }
-            rowItems.push(<Tablet key={tablet.Tablet_Number.toString()} Block={tablet.Block} Row_Number={tablet.Row_Number} Column_Number={tablet.Column_Number} Status={tablet.Status} Tablet_Number={tablet.Tablet_Number} ApplicationID={tablet.ApplicationID}/>);
+            rowItems.push(<Tablet key={tablet.Tablet_Number.toString()} Block={tablet.Block} Row_Number={tablet.Row_Number} Column_Number={tablet.Column_Number} Status={tablet.Status} Tablet_Number={tablet.Tablet_Number} ApplicationID={tablet.ApplicationID} />);
             if (index === tablets.length - 1) {
               rows.push(
                 <div key={currentRow} className="flex flex-row">
