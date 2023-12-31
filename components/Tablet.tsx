@@ -77,7 +77,7 @@ function Tablet(props: Tablet) {
   async function fetchApplicationTablet() {
     console.log("fetchApplicationTablet");
     // might change to application id instead of tablet number
-    const q = query(collection(db, "tabletapplications"), where("Tablet_Number", "==", props.Tablet_Number), where("Status", "==", "Pending"));
+    const q = query(collection(db, "tabletapplications"), where("Tablet_Number", "==", props.Tablet_Number), where("Status", "==", "Current"));
     try {
       const querySnapshot = await getDocs(q);
   
@@ -175,6 +175,8 @@ function Tablet(props: Tablet) {
                   onSave={handleSaveTablet}
                   isEditable={false}
                   updateApplication={updateApplication}
+                  Outstanding_Amount={applicationForm?.Outstanding_Amount || 0}
+                  Number_of_Months={applicationForm?.Number_of_Months || 0}
                 />
               ) : (
                 <div className="w-full flex flex-col">
@@ -215,7 +217,6 @@ function Tablet(props: Tablet) {
                       <Button className="mr-4" onClick={handleSaveTablet}>
                         Save
                       </Button>
-                      <Button variant="secondary">Cancel</Button>
                     </div>
                   )}
                 </div>
@@ -248,6 +249,8 @@ function Tablet(props: Tablet) {
                   onSave={handleSaveTablet}
                   isEditable={true}
                   updateApplication={updateApplication}
+                  Outstanding_Amount={applicationForm?.Outstanding_Amount || 0}
+                  Number_of_Months={applicationForm?.Number_of_Months || 0}
                 />
               )}
               {/* if select Occupied a form to fill in */}
@@ -278,6 +281,8 @@ function Tablet(props: Tablet) {
                   onSave={handleSaveTablet}
                   isEditable={true}
                   updateApplication={updateApplication}
+                  Outstanding_Amount={applicationForm?.Outstanding_Amount || 0}
+                  Number_of_Months={applicationForm?.Number_of_Months || 0}
                 />
               )}
               {(status === "Occupied (N)" && applicationForm?.ApplicationID == undefined) && (
@@ -307,6 +312,8 @@ function Tablet(props: Tablet) {
                   onSave={handleSaveTablet}
                   isEditable={true}
                   updateApplication={updateApplication}
+                  Outstanding_Amount={applicationForm?.Outstanding_Amount || 0}
+                  Number_of_Months={applicationForm?.Number_of_Months || 0}
                 />
               )}
             </DialogHeader>
