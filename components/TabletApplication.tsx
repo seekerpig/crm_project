@@ -30,8 +30,14 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
   const handleCheckFields = () => {
     setCheckFields(true);
     if (application.Applicant_Name_English != "" && application.Applicant_Name_English != "" && application.Applicant_Address!="" && application.Applicant_IdentifiedCode!="" && application.Applicant_Gender!="" && application.Applicant_Relationship!="" && application.Applicant_ContactNumber!="" && application.Officer_In_Charge!="" && Number(application.Amount_Received)>0 && application.Receipt_No!=""){
-      setCheckFields(false)
-      handleSaveClick()
+      if (application.Application_Type === "IPT"  && Number(application.Number_of_Months) > 0 && Number(application.Outstanding_Amount) > 0) {
+        setCheckFields(false)
+        handleSaveClick()
+      }
+      else if (application.Application_Type !== "IPT") {
+        setCheckFields(false)
+        handleSaveClick()
+      }
     }
   };
   const handleSaveClick = async () => {
@@ -56,7 +62,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
     else {
       const newdata = {
         ...data,
-        Status: "Pending",
+        Status: "Current",
         Leasing_Date: application.Leasing_Date.toString(),
       };
       try {
@@ -78,7 +84,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
     if (application.ApplicationID) {
       try {
         const tabletDocRef = doc(db, "tabletapplications", application.ApplicationID.toString());
-        await updateDoc(tabletDocRef, { Status: "archive" });
+        await updateDoc(tabletDocRef, { Status: "Archive" });
         console.log(`Document with ID ${application.ApplicationID.toString()} archive successfully.`);
         
         const data = {
@@ -103,12 +109,17 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
           SecondContact_Name_Chinese: "",
           SecondContact_Address: "",
           SecondContact_ContactNumber: "",
+          SecondContact_Relationship:"",
+          SecondContact_IdentifiedCode:"",
+          SecondContact_Gender:"",
           Officer_In_Charge: "",
           Amount_Received: 0,
           Receipt_No: "",
           Payment_Comments: "",
           Remarks: "",
           Status: "",
+          Number_of_Months: 0,
+          Outstanding_Amount: 0,
         };
         setApplication(data);
         props.updateApplication(data);
@@ -122,7 +133,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
     // Add logic to delete the data from your database or state
     const data = {
       ...oldApplication,
-      Status: "archive",
+      Status: "Archive",
     };
     if (application.ApplicationID) {
       try {
@@ -132,7 +143,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
         setOldApplication(application);
         const newdata = {
           ...application,
-          Status: "Pending",
+          Status: "Current",
           Leasing_Date: application.Leasing_Date.toString(),
           applicationID: "",
         };
@@ -186,6 +197,49 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 <span>{String(application.Leasing_Date).substring(0, 10)}</span>
               </td>
             </tr>
+            {application.Application_Type == "IPT" && (<>
+            <tr className="border border-gray-300">
+              <td colSpan={1} className="border border-gray-300 p-1">
+                <strong>Number of Months*</strong>
+              </td>
+              <td colSpan={1} className="p-1 w-64">
+                {isEditing ? (
+                  <Input
+                    type="Number"
+                    value={application.Number_of_Months?.toString()}
+                    onChange={(e) => {
+                      setApplication({ ...application, Number_of_Months: parseFloat(e.target.value) });
+                    }}
+                  />
+                ) : (
+                  <span>{application.Number_of_Months?.toString()}</span>
+                )}
+                {checkFields && (application.Number_of_Months?.valueOf() ?? 0) <= 0 && <p className="text-sm text-red-500"> Please enter valid amount</p>}
+              </td>
+            </tr>
+            <tr className="border border-gray-300">
+              <td colSpan={1} className="border border-gray-300 p-1">
+                <strong>Outstanding Amount*</strong>
+              </td>
+              <td colSpan={1} className="p-1 w-64">
+                {isEditing ? (
+                  <Input
+                    type="Number"
+                    value={application.Outstanding_Amount?.toString()}
+                    onChange={(e) => {
+                      setApplication({ ...application, Outstanding_Amount: parseFloat(e.target.value) });
+                    }}
+                  />
+                ) : (
+                  <span>{application.Outstanding_Amount?.toString()}</span>
+                )}
+                {checkFields && (application.Outstanding_Amount?.valueOf() ?? 0) <= 0 && <p className="text-sm text-red-500"> Please enter valid amount</p>}
+              </td>
+            </tr>
+            </>
+            )}
+            
+
             <tr className="h-5"></tr>
             <tr className="border border-gray-300 ">
               <td colSpan={1} className="border border-gray-300 p-1">
@@ -442,6 +496,150 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 {checkFields && application.Applicant_ContactNumber == "" && <p className="text-sm text-red-500"> Please enter contact number</p>}
               </td>
             </tr>
+
+
+            <tr className="h-5"></tr>
+            <tr className="border border-gray-300">
+              <td colSpan={1} className="border border-gray-300 p-1">
+                <strong>Second Contact Name/ 英文名</strong>
+              </td>
+              <td colSpan={1} className="p-1 w-64">
+                {isEditing ? (
+                  <Input
+                    type="text"
+                    value={application.SecondContact_Name_English as string}
+                    onChange={(e) => {
+                      setApplication({ ...application, SecondContact_Name_English: e.target.value as string });
+                    }}
+                  />
+                ) : (
+                  <span>{application.SecondContact_Name_English}</span>
+                )}
+              </td>
+            </tr>
+            <tr className="border border-gray-300">
+              <td colSpan={1} className="border border-gray-300 p-1">
+                <strong>第二联系姓名/ 中文名</strong>
+              </td>
+              <td colSpan={1} className="p-1 w-64">
+                {isEditing ? (
+                  <Input
+                    type="text"
+                    value={application.SecondContact_Name_Chinese as string}
+                    onChange={(e) => {
+                      setApplication({ ...application, SecondContact_Name_Chinese: e.target.value as string });
+                    }}
+                  />
+                ) : (
+                  <span>{application.SecondContact_Name_Chinese}</span>
+                )}
+              </td>
+            </tr>
+            <tr className="border border-gray-300">
+              <td colSpan={1} className="border border-gray-300 p-1">
+                <strong>Address/ 地址</strong>
+              </td>
+              <td colSpan={1} className="p-1 w-64">
+                {isEditing ? (
+                  <Input
+                    type="text"
+                    value={application.SecondContact_Address as string}
+                    onChange={(e) => {
+                      setApplication({ ...application, SecondContact_Address: e.target.value as string });
+                    }}
+                  />
+                ) : (
+                  <span>{application.SecondContact_Address}</span>
+                )}
+              </td>
+            </tr>
+            <tr className="border border-gray-300">
+              <td colSpan={1} className="border border-gray-300 p-1">
+                <strong>Indentified Code </strong>
+              </td>
+              <td colSpan={1} className="p-1 w-64">
+                {isEditing ? (
+                  <Input
+                    type="text"
+                    value={application.SecondContact_IdentifiedCode as string}
+                    onChange={(e) => {
+                      setApplication({ ...application, SecondContact_IdentifiedCode: e.target.value as string });
+                    }}
+                  />
+                ) : (
+                  <span>{application.SecondContact_IdentifiedCode}</span>
+                )}
+
+              </td>
+            </tr>
+            <tr className="border border-gray-300">
+              <td colSpan={1} className="border border-gray-300 p-1">
+                <strong>Gender / 性别</strong>
+              </td>
+              <td colSpan={1} className="p-1 w-64">
+                {isEditing ? (
+                <Select value={application.SecondContact_Gender as string} onValueChange={(e) => {
+                  setApplication({ ...application, SecondContact_Gender: e as string });
+                }}>
+                  {/* Select trigger button */}
+                  <SelectTrigger>
+                    {/* Display selected value or default text */}
+                    {application.SecondContact_Gender || "Select Gender"}
+                  </SelectTrigger>
+
+                  {/* Select content/options */}
+                  <SelectContent>
+                    {/* Option for "Male" */}
+                    <SelectItem value="Male">Male</SelectItem>
+
+                    {/* Option for "Female" */}
+                    <SelectItem value="Female">Female</SelectItem>
+
+                    {/* Add more options as needed */}
+                  </SelectContent>
+                </Select>
+                ) : (
+                  <span>{application.SecondContact_Gender}</span>
+                )}
+              </td>
+            </tr>
+            <tr className="border border-gray-300">
+              <td colSpan={1} className="border border-gray-300 p-1">
+                <strong>Relationship/与受益人的关</strong>
+              </td>
+              <td colSpan={1} className="p-1 w-64">
+                {isEditing ? (
+                  <Input
+                    type="text"
+                    value={application.SecondContact_Relationship as string}
+                    onChange={(e) => {
+                      setApplication({ ...application, SecondContact_Relationship: e.target.value as string });
+                    }}
+                  />
+                ) : (
+                  <span>{application.SecondContact_Relationship}</span>
+                )}
+              </td>
+            </tr>
+            <tr className="border border-gray-300">
+              <td colSpan={1} className="border border-gray-300 p-1">
+                <strong>Telephone Nos/Home or Mobile*</strong>
+              </td>
+              <td colSpan={1} className="p-1 w-64">
+                {isEditing ? (
+                  <Input
+                    type="text"
+                    value={application.SecondContact_ContactNumber as string}
+                    onChange={(e) => {
+                      setApplication({ ...application, SecondContact_ContactNumber: e.target.value as string });
+                    }}
+                  />
+                ) : (
+                  <span>{application.SecondContact_ContactNumber}</span>
+                )}
+              </td>
+            </tr>
+
             <tr className="h-5"></tr>
             <tr className="border border-gray-300">
               <td colSpan={1} className="border border-gray-300 p-1">

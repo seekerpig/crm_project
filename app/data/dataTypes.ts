@@ -20,12 +20,17 @@ export interface TabletApplication {
   SecondContact_Name_Chinese?: String,
   SecondContact_Address?: String,
   SecondContact_ContactNumber?: String,
+  SecondContact_Relationship?: String,
+  SecondContact_IdentifiedCode?: String,
+  SecondContact_Gender?: String,
   Officer_In_Charge: String,
   Amount_Received: Number;
   Receipt_No?: String,
   Payment_Comments?: String,
   Remarks?: String,
-  Status: String
+  Status: String,
+  Outstanding_Amount?: Number,
+  Number_of_Months?: Number,
 }
 
 export interface Tablet {
