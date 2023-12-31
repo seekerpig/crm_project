@@ -26,11 +26,11 @@ export interface TabletApplication {
   Officer_In_Charge: String,
   Amount_Received: Number;
   Receipt_No?: String,
+  Outstanding_Amount?: String,
+  Number_of_Months?: String,
   Payment_Comments?: String,
   Remarks?: String,
   Status: String,
-  Outstanding_Amount?: Number,
-  Number_of_Months?: Number,
 }
 
 export interface Tablet {
@@ -50,11 +50,12 @@ export interface Invoice {
   Tablet_Number: String,
   Payee_Name: String,
   Payee_Address: String,
-  Description: "Purchase of Tablet Leasing (Normal)" | "Annual Fee for Maintenance of Ancestor Tablet" | "Purchase of Tablet (Special)" | "Monthly Installment",
+  Description: "Purchase of Tablet Leasing (Normal)" | "Annual Fee for Maintenance of Ancestor Tablet" | "Purchase of Tablet (Special)" | "Monthly Installment" | "Installment Downpayment",
   Fiscal_Year: Number,
   Receipt_No: String,
   Amount: Number,
   Year_Positioned: Number,
+  Month?: Number,
   IsPaid: Boolean,
 }
 

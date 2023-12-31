@@ -11,7 +11,6 @@ import { Invoice, TabletApplication } from "@/app/data/dataTypes";
 import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/components/ui/use-toast";
 
-
 import { db } from "@/lib/firebase/firebase";
 import { collection, query, where, getDocs, doc, getDoc, writeBatch, addDoc, setDoc, updateDoc } from "firebase/firestore";
 
@@ -22,20 +21,11 @@ function GenerateInstallmentInvoiceModal(props: any) {
   const currentYear = new Date().getFullYear();
 
   const [selectedYear, setSelectedYear] = useState(currentYear);
-  const [price, setSelectedPrice] = useState(30);
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth()); // default to January
+
   const [showTable, setShowTable] = useState(false);
   const [invoices, setInvoices] = useState([] as Invoice[]);
   const [dialogOpen, setDialogOpen] = useState(false);
-
-  const handlePriceChange = (event: any) => {
-    // Parse the input value as a float
-    const newPrice = parseFloat(event.target.value);
-
-    // Check if the parsed value is a valid number
-    if (!isNaN(newPrice)) {
-      setSelectedPrice(newPrice);
-    }
-  };
 
   const handleDeleteInvoice = (applicationID: string) => {
     // Remove the invoice from the invoices list
@@ -43,102 +33,119 @@ function GenerateInstallmentInvoiceModal(props: any) {
     setInvoices(updatedInvoices);
   };
 
-  async function getInvoicesForApplicationsNormalType(year: string, price: number) {
-    const queryTabletApplications = query(collection(db, "tabletapplications"), where("Application_Type", "==", "N"));
+  async function getInvoicesForApplicationsIPTType(year: string, month: number) {
+    const queryTabletApplications = query(collection(db, "tabletapplications"), where("Application_Type", "==", "IPT"), where("Status", "==", "Current"));
 
     const querySnapshotTabletApplications = await getDocs(queryTabletApplications);
 
     var currInvoices: Invoice[] = [];
 
-    querySnapshotTabletApplications.forEach((doc) => {
+    for (const doc of querySnapshotTabletApplications.docs) {
       let tabletApplication = doc.data() as TabletApplication;
-      let invoice: Invoice = {
-        InvoiceNo: "",
-        ApplicationID: tabletApplication.ApplicationID,
-        Dated: new Date().toISOString(),
-        Terms: "30 Days",
-        Tablet_Number: tabletApplication.Tablet_Number,
-        Payee_Name: tabletApplication.Applicant_Name_English,
-        Payee_Address: tabletApplication.Applicant_Address,
-        Description: "Annual Fee for Maintenance of Ancestor Tablet",
-        Fiscal_Year: Number(year),
-        Receipt_No: "",
-        Amount: price,
-        Year_Positioned: new Date(tabletApplication.Leasing_Date).getFullYear(),
-        IsPaid: false,
-      };
-      currInvoices.push(invoice);
-    });
+
+      if (tabletApplication.Outstanding_Amount && parseFloat(tabletApplication.Outstanding_Amount.toString()) > 0 && tabletApplication.Number_of_Months && parseInt(tabletApplication.Number_of_Months.toString()) > 0) {
+        let invoice: Invoice = {
+          InvoiceNo: "",
+          ApplicationID: tabletApplication.ApplicationID,
+          Dated: new Date().toISOString(),
+          Terms: "30 Days",
+          Tablet_Number: tabletApplication.Tablet_Number,
+          Payee_Name: tabletApplication.Applicant_Name_English,
+          Payee_Address: tabletApplication.Applicant_Address,
+          Description: "Monthly Installment",
+          Fiscal_Year: Number(year),
+          Receipt_No: "",
+          Amount: parseFloat((parseFloat(tabletApplication.Outstanding_Amount.toString()) / parseInt(tabletApplication.Number_of_Months.toString())).toFixed(2)),
+          Year_Positioned: new Date(tabletApplication.Leasing_Date).getFullYear(),
+          Month: month,
+          IsPaid: false,
+        };
+
+        // Need to check whether invoice of this month for this appID exists. If so, don't allow create.
+        console.log("Trying invoice: ", tabletApplication.ApplicationID);
+        const queryInvoice = query(collection(db, "invoices"), where("Month", "==", month), where("Fiscal_Year", "==", parseInt(year)), where("ApplicationID", "==", tabletApplication.ApplicationID.toString()));
+        const queryInvoiceSnapshot = await getDocs(queryInvoice);
+        if (queryInvoiceSnapshot.empty) {
+          currInvoices.push(invoice);
+        } else {
+          console.log("Invoice with this app ID, year and month already exists");
+        }
+        // Need to reduce outstanding balance of application form. (NO, only do this after mark as paid)
+      }
+    }
     console.log("Before filtered invoices:", currInvoices);
     setInvoices(currInvoices);
     setShowTable(true);
   }
 
-  const handleGenerateMaintenanceInvoices = async () => {
+  const handleGenerateInstallmentInvoices = async () => {
     // Check if both year and month are selected
-    if (selectedYear !== null && price !== null) {
-      await getInvoicesForApplicationsNormalType(selectedYear.toString(), price);
-      console.log("Generating invoices for:", selectedYear, " and for price: ", price);
+    if (selectedYear !== null && selectedMonth !== null) {
+      await getInvoicesForApplicationsIPTType(selectedYear.toString(), selectedMonth);
+      console.log("Generating invoices for:", selectedYear, " and for month: ", selectedMonth);
     } else {
       // Handle the case where either year or month is not selected
       console.error("Please select year and input a valid price");
     }
   };
   async function finaliseGenerateInvoice() {
-    const docRef = doc(db, "invoicemetadata", selectedYear.toString());
-    const docSnap = await getDoc(docRef);
+    if (invoices.length > 0) {
+      const docRef = doc(db, "invoicemetadata", selectedYear.toString());
+      const docSnap = await getDoc(docRef);
 
-    const batchedWrite = writeBatch(db);
+      const batchedWrite = writeBatch(db);
 
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
-      let currentLatestInvoiceNumber: number = Number(docSnap.data().latestInvoiceNo);
-      currentLatestInvoiceNumber++;
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+        let currentLatestInvoiceNumber: number = Number(docSnap.data().latestInvoiceNo);
+        currentLatestInvoiceNumber++;
 
-      try {
-        for (const invoice of invoices) {
-          invoice.InvoiceNo = selectedYear.toString().substring(2) + currentLatestInvoiceNumber.toString().padStart(3, "0");
-          const invoiceDocRef = doc(db, "invoices", invoice.InvoiceNo.toString());
-          setDoc(invoiceDocRef, invoice);
-          currentLatestInvoiceNumber++;
+        try {
+          for (const invoice of invoices) {
+            invoice.InvoiceNo = selectedYear.toString().substring(2) + currentLatestInvoiceNumber.toString().padStart(3, "0");
+            const invoiceDocRef = doc(db, "invoices", invoice.InvoiceNo.toString());
+            setDoc(invoiceDocRef, invoice);
+            currentLatestInvoiceNumber++;
+          }
+
+          updateDoc(docRef, { latestInvoiceNo: currentLatestInvoiceNumber - 1 });
+          await batchedWrite.commit();
+
+          toast({
+            title: "Successful",
+            description: "Invoices were created successfully",
+          });
+
+          console.log("Invoices added to database", invoices);
+          setInvoices([]);
+          setShowTable(false);
+        } catch (error: any) {
+          console.error("Error adding invoices:", error.message);
         }
+      } else {
+        console.log("No such invoice metadata with the selected year, must create new year!");
 
-        updateDoc(docRef, { latestInvoiceNo: currentLatestInvoiceNumber - 1 });
-        await batchedWrite.commit();
+        let currentLatestInvoiceNumber: number = 1;
+        try {
+          for (const invoice of invoices) {
+            invoice.InvoiceNo = selectedYear.toString().substring(2) + currentLatestInvoiceNumber.toString().padStart(3, "0");
+            const invoiceDocRef = doc(db, "invoices", invoice.InvoiceNo.toString());
+            setDoc(invoiceDocRef, invoice);
+            currentLatestInvoiceNumber++;
+          }
 
-        toast({
-          title: "Successful",
-          description: "Invoices were created successfully",
-        });
+          setDoc(docRef, { latestInvoiceNo: currentLatestInvoiceNumber - 1 });
+          await batchedWrite.commit();
 
-        console.log("Invoices added to database", invoices);
-        setInvoices([]);
-        setShowTable(false);
-      } catch (error: any) {
-        console.error("Error adding invoices:", error.message);
-      }
-    } else {
-      console.log("No such invoice metadata with the selected year, must create new year!");
-
-      let currentLatestInvoiceNumber: number = 1;
-      try {
-        for (const invoice of invoices) {
-          invoice.InvoiceNo = selectedYear.toString().substring(2) + currentLatestInvoiceNumber.toString().padStart(3, "0");
-          const invoiceDocRef = doc(db, "invoices", invoice.InvoiceNo.toString());
-          setDoc(invoiceDocRef, invoice);
-          currentLatestInvoiceNumber++;
+          console.log("Invoices added to database", invoices);
+          setInvoices([]);
+          setShowTable(false);
+        } catch (error: any) {
+          console.error("Error adding invoices:", error.message);
         }
-
-        setDoc(docRef, { latestInvoiceNo: currentLatestInvoiceNumber - 1 });
-        await batchedWrite.commit();
-
-        console.log("Invoices added to database", invoices);
-        setInvoices([]);
-        setShowTable(false);
-      } catch (error: any) {
-        console.error("Error adding invoices:", error.message);
       }
     }
+
     setDialogOpen(false);
   }
 
@@ -175,13 +182,33 @@ function GenerateInstallmentInvoiceModal(props: any) {
                   </SelectGroup>
                 </SelectContent>
               </Select>
-            </div>
-            <div className="grid w-full items-center gap-1.5 mt-3">
-              <Label htmlFor="number">Price (S$)</Label>
-              <Input type="number" step="0.01" id="number" placeholder="30" value={price} onChange={handlePriceChange} />
+              {/* Month Select */}
+              <Label htmlFor="month" className="mt-3 mb-1">
+                Month:
+              </Label>
+              <Select
+                defaultValue={selectedMonth.toString()}
+                onValueChange={(value: string) => {
+                  setSelectedMonth(Number(value));
+                }}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select a Month" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Month</SelectLabel>
+                    {Array.from({ length: 12 }, (_, index) => index + 1).map((month) => (
+                      <SelectItem key={month} value={month.toString()}>
+                        {month.toString()}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </div>
             <div className="w-full mt-4">
-              <Button className="w-[180px]" onClick={handleGenerateMaintenanceInvoices}>
+              <Button className="w-[180px]" onClick={handleGenerateInstallmentInvoices}>
                 Generate Invoices
               </Button>
             </div>

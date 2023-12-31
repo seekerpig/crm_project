@@ -249,6 +249,20 @@ export const columns: ColumnDef<TabletApplication>[] = [
     enableHiding: false,
   },
   {
+    accessorKey: "Outstanding_Amount",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Outstanding_Amount" />,
+    cell: ({ row }) => <div>{row.getValue("Outstanding_Amount")}</div>,
+    enableSorting: true,
+    enableHiding: true,
+  },
+  {
+    accessorKey: "Number_of_Months",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Number_of_Months" />,
+    cell: ({ row }) => <div>{row.getValue("Number_of_Months")}</div>,
+    enableSorting: true,
+    enableHiding: true,
+  },
+  {
     id: "actions",
     cell: ({ row }) => <DataTableRowActions row={row} />,
   },
