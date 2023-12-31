@@ -20,6 +20,9 @@ export interface TabletApplication {
   SecondContact_Name_Chinese?: String,
   SecondContact_Address?: String,
   SecondContact_ContactNumber?: String,
+  SecondContact_Relationship?: String,
+  SecondContact_IdentifiedCode?: String,
+  SecondContact_Gender?: String,
   Officer_In_Charge: String,
   Amount_Received: Number;
   Receipt_No?: String,
