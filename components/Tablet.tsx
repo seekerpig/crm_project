@@ -217,7 +217,6 @@ function Tablet(props: Tablet) {
                       <Button className="mr-4" onClick={handleSaveTablet}>
                         Save
                       </Button>
-                      <Button variant="secondary">Cancel</Button>
                     </div>
                   )}
                 </div>
