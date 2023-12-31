@@ -14,6 +14,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { db } from "@/lib/firebase/firebase";
 import { collection, query, where, getDocs, doc, getDoc, writeBatch, addDoc, setDoc, updateDoc } from "firebase/firestore";
 
+// Must be called after the tablet application itself is created.
 export async function CreateInvoiceAsPaid(tablet_number: string, amt: number, app_type: string) {
   // First need to find the tabletNo with the Current status and see if it exists.
   const queryTabletApplication = query(collection(db, "tabletapplications"), where("Tablet_Number", "==", tablet_number.toUpperCase()), where("Status", "==", "Current"));
