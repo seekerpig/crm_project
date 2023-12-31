@@ -8,7 +8,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 
 import { DataTablePagination } from "../components/data-table-pagination";
 import { DataTableToolbar } from "../components/data-table-toolbar";
-import GenerateInvoiceModal  from "../components/generateInvoiceModal";
+import GenerateMaintenanceInvoiceModal  from "./generateMaintenanceInvoices";
+import GenerateInstallmentInvoiceModal from "./generateInstallmentInvoices";
+import GenerateManualInvoiceModal from "./generateManualInvoice";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -85,7 +87,9 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 
   return (
     <div className="space-y-4">
-      <GenerateInvoiceModal/>
+      <GenerateMaintenanceInvoiceModal/>
+      <GenerateInstallmentInvoiceModal/>
+      <GenerateManualInvoiceModal/>
       <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>

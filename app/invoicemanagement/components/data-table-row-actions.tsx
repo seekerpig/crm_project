@@ -10,14 +10,14 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
-import { Invoice } from "../../data/dataTypes";
+import { Invoice, TabletApplication } from "../../data/dataTypes";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React, { useRef } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
 import { db } from "@/lib/firebase/firebase";
-import { updateDoc, doc, collection, deleteDoc } from "firebase/firestore";
+import { updateDoc, doc, collection, deleteDoc, getDoc } from "firebase/firestore";
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -34,16 +34,36 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
   const downloadablePdfRef = useRef(null);
   const { toast } = useToast();
 
-  function updateInvoicePaymentData(): void {
+  async function updateInvoicePaymentData(): Promise<void> {
     try {
       const collectionRef = collection(db, "invoices");
       const documentID = invoice.InvoiceNo.toString();
       const docRef = doc(collectionRef, documentID);
 
+      const tabletCollectionRef = collection(db, "tabletapplications");
+      const tabletAppID = invoice.ApplicationID.toString();
+      const tabletRef = doc(tabletCollectionRef, tabletAppID);
+      
       updateDoc(docRef, {
         ["IsPaid"]: true,
         ["Receipt_No"]: receiptNo.toString(),
-      }).then(() => {
+      }).then(async () => {
+        
+        const tabletApp = await getDoc(tabletRef);
+        const tabletAppData = tabletApp.data() as TabletApplication;
+        if (invoice.IsPaid == false && typeof tabletAppData.Outstanding_Amount === "number" && typeof tabletAppData.Number_of_Months === "number" && typeof invoice.Amount === "number" && tabletAppData.Outstanding_Amount - invoice.Amount < 1) {
+          updateDoc(tabletRef, {
+            ["Outstanding_Amount"]: 0,
+            ["Number_of_Months"]: 0,
+            ["Application_Type"]: "N",
+          })
+        }
+        else if (invoice.IsPaid == false && tabletAppData.Application_Type == "IPT" && typeof tabletAppData.Outstanding_Amount === "number" && typeof tabletAppData.Number_of_Months === "number" && typeof invoice.Amount === "number") {
+          updateDoc(tabletRef, {
+            ["Outstanding_Amount"]: tabletAppData.Outstanding_Amount - invoice.Amount,
+            ["Number_of_Months"]: tabletAppData.Number_of_Months - 1,
+          })
+        }
         toast({
           title: "Successful",
           description: "Invoices mark as paid with receipt number",
@@ -157,7 +177,12 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                     </div>
                     <p className="pl-2">{invoice.Description}</p>
                     <br />
-                    <p className="pl-2">For fiscal year {invoice.Fiscal_Year.toString()}</p>
+                    {invoice.Description == "Monthly Installment" && <p className="pl-2">For Monthly Installment</p>}
+                    {invoice.Description == "Annual Fee for Maintenance of Ancestor Tablet" && <p className="pl-2">For fiscal year {invoice.Fiscal_Year.toString()}</p>}
+                    {invoice.Description == "Purchase of Tablet Leasing (Normal)" && <p className="pl-2">Purchase of Tablet Leasing (Normal)</p>}
+                    {invoice.Description == "Purchase of Tablet (Special)" && <p className="pl-2">Purchase of Tablet (Special)</p>}
+                    {invoice.Description == "Installment Downpayment" && <p className="pl-2">Installment Downpayment</p>}
+
                     <div className="w-full flex flex-row justify-end py-2 pr-3 border-t-2 border-black absolute bottom-0">
                       <p className="font-bold">Total Amount:</p>
                     </div>

@@ -110,8 +110,8 @@ export const columns: ColumnDef<Invoice>[] = [
   },
   {
     accessorKey: "Amount",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Year_Positioned" />,
-    cell: ({ row }) => <div>{row.getValue("Year_Positioned")}</div>,
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Amount" />,
+    cell: ({ row }) => <div>{row.getValue("Amount")}</div>,
     enableSorting: true,
     enableHiding: true,
   },
