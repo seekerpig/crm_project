@@ -11,6 +11,7 @@ import { Invoice, TabletApplication } from "@/app/data/dataTypes";
 import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/components/ui/use-toast";
 
+
 import { db } from "@/lib/firebase/firebase";
 import { collection, query, where, getDocs, doc, getDoc, writeBatch, addDoc, setDoc, updateDoc } from "firebase/firestore";
 

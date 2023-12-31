@@ -22,19 +22,19 @@ function Tablet(props: Tablet) {
   useEffect(() => {
     switch (newTablet.Status.toString()) {
       case "IPT":
-        setNewStatusColorClass("bg-green-500"); // Green
+        setNewStatusColorClass("bg-green-300 font-bold"); // Green
         break;
       case "Reserved":
-        setNewStatusColorClass("bg-yellow-500"); // Yellow
+        setNewStatusColorClass("bg-yellow-200 font-bold"); // Yellow
         break;
       case "Occupied (S)":
-        setNewStatusColorClass("bg-red-500"); // Red
+        setNewStatusColorClass("bg-red-300 font-bold"); // Red
         break;
       case "Occupied (N)":
-        setNewStatusColorClass("bg-red-500"); // Red
+        setNewStatusColorClass("bg-red-300 font-bold"); // Red
         break;
       case "Blocked":
-        setNewStatusColorClass("bg-purple-500"); // Purple
+        setNewStatusColorClass("bg-purple-300 font-bold"); // Purple
         break;
       default:
         setNewStatusColorClass(""); // Default color
@@ -141,7 +141,7 @@ function Tablet(props: Tablet) {
           <DialogContent className="w-full flex sm:max-w-[650px] sm:max-h-[800px]">
             <DialogHeader className="w-full">
               <DialogTitle>
-                Selected tablet is currently {newTablet.Status}:{" "}
+                Selected tablet in row ({newTablet.Row_Number}) is currently {newTablet.Status}:{" "}
                 <div className={` ${statusColorClass} cursor-pointer w-[43px] h-[51px] px-3 pt-[25px] pb-1 border border-zinc-700 rounded shadow flex-col justify-end items-center inline-flex m-1 `}>
                   <div>{props.Column_Number}</div>
                 </div>
@@ -190,22 +190,22 @@ function Tablet(props: Tablet) {
                       <SelectGroup>
                         <SelectLabel>Status</SelectLabel>
                         <SelectItem value="Available">
-                          <span className="bg-white text-black px-2 py-1 rounded-full border border-black">Available</span>
+                          <span className="bg-white font-bold text-black px-2 py-1 rounded-full border border-black">Available</span>
                         </SelectItem>
                         <SelectItem value="IPT">
-                          <span className="bg-green-500 text-black px-2 py-1 rounded-full  ">IPT</span>
+                          <span className="bg-green-300 font-bold text-black px-2 py-1 rounded-full  ">IPT</span>
                         </SelectItem>
                         <SelectItem value="Reserved">
-                          <span className="bg-yellow-500 text-black px-2 py-1 rounded-full  ">Reserved</span>
+                          <span className="bg-yellow-200 font-bold text-black px-2 py-1 rounded-full  ">Reserved</span>
                         </SelectItem>
                         <SelectItem value="Occupied (S)">
-                          <span className="bg-red-500 text-black px-2 py-1 rounded-full  ">Occupied (S)</span>
+                          <span className="bg-red-300 font-bold text-black px-2 py-1 rounded-full  ">Occupied (S)</span>
                         </SelectItem>
                         <SelectItem value="Occupied (N)">
-                          <span className="bg-red-500 text-black px-2 py-1 rounded-full  ">Occupied (N)</span>
+                          <span className="bg-red-300 font-bold text-black px-2 py-1 rounded-full  ">Occupied (N)</span>
                         </SelectItem>
                         <SelectItem value="Blocked">
-                          <span className="bg-purple-500 text-black px-2 py-1 rounded-full ">Blocked</span>
+                          <span className="bg-purple-300 font-bold text-black px-2 py-1 rounded-full ">Blocked</span>
                         </SelectItem>
                       </SelectGroup>
                     </SelectContent>
