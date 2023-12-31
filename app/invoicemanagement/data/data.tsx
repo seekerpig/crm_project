@@ -26,6 +26,10 @@ export const descriptions = [
   {
     value: "Monthly Installment",
     label: "Monthly Installment",
+  },
+  {
+    value: "Installment Downpayment",
+    label: "Installment Downpayment",
   }
 ]
 

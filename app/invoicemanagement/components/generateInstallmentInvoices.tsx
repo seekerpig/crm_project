@@ -62,10 +62,15 @@ function GenerateInstallmentInvoiceModal(props: any) {
         };
 
         // Need to check whether invoice of this month for this appID exists. If so, don't allow create.
-        console.log("Trying invoice: ", tabletApplication.ApplicationID);
+        //console.log("Trying invoice: ", tabletApplication.ApplicationID);
         const queryInvoice = query(collection(db, "invoices"), where("Month", "==", month), where("Fiscal_Year", "==", parseInt(year)), where("ApplicationID", "==", tabletApplication.ApplicationID.toString()));
         const queryInvoiceSnapshot = await getDocs(queryInvoice);
-        if (queryInvoiceSnapshot.empty) {
+
+        // Need to check whether the total number of unpaid invoices generated for this appID already reaches the remaining number of months, if so, don't allow additional generation
+        const queryInvoices = query(collection(db, "invoices"), where("ApplicationID", "==", tabletApplication.ApplicationID.toString()), where("IsPaid", "==", false));
+        const queryInvoicesSnapshot = await getDocs(queryInvoices);
+
+        if (queryInvoiceSnapshot.empty && queryInvoicesSnapshot.size < tabletApplication.Number_of_Months.valueOf()) {
           currInvoices.push(invoice);
         } else {
           console.log("Invoice with this app ID, year and month already exists");

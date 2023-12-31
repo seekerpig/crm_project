@@ -26,8 +26,8 @@ export interface TabletApplication {
   Officer_In_Charge: String,
   Amount_Received: Number;
   Receipt_No?: String,
-  Outstanding_Amount?: String,
-  Number_of_Months?: String,
+  Outstanding_Amount?: Number,
+  Number_of_Months?: Number,
   Payment_Comments?: String,
   Remarks?: String,
   Status: String,
