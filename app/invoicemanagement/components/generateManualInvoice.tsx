@@ -14,6 +14,96 @@ import { useToast } from "@/components/ui/use-toast";
 import { db } from "@/lib/firebase/firebase";
 import { collection, query, where, getDocs, doc, getDoc, writeBatch, addDoc, setDoc, updateDoc } from "firebase/firestore";
 
+export async function CreateInvoiceAsPaid(tablet_number: string, amt: number, app_type: string) {
+  // First need to find the tabletNo with the Current status and see if it exists.
+  const queryTabletApplication = query(collection(db, "tabletapplications"), where("Tablet_Number", "==", tablet_number.toUpperCase()), where("Status", "==", "Current"));
+  const querySnapshotTabletApplication = await getDocs(queryTabletApplication);
+  if (amt <= 0) {
+    console.log("Amount cannot be 0 or less");
+  } else if (querySnapshotTabletApplication.empty) {
+    // Cannot find any tablet to add the invoice
+    console.log("Unable to find any current tablet application associated with the tablet number: ", tablet_number);
+  } else {
+    try {
+      const tabletApp = querySnapshotTabletApplication.docs[0].data() as TabletApplication;
+      const docRef = doc(db, "invoicemetadata", new Date().getFullYear().toString());
+      const docSnap = await getDoc(docRef);
+
+      let invoiceDescription: "Purchase of Tablet Leasing (Normal)" | "Purchase of Tablet (Special)" | "Installment Downpayment" | "Custom Payment" = "Custom Payment";
+
+      switch (app_type) {
+        case "N":
+          invoiceDescription = "Purchase of Tablet Leasing (Normal)";
+          break;
+        case "S":
+          invoiceDescription = "Purchase of Tablet (Special)";
+          break;
+        case "TIP":
+          invoiceDescription = "Installment Downpayment";
+          break;
+        // Add additional cases if needed
+        default:
+          // Handle the case where app_type doesn't match any of the expected values
+          break;
+      }
+
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+        let currentLatestInvoiceNumber: number = Number(docSnap.data().latestInvoiceNo);
+        currentLatestInvoiceNumber++;
+
+        // Check whether if the app data is of TIP type
+        const newInvoice: Invoice = {
+          InvoiceNo: new Date().getFullYear().toString().substring(2) + currentLatestInvoiceNumber.toString().padStart(3, "0"),
+          ApplicationID: tabletApp.ApplicationID,
+          Dated: new Date().toISOString(),
+          Terms: "",
+          Tablet_Number: tabletApp.Tablet_Number,
+          Payee_Name: tabletApp.Applicant_Name_English,
+          Payee_Address: tabletApp.Applicant_Address,
+          Description: invoiceDescription,
+          Fiscal_Year: new Date().getFullYear(),
+          Receipt_No: "",
+          Amount: amt,
+          Year_Positioned: new Date().getFullYear(),
+          IsPaid: true,
+        };
+
+        const invoiceDocRef = doc(db, "invoices", newInvoice.InvoiceNo.toString());
+        setDoc(invoiceDocRef, newInvoice);
+
+        updateDoc(docRef, { latestInvoiceNo: currentLatestInvoiceNumber });
+
+      } else {
+        console.log("Metadata for invoice numbering not found for the year, must create new one.");
+        let currentLatestInvoiceNumber: number = 1;
+
+        const newInvoice: Invoice = {
+          InvoiceNo: new Date().getFullYear().toString().substring(2) + currentLatestInvoiceNumber.toString().padStart(3, "0"),
+          ApplicationID: tabletApp.ApplicationID,
+          Dated: new Date().toISOString(),
+          Terms: "",
+          Tablet_Number: tabletApp.Tablet_Number,
+          Payee_Name: tabletApp.Applicant_Name_English,
+          Payee_Address: tabletApp.Applicant_Address,
+          Description: invoiceDescription,
+          Fiscal_Year: new Date().getFullYear(),
+          Receipt_No: "",
+          Amount: amt,
+          Year_Positioned: new Date().getFullYear(),
+          IsPaid: true,
+        };
+
+        const invoiceDocRef = doc(db, "invoices", newInvoice.InvoiceNo.toString());
+        setDoc(invoiceDocRef, newInvoice);
+
+        setDoc(docRef, { latestInvoiceNo: currentLatestInvoiceNumber });
+      }
+    } catch (error) {
+      console.log("Error creating invoice: ", error);
+    }
+  }
+}
 function GenerateManualInvoiceModal() {
   const { toast } = useToast();
   const [amount, setAmount] = useState<number>(0);
@@ -30,8 +120,7 @@ function GenerateManualInvoiceModal() {
         title: "Amount Error",
         description: "Amount cannot be 0 or less",
       });
-    }
-    else if (amount <= 0 || querySnapshotTabletApplication.empty) {
+    } else if (querySnapshotTabletApplication.empty) {
       // Cannot find any tablet to add the invoice
       console.log("Unable to find any current tablet application associated with the tablet number: ", tabletNo);
       toast({
