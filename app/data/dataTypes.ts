@@ -25,7 +25,9 @@ export interface TabletApplication {
   Receipt_No?: String,
   Payment_Comments?: String,
   Remarks?: String,
-  Status: String
+  Status: String,
+  Outstanding_Amount?: Number,
+  Number_of_Months?: Number,
 }
 
 export interface Tablet {
