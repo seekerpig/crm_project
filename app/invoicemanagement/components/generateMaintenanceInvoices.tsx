@@ -15,7 +15,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { db } from "@/lib/firebase/firebase";
 import { collection, query, where, getDocs, doc, getDoc, writeBatch, addDoc, setDoc, updateDoc } from "firebase/firestore";
 
-function GenerateInvoiceModal(props: any) {
+function GenerateMaintenanceInvoiceModal(props: any) {
   const { invoiceData } = props;
   const { toast } = useToast();
 
@@ -44,7 +44,7 @@ function GenerateInvoiceModal(props: any) {
   };
 
   async function getInvoicesForApplicationsNormalType(year: string, price: number) {
-    const queryTabletApplications = query(collection(db, "tabletapplications"), where("Application_Type", "==", "N"));
+    const queryTabletApplications = query(collection(db, "tabletapplications"), where("Application_Type", "==", "N"), where("Status", "==", "Current"));
 
     const querySnapshotTabletApplications = await getDocs(queryTabletApplications);
 
@@ -145,7 +145,7 @@ function GenerateInvoiceModal(props: any) {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button onClick={() => setShowTable(false)}>Generate Invoice</Button>
+        <Button onClick={() => setShowTable(false)}>Generate Yearly Maintenance Invoice</Button>
       </DialogTrigger>
       <DialogContent className="w-full flex lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl overflow-y-scroll max-h-[80vh]">
         <DialogHeader className={`${showTable == false ? "w-full" : "hidden"}  `}>
@@ -249,4 +249,4 @@ function GenerateInvoiceModal(props: any) {
   );
 }
 
-export default GenerateInvoiceModal;
+export default GenerateMaintenanceInvoiceModal;

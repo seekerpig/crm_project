@@ -41,12 +41,12 @@ export const statuses = [
 
 export const priorities = [
   {
-    label: "Pending",
-    value: "Pending",
+    label: "Current",
+    value: "Current",
   },
   {
-    label: "Approved",
-    value: "Approved",
+    label: "Archived",
+    value: "Archived",
   },
 
 ]
