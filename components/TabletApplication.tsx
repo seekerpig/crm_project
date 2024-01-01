@@ -171,11 +171,10 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
           <Button onClick={handleCheckFields} className="me-3">Save</Button>
           {application.ApplicationID !== "" && <Button onClick={handleCopy}>Save as New Form</Button>}
         </div>
-      ) : (
+      ) : ( application.Status !== "Archive" &&
         <div>
           <Button onClick={handleEditClick} className="me-3">Edit</Button>
           <Button onClick={handleDeleteClick} className="me-3">Archive</Button>
-
         </div>
       )}
       <div className="overflow-y-auto ">
