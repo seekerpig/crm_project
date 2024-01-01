@@ -118,13 +118,30 @@ function Tablet(props: Tablet) {
         await updateDoc(tabletDocRef, data);
         console.log(`Document with ID ${block} written successfully.`);
         setNewTablet(tablet);
+        if (application.Application_Type === "IPT") {
+          handleStatusChange("IPT");
+        }
+        else if (application.Status === "S") {
+          handleStatusChange("Occupied (S)");
+        }
+        else if (application.Status === "N") {
+          handleStatusChange("Occupied (N)");
+        }
       } catch (error) {
         console.error("Error updating document: ", error);
       }
     }
     else {
       setApplicationForm(application);
-      setStatus(application.Status);
+      if (application.Application_Type === "IPT") {
+        handleStatusChange("IPT");
+      }
+      else if (application.Status === "S") {
+        handleStatusChange("Occupied (S)");
+      }
+      else if (application.Status === "N") {
+        handleStatusChange("Occupied (N)");
+      }
     }
   }
 
@@ -226,7 +243,7 @@ function Tablet(props: Tablet) {
                 <TabletApplication
                   ApplicationID={applicationForm?.ApplicationID || ""}
                   Tablet_Number={newTablet.Tablet_Number}
-                  Leasing_Date={applicationForm?.Leasing_Date || new Date()}
+                  Leasing_Date={applicationForm?.Leasing_Date || new Date().toISOString()}
                   Application_Type={"IPT"}
                   Beneficiary1_Name_English={applicationForm?.Beneficiary1_Name_English || ""}
                   Beneficiary1_Name_Chinese={applicationForm?.Beneficiary1_Name_Chinese || ""}
@@ -258,7 +275,7 @@ function Tablet(props: Tablet) {
                 <TabletApplication
                   ApplicationID={applicationForm?.ApplicationID || ""}
                   Tablet_Number={newTablet.Tablet_Number}
-                  Leasing_Date={applicationForm?.Leasing_Date || new Date()}
+                  Leasing_Date={applicationForm?.Leasing_Date || new Date().toISOString()}
                   Application_Type={"S"}
                   Beneficiary1_Name_English={applicationForm?.Beneficiary1_Name_English || ""}
                   Beneficiary1_Name_Chinese={applicationForm?.Beneficiary1_Name_Chinese || ""}
@@ -289,7 +306,7 @@ function Tablet(props: Tablet) {
                 <TabletApplication
                   ApplicationID={applicationForm?.ApplicationID || ""}
                   Tablet_Number={newTablet.Tablet_Number}
-                  Leasing_Date={applicationForm?.Leasing_Date || new Date()}
+                  Leasing_Date={applicationForm?.Leasing_Date || new Date().toISOString()}
                   Application_Type={"N"}
                   Beneficiary1_Name_English={applicationForm?.Beneficiary1_Name_English || ""}
                   Beneficiary1_Name_Chinese={applicationForm?.Beneficiary1_Name_Chinese || ""}

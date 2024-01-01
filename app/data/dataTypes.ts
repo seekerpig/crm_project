@@ -1,7 +1,7 @@
 export interface TabletApplication {
   ApplicationID: String,
   Tablet_Number: String,
-  Leasing_Date: Date,
+  Leasing_Date: String,
   Application_Type: String,
   Beneficiary1_Name_English: String,
   Beneficiary1_Name_Chinese: String,
