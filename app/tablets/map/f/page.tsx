@@ -6,7 +6,7 @@ import { db } from "@/lib/firebase/firebase";
 async function getTablets() {
   // Reference to the specific document by ID
   let tablets: Tablet[] = [];
-  const documentRef = doc(db, "tablets", "BlockC");
+  const documentRef = doc(db, "tablets", "BlockF");
 
   // Retrieve the document
   const documentSnapshot = await getDoc(documentRef);

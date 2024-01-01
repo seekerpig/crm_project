@@ -15,6 +15,7 @@ import { set } from "lodash";
 
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 function TabletApplication(props: TabletApplication & { onSave: () => void } & { isEditable: boolean } & { updateApplication: (application: TabletApplication) => void }) {
   const { onSave, updateApplication, isEditable, ...initialApplication } = props;
@@ -29,30 +30,26 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
   const [checkFields, setCheckFields] = useState(false);
   const handleCheckFields = () => {
     setCheckFields(true);
-    if (application.Applicant_Name_English != "" && application.Applicant_Name_English != "" && application.Applicant_Address!="" && application.Applicant_IdentifiedCode!="" && application.Applicant_Gender!="" && application.Applicant_Relationship!="" && application.Applicant_ContactNumber!="" && application.Officer_In_Charge!="" && Number(application.Amount_Received)>0 && application.Receipt_No!=""){
-      if (application.Application_Type === "IPT"  && Number(application.Number_of_Months) > 0 && Number(application.Outstanding_Amount) > 0) {
-        setCheckFields(false)
-        handleSaveClick()
-      }
-      else if (application.Application_Type !== "IPT") {
-        setCheckFields(false)
-        handleSaveClick()
+    if (application.Applicant_Name_English != "" && application.Applicant_Name_English != "" && application.Applicant_Address != "" && application.Applicant_IdentifiedCode != "" && application.Applicant_Gender != "" && application.Applicant_Relationship != "" && application.Applicant_ContactNumber != "" && application.Officer_In_Charge != "" && Number(application.Amount_Received) > 0 && application.Receipt_No != "") {
+      if (application.Application_Type === "IPT" && Number(application.Number_of_Months) > 0 && Number(application.Outstanding_Amount) > 0) {
+        setCheckFields(false);
+        handleSaveClick();
+      } else if (application.Application_Type !== "IPT") {
+        setCheckFields(false);
+        handleSaveClick();
       }
     }
   };
   const handleSaveClick = async () => {
     // Add logic to save the edited data to your database or state
-    const data = {
-      ...application,
-    };
 
     // edit the data
     if (application.ApplicationID) {
       try {
+        console.log(application.ApplicationID.toString());
         const tabletDocRef = doc(db, "tabletapplications", application.ApplicationID.toString());
-        await updateDoc(tabletDocRef, data);
+        await updateDoc(tabletDocRef, application);
         console.log(`Document with ID ${application.ApplicationID.toString()} written successfully.`);
-        // setApplication(application);
         props.updateApplication(application);
       } catch (error) {
         console.error("Error updating document: ", error);
@@ -60,15 +57,18 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
     }
     // create new data
     else {
-      const newdata = {
-        ...data,
+      const updatedApplication = {
+        ...application,
         Status: "Current",
         Leasing_Date: application.Leasing_Date.toString(),
       };
+    
       try {
-        const docRef = await addDoc(collection(db, "tabletapplications"), newdata);
+        const docRef = await addDoc(collection(db, "tabletapplications"), updatedApplication);
         await updateDoc(docRef, { ApplicationID: docRef.id });
-        setApplication({ ...application, ApplicationID: docRef.id });
+        updatedApplication.ApplicationID = docRef.id;
+        setApplication(updatedApplication);
+        props.updateApplication(updatedApplication);
         props.onSave();
         console.log(`Document with ID ${docRef.id} written successfully.`);
       } catch (e) {
@@ -78,6 +78,8 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
 
     setIsEditing(false);
   };
+  
+
 
   const handleDeleteClick = async () => {
     // Add logic to delete the data from your database or state
@@ -86,11 +88,11 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
         const tabletDocRef = doc(db, "tabletapplications", application.ApplicationID.toString());
         await updateDoc(tabletDocRef, { Status: "Archive" });
         console.log(`Document with ID ${application.ApplicationID.toString()} archive successfully.`);
-        
+
         const data = {
           ApplicationID: "",
           Tablet_Number: application.Tablet_Number,
-          Leasing_Date: new Date(),
+          Leasing_Date: "",
           Application_Type: "",
           Beneficiary1_Name_English: "",
           Beneficiary1_Name_Chinese: "",
@@ -109,9 +111,9 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
           SecondContact_Name_Chinese: "",
           SecondContact_Address: "",
           SecondContact_ContactNumber: "",
-          SecondContact_Relationship:"",
-          SecondContact_IdentifiedCode:"",
-          SecondContact_Gender:"",
+          SecondContact_Relationship: "",
+          SecondContact_IdentifiedCode: "",
+          SecondContact_Gender: "",
           Officer_In_Charge: "",
           Amount_Received: 0,
           Receipt_No: "",
@@ -127,7 +129,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
         console.error("Error deleting document: ", error);
       }
     }
-  }
+  };
 
   const handleCopy = async () => {
     // Add logic to delete the data from your database or state
@@ -156,27 +158,59 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
         } catch (e) {
           console.error("Error adding document: ", e);
         }
-
       } catch (error) {
         console.error("Error copying document: ", error);
       }
     }
     setIsEditing(false);
-  }
+  };
 
   return (
     <>
       {isEditing ? (
         <div>
-          <Button onClick={handleCheckFields} className="me-3">Save</Button>
-          {application.ApplicationID !== "" && <Button onClick={handleCopy}>Save as New Form</Button>}
+          <Button onClick={handleCheckFields} className="me-3">
+            Save
+          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>{application.ApplicationID !== "" && <Button>Save as New Form</Button>}</AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>This action cannot be undone. This will save the new information to a new form and archive the current form</AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleCopy}>Continue</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       ) : (
-        <div>
-          <Button onClick={handleEditClick} className="me-3">Edit</Button>
-          <Button onClick={handleDeleteClick} className="me-3">Archive</Button>
-
-        </div>
+        application.Status !== "Archive" && (
+          <div>
+            <Button onClick={handleEditClick} className="me-3">
+              Edit
+            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button className="me-3">
+                  Archive
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>This action cannot be undone. This will archive the current form and set the tablet to available</AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction  onClick={handleDeleteClick}>Continue</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
+        )
       )}
       <div className="overflow-y-auto ">
         <table className="w-full">
@@ -197,48 +231,48 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 <span>{String(application.Leasing_Date).substring(0, 10)}</span>
               </td>
             </tr>
-            {application.Application_Type == "IPT" && (<>
-            <tr className="border border-gray-300">
-              <td colSpan={1} className="border border-gray-300 p-1">
-                <strong>Number of Months*</strong>
-              </td>
-              <td colSpan={1} className="p-1 w-64">
-                {isEditing ? (
-                  <Input
-                    type="Number"
-                    value={application.Number_of_Months?.toString()}
-                    onChange={(e) => {
-                      setApplication({ ...application, Number_of_Months: parseFloat(e.target.value) });
-                    }}
-                  />
-                ) : (
-                  <span>{application.Number_of_Months?.toString()}</span>
-                )}
-                {checkFields && (application.Number_of_Months?.valueOf() ?? 0) <= 0 && <p className="text-sm text-red-500"> Please enter valid amount</p>}
-              </td>
-            </tr>
-            <tr className="border border-gray-300">
-              <td colSpan={1} className="border border-gray-300 p-1">
-                <strong>Outstanding Amount*</strong>
-              </td>
-              <td colSpan={1} className="p-1 w-64">
-                {isEditing ? (
-                  <Input
-                    type="Number"
-                    value={application.Outstanding_Amount?.toString()}
-                    onChange={(e) => {
-                      setApplication({ ...application, Outstanding_Amount: parseFloat(e.target.value) });
-                    }}
-                  />
-                ) : (
-                  <span>{application.Outstanding_Amount?.toString()}</span>
-                )}
-                {checkFields && (application.Outstanding_Amount?.valueOf() ?? 0) <= 0 && <p className="text-sm text-red-500"> Please enter valid amount</p>}
-              </td>
-            </tr>
-            </>
+            {application.Application_Type == "IPT" && (
+              <>
+                <tr className="border border-gray-300">
+                  <td colSpan={1} className="border border-gray-300 p-1">
+                    <strong>Number of Months*</strong>
+                  </td>
+                  <td colSpan={1} className="p-1 w-64">
+                    {isEditing ? (
+                      <Input
+                        type="Number"
+                        value={application.Number_of_Months?.toString()}
+                        onChange={(e) => {
+                          setApplication({ ...application, Number_of_Months: parseFloat(e.target.value) });
+                        }}
+                      />
+                    ) : (
+                      <span>{application.Number_of_Months?.toString()}</span>
+                    )}
+                    {checkFields && (application.Number_of_Months?.valueOf() ?? 0) <= 0 && <p className="text-sm text-red-500"> Please enter valid amount</p>}
+                  </td>
+                </tr>
+                <tr className="border border-gray-300">
+                  <td colSpan={1} className="border border-gray-300 p-1">
+                    <strong>Outstanding Amount*</strong>
+                  </td>
+                  <td colSpan={1} className="p-1 w-64">
+                    {isEditing ? (
+                      <Input
+                        type="Number"
+                        value={application.Outstanding_Amount?.toString()}
+                        onChange={(e) => {
+                          setApplication({ ...application, Outstanding_Amount: parseFloat(e.target.value) });
+                        }}
+                      />
+                    ) : (
+                      <span>{application.Outstanding_Amount?.toString()}</span>
+                    )}
+                    {checkFields && (application.Outstanding_Amount?.valueOf() ?? 0) <= 0 && <p className="text-sm text-red-500"> Please enter valid amount</p>}
+                  </td>
+                </tr>
+              </>
             )}
-            
 
             <tr className="h-5"></tr>
             <tr className="border border-gray-300 ">
@@ -432,26 +466,29 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
-                <Select value={application.Applicant_Gender as string} onValueChange={(e) => {
-                  setApplication({ ...application, Applicant_Gender: e as string });
-                }}>
-                  {/* Select trigger button */}
-                  <SelectTrigger>
-                    {/* Display selected value or default text */}
-                    {application.Applicant_Gender || "Select Gender"}
-                  </SelectTrigger>
+                  <Select
+                    value={application.Applicant_Gender as string}
+                    onValueChange={(e) => {
+                      setApplication({ ...application, Applicant_Gender: e as string });
+                    }}
+                  >
+                    {/* Select trigger button */}
+                    <SelectTrigger>
+                      {/* Display selected value or default text */}
+                      {application.Applicant_Gender || "Select Gender"}
+                    </SelectTrigger>
 
-                  {/* Select content/options */}
-                  <SelectContent>
-                    {/* Option for "Male" */}
-                    <SelectItem value="Male">Male</SelectItem>
+                    {/* Select content/options */}
+                    <SelectContent>
+                      {/* Option for "Male" */}
+                      <SelectItem value="Male">Male</SelectItem>
 
-                    {/* Option for "Female" */}
-                    <SelectItem value="Female">Female</SelectItem>
+                      {/* Option for "Female" */}
+                      <SelectItem value="Female">Female</SelectItem>
 
-                    {/* Add more options as needed */}
-                  </SelectContent>
-                </Select>
+                      {/* Add more options as needed */}
+                    </SelectContent>
+                  </Select>
                 ) : (
                   <span>{application.Applicant_Gender}</span>
                 )}
@@ -496,7 +533,6 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 {checkFields && application.Applicant_ContactNumber == "" && <p className="text-sm text-red-500"> Please enter contact number</p>}
               </td>
             </tr>
-
 
             <tr className="h-5"></tr>
             <tr className="border border-gray-300">
@@ -569,7 +605,6 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 ) : (
                   <span>{application.SecondContact_IdentifiedCode}</span>
                 )}
-
               </td>
             </tr>
             <tr className="border border-gray-300">
@@ -578,26 +613,29 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
-                <Select value={application.SecondContact_Gender as string} onValueChange={(e) => {
-                  setApplication({ ...application, SecondContact_Gender: e as string });
-                }}>
-                  {/* Select trigger button */}
-                  <SelectTrigger>
-                    {/* Display selected value or default text */}
-                    {application.SecondContact_Gender || "Select Gender"}
-                  </SelectTrigger>
+                  <Select
+                    value={application.SecondContact_Gender as string}
+                    onValueChange={(e) => {
+                      setApplication({ ...application, SecondContact_Gender: e as string });
+                    }}
+                  >
+                    {/* Select trigger button */}
+                    <SelectTrigger>
+                      {/* Display selected value or default text */}
+                      {application.SecondContact_Gender || "Select Gender"}
+                    </SelectTrigger>
 
-                  {/* Select content/options */}
-                  <SelectContent>
-                    {/* Option for "Male" */}
-                    <SelectItem value="Male">Male</SelectItem>
+                    {/* Select content/options */}
+                    <SelectContent>
+                      {/* Option for "Male" */}
+                      <SelectItem value="Male">Male</SelectItem>
 
-                    {/* Option for "Female" */}
-                    <SelectItem value="Female">Female</SelectItem>
+                      {/* Option for "Female" */}
+                      <SelectItem value="Female">Female</SelectItem>
 
-                    {/* Add more options as needed */}
-                  </SelectContent>
-                </Select>
+                      {/* Add more options as needed */}
+                    </SelectContent>
+                  </Select>
                 ) : (
                   <span>{application.SecondContact_Gender}</span>
                 )}
