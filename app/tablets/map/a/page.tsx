@@ -5,6 +5,7 @@ import { table } from "console";
 import { collection, query, where, getDocs, doc, setDoc, getDoc } from "firebase/firestore";
 import { Tablets } from "lucide-react";
 import { Tablet as TabletType } from "@/app/data/dataTypes";
+import ProtectedPage from "@/components/ProtectedPage";
 
 // const data = {
 //   F0101: [ 'Available', '' ],
@@ -389,7 +390,8 @@ export default async function TabletsMapViewBlockA() {
   });
 
   return (
-    <div className="w-full h-screen overflow-auto ">
+    <div className="">
+      <ProtectedPage/>
       <div className="my-1 sticky left-0 top-0 bg-white/75">
         <span className="bg-white text-black px-2 py-1 rounded-full ms-10 border border-black">Available</span>
         <span className="bg-green-300 font-bold text-black px-2 py-1 rounded-full ms-10 ">IPT</span>

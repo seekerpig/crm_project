@@ -245,7 +245,7 @@ function GenerateInstallmentInvoiceModal(props: any) {
                 {invoices.map((invoice) => (
                   <TableRow key={invoice.ApplicationID.toString()}>
                     <TableCell>{invoice.Fiscal_Year.toString()}</TableCell>
-                    <TableCell>{invoice.Dated}</TableCell>
+                    <TableCell>{new Date(invoice.Dated.toString()).toDateString()}</TableCell>
                     <TableCell>{invoice.Terms}</TableCell>
                     <TableCell>{invoice.Tablet_Number}</TableCell>
                     <TableCell>{invoice.Payee_Name}</TableCell>

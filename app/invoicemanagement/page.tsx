@@ -3,6 +3,7 @@ import { DataTable } from "./components/data-table"
 import { Invoice } from "../data/dataTypes"
 import { db } from "@/lib/firebase/firebase"
 import { collection, query, where, getDocs } from "firebase/firestore"
+import ProtectedPage from "@/components/ProtectedPage"
 
 async function getInvoices() {
   const q = query(collection(db, "invoices"))
@@ -23,6 +24,7 @@ export default async function InvoiceManagement() {
   const invoices = await getInvoices();
   return (
     <>
+    <ProtectedPage/>
       <div className="h-full flex-col space-y-8 flex">
         <div className="flex items-center justify-between space-y-2">
           <div>
