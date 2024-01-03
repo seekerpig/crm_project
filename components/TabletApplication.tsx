@@ -11,9 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { db } from "@/lib/firebase/firebase";
 import { collection, query, where, getDocs, doc, setDoc, getDoc, updateDoc, addDoc } from "firebase/firestore";
-import { set } from "lodash";
-
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { CreateInvoiceAsPaid } from "@/app/invoicemanagement/components/generateManualInvoice";
 import { Input } from "@/components/ui/input";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
@@ -71,6 +69,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
         props.updateApplication(updatedApplication);
         props.onSave();
         console.log(`Document with ID ${docRef.id} written successfully.`);
+        CreateInvoiceAsPaid(updatedApplication.Tablet_Number.toString(), updatedApplication.Amount_Received.valueOf(), updatedApplication.Application_Type.toString())
       } catch (e) {
         console.error("Error adding document: ", e);
       }

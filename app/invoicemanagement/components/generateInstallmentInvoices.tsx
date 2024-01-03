@@ -13,11 +13,11 @@ import { useToast } from "@/components/ui/use-toast";
 
 import { db } from "@/lib/firebase/firebase";
 import { collection, query, where, getDocs, doc, getDoc, writeBatch, addDoc, setDoc, updateDoc } from "firebase/firestore";
+import { useRouter } from "next/router";
 
 function GenerateInstallmentInvoiceModal(props: any) {
   const { invoiceData } = props;
   const { toast } = useToast();
-
   const currentYear = new Date().getFullYear();
 
   const [selectedYear, setSelectedYear] = useState(currentYear);
@@ -56,7 +56,7 @@ function GenerateInstallmentInvoiceModal(props: any) {
           Fiscal_Year: Number(year),
           Receipt_No: "",
           Amount: parseFloat((parseFloat(tabletApplication.Outstanding_Amount.toString()) / parseInt(tabletApplication.Number_of_Months.toString())).toFixed(2)),
-          Year_Positioned: new Date(tabletApplication.Leasing_Date).getFullYear(),
+          Year_Positioned: new Date(tabletApplication.Leasing_Date.toString()).getFullYear(),
           Month: month,
           IsPaid: false,
         };
@@ -124,6 +124,7 @@ function GenerateInstallmentInvoiceModal(props: any) {
           console.log("Invoices added to database", invoices);
           setInvoices([]);
           setShowTable(false);
+          setTimeout(() => window.location.reload(), 500);
         } catch (error: any) {
           console.error("Error adding invoices:", error.message);
         }
@@ -145,12 +146,13 @@ function GenerateInstallmentInvoiceModal(props: any) {
           console.log("Invoices added to database", invoices);
           setInvoices([]);
           setShowTable(false);
+          setTimeout(() => window.location.reload(), 500);
         } catch (error: any) {
           console.error("Error adding invoices:", error.message);
         }
       }
     }
-
+    
     setDialogOpen(false);
   }
 
@@ -220,7 +222,7 @@ function GenerateInstallmentInvoiceModal(props: any) {
           </div>
         </DialogHeader>
         <DialogHeader className={`${showTable == false ? "hidden" : "w-full"}  `}>
-          <DialogTitle>Please confirm the invoices to be generated:</DialogTitle>
+          <DialogTitle>Please confirm the invoices to be generated for year {selectedYear},  month {selectedMonth}</DialogTitle>
           <p>There is a total of {invoices.length} invoices to be generated</p>
           <div className="w-full">
             <Table>

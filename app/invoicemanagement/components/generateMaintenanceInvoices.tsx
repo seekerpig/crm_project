@@ -15,10 +15,10 @@ import { useToast } from "@/components/ui/use-toast";
 import { db } from "@/lib/firebase/firebase";
 import { collection, query, where, getDocs, doc, getDoc, writeBatch, addDoc, setDoc, updateDoc } from "firebase/firestore";
 
+
 function GenerateMaintenanceInvoiceModal(props: any) {
   const { invoiceData } = props;
   const { toast } = useToast();
-
   const currentYear = new Date().getFullYear();
 
   const [selectedYear, setSelectedYear] = useState(currentYear);
@@ -64,7 +64,7 @@ function GenerateMaintenanceInvoiceModal(props: any) {
         Fiscal_Year: Number(year),
         Receipt_No: "",
         Amount: price,
-        Year_Positioned: new Date(tabletApplication.Leasing_Date).getFullYear(),
+        Year_Positioned: new Date(tabletApplication.Leasing_Date.toString()).getFullYear(),
         IsPaid: false,
       };
       currInvoices.push(invoice);
@@ -110,10 +110,11 @@ function GenerateMaintenanceInvoiceModal(props: any) {
           title: "Successful",
           description: "Invoices were created successfully",
         });
-
+        
         console.log("Invoices added to database", invoices);
         setInvoices([]);
         setShowTable(false);
+        setTimeout(() => window.location.reload(), 500);
       } catch (error: any) {
         console.error("Error adding invoices:", error.message);
       }
@@ -135,6 +136,7 @@ function GenerateMaintenanceInvoiceModal(props: any) {
         console.log("Invoices added to database", invoices);
         setInvoices([]);
         setShowTable(false);
+        setTimeout(() => window.location.reload(), 500);
       } catch (error: any) {
         console.error("Error adding invoices:", error.message);
       }

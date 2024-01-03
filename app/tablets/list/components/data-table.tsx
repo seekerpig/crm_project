@@ -18,83 +18,6 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
-// async function pushMockDataToFirebase(apps: TabletApplication[]) {
-//   apps.forEach(async (app: TabletApplication) => {
-//     try {
-//       await setDoc(doc(db, "tabletapplications", app.ApplicationID.toString()), app)
-//       console.log("Successfully added:" + app.ApplicationID);
-//     }
-//     catch (error) {
-//       console.log("Error adding mockdata" + error);
-//     }
-//   });
-// }
-
-function generateMockInvoice(application: TabletApplication) {
-  const invoiceTypes = [
-    "Purchase of Tablet Leasing (Normal)",
-    "Annual Fee for Maintenance of Ancestor Tablet",
-    "Purchase of Tablet (Special)"
-  ];
-
-  const randomInvoiceType = "Purchase of Tablet Leasing (Normal)";
-  const randomInvoiceNo = `INV-${Math.floor(Math.random() * 1000)}`;
-  const randomApplicationID = application.ApplicationID;
-  const randomDated = application.Leasing_Date;
-  const randomTerms = `${Math.floor(Math.random() * 30) + 1} Days`;
-  const randomTabletNumber =  application.Tablet_Number;
-  const randomPayeeName = application.Applicant_Name_English;
-  const randomPayeeAddress = application.Applicant_Address;
-  const randomFiscalYear = new Date().getFullYear();
-  const randomReceiptNo = `RCPT-${Math.floor(Math.random() * 1000)}`;
-  const randomAmount = 30;
-  const randomYearPositioned = new Date().getFullYear();
-  const randomIsPaid = true;
-
-  const mockInvoice: Invoice = {
-    InvoiceNo: randomInvoiceNo,
-    ApplicationID: randomApplicationID,
-    Dated: randomDated,
-    Terms: randomTerms,
-    Tablet_Number: randomTabletNumber,
-    Payee_Name: randomPayeeName,
-    Payee_Address: randomPayeeAddress,
-    Description: randomInvoiceType,
-    Fiscal_Year: randomFiscalYear,
-    Receipt_No: randomReceiptNo,
-    Amount: randomAmount,
-    Year_Positioned: randomYearPositioned,
-    IsPaid: randomIsPaid
-  };
-
-  return mockInvoice;
-}
-
-
-async function generateInvoicesData(data: TabletApplication[]) {
-  data.forEach(async application => {
-    try {
-      let invoice: Invoice = await generateMockInvoice(application);
-      await setDoc(doc(db, "invoices", invoice.InvoiceNo.toString()), invoice)
-      console.log("Successfully added:" + invoice.InvoiceNo);
-    }
-    catch (error) {
-      console.log("error added invoice to firebase");
-    }
-  });
-
-}
-
-async function generateApplicationsCombinedToFirebase(data: TabletApplication[]) {
-  console.log(data)
-  // try {
-  //   const id = "allapplications";
-  //   const applicationsDocRef = doc(db, "applications", )
-  // }
-  // catch (error) {
-  //   console.log("Error adding applications document into firebase");
-  //}
-}
 
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
@@ -125,7 +48,13 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
     }
   }, [columnVisibility]);
 
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [sorting, setSorting] = React.useState<SortingState>([
+    // Set default sorting for the "Dated" column to be descending
+    {
+      id: "Leasing_Date",
+      desc: true,
+    },
+  ]);
 
   const table = useReactTable({
     data,
@@ -154,8 +83,6 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 
   return (
     <div className="space-y-4">
-      <Button onClick={() => generateInvoicesData(data as TabletApplication[])}> Generate Invoices to Firebase </Button>
-      <Button onClick={() => generateApplicationsCombinedToFirebase(data as TabletApplication[])}> Generate Applications Combined to Firebase </Button>
       <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>

@@ -58,7 +58,13 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
     }
   }, [columnVisibility]);
 
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [sorting, setSorting] = React.useState<SortingState>([
+    // Set default sorting for the "Dated" column to be descending
+    {
+      id: "Dated",
+      desc: true,
+    },
+  ]);
 
   const table = useReactTable({
     data,

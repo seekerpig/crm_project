@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState("No User");
 
   const router = useRouter()
 
@@ -19,16 +19,6 @@ export function AuthProvider({ children }) {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
-	useEffect(() => {
-		onAuthStateChanged((authUser) => {
-			if (currentUser === undefined) return
-			// refresh when user changed to ease testing
-			if (currentUser?.email !== authUser?.email) {
-				router.refresh()
-			}
-		})
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [currentUser])
 
   return (
     <AuthContext.Provider value={currentUser}>
