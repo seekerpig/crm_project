@@ -426,7 +426,16 @@ export default async function TabletsMapViewBlockA() {
               );
               currentRow = tablet.Row_Number.toString();
             }
-            rowItems.push(<Tablet key={tablet.Tablet_Number.toString()} Block={tablet.Block} Row_Number={tablet.Row_Number} Column_Number={tablet.Column_Number} Status={tablet.Status} Tablet_Number={tablet.Tablet_Number} ApplicationID={tablet.ApplicationID} />);
+            if(tablet.Row_Number === "17" && tablet.Column_Number === "49") {
+
+              rowItems.push(<div className="">
+                <img src="/temple-icon.jpeg" alt="Block A" className="w-24 h-24 absolute"/>
+                <Tablet key={tablet.Tablet_Number.toString()} Block={tablet.Block} Row_Number={tablet.Row_Number} Column_Number={tablet.Column_Number} Status={tablet.Status} Tablet_Number={tablet.Tablet_Number} ApplicationID={tablet.ApplicationID} />
+                </div>);
+            }
+            else{
+              rowItems.push(<Tablet key={tablet.Tablet_Number.toString()} Block={tablet.Block} Row_Number={tablet.Row_Number} Column_Number={tablet.Column_Number} Status={tablet.Status} Tablet_Number={tablet.Tablet_Number} ApplicationID={tablet.ApplicationID} />);
+            }
             if (index === tablets.length - 1) {
               rows.push(
                 <div key={currentRow} className="flex flex-row">
