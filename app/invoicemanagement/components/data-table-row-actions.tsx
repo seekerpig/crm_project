@@ -44,6 +44,10 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
       const tabletAppID = invoice.ApplicationID.toString();
       const tabletRef = doc(tabletCollectionRef, tabletAppID);
       
+      const tabletMetadataCollectionRef = collection(db, "tablets");
+      const tabletBlock = "Block" + invoice.Tablet_Number.charAt(0);
+      const tabletMetadataRef = doc(tabletMetadataCollectionRef, tabletBlock);
+
       updateDoc(docRef, {
         ["IsPaid"]: true,
         ["Receipt_No"]: receiptNo.toString(),
@@ -57,11 +61,21 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
             ["Number_of_Months"]: 0,
             ["Application_Type"]: "N",
           })
+
+          updateDoc(tabletMetadataRef, {
+            [invoice.Tablet_Number.toString()]: ["Occupied (N)", ""]
+          })
+          
+        }
+        else if (invoice.IsPaid == false && tabletAppData.Application_Type == "IPT" && invoice.Description == "Monthly Installment" && typeof tabletAppData.Outstanding_Amount === "number" && typeof tabletAppData.Number_of_Months === "number" && typeof invoice.Amount === "number") {
+          updateDoc(tabletRef, {
+            ["Outstanding_Amount"]: tabletAppData.Outstanding_Amount - invoice.Amount,
+            ["Number_of_Months"]: tabletAppData.Number_of_Months - 1,
+          })
         }
         else if (invoice.IsPaid == false && tabletAppData.Application_Type == "IPT" && typeof tabletAppData.Outstanding_Amount === "number" && typeof tabletAppData.Number_of_Months === "number" && typeof invoice.Amount === "number") {
           updateDoc(tabletRef, {
             ["Outstanding_Amount"]: tabletAppData.Outstanding_Amount - invoice.Amount,
-            ["Number_of_Months"]: tabletAppData.Number_of_Months - 1,
           })
         }
         toast({
@@ -69,6 +83,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
           description: "Invoices mark as paid with receipt number",
         });
         setDialogOpen(false);
+        setTimeout(() => window.location.reload(), 500);
       });
     } catch (error) {
       toast({
@@ -94,6 +109,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
           title: "Successful",
           description: "Invoices deleted successfully",
         });
+        setTimeout(() => window.location.reload(), 500);
       });
     } catch (error) {
       toast({

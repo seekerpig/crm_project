@@ -39,7 +39,7 @@ export async function CreateInvoiceAsPaid(tablet_number: string, amt: number, ap
         case "S":
           invoiceDescription = "Purchase of Tablet (Special)";
           break;
-        case "TIP":
+        case "IPT":
           invoiceDescription = "Installment Downpayment";
           break;
         // Add additional cases if needed
@@ -53,7 +53,7 @@ export async function CreateInvoiceAsPaid(tablet_number: string, amt: number, ap
         let currentLatestInvoiceNumber: number = Number(docSnap.data().latestInvoiceNo);
         currentLatestInvoiceNumber++;
 
-        // Check whether if the app data is of TIP type
+        // Check whether if the app data is of IPT type
         const newInvoice: Invoice = {
           InvoiceNo: new Date().getFullYear().toString().substring(2) + currentLatestInvoiceNumber.toString().padStart(3, "0"),
           ApplicationID: tabletApp.ApplicationID,
@@ -139,7 +139,7 @@ function GenerateManualInvoiceModal() {
           let currentLatestInvoiceNumber: number = Number(docSnap.data().latestInvoiceNo);
           currentLatestInvoiceNumber++;
 
-          // Check whether if the app data is of TIP type
+          // Check whether if the app data is of IPT type
           const newInvoice: Invoice = {
             InvoiceNo: new Date().getFullYear().toString().substring(2) + currentLatestInvoiceNumber.toString().padStart(3, "0"),
             ApplicationID: tabletApp.ApplicationID,
@@ -165,6 +165,7 @@ function GenerateManualInvoiceModal() {
             title: "Successful",
             description: "Invoice created successfully",
           });
+          setTimeout(() => window.location.reload(), 500);
         } else {
           console.log("Metadata for invoice numbering not found for the year, must create new one.");
           let currentLatestInvoiceNumber: number = 1;
@@ -194,6 +195,7 @@ function GenerateManualInvoiceModal() {
             title: "Successful",
             description: "Invoice created successfully",
           });
+          setTimeout(() => window.location.reload(), 500);
         }
       } catch (error) {
         toast({

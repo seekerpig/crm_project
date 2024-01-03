@@ -36,6 +36,7 @@ export const columns: ColumnDef<Invoice>[] = [
     cell: ({ row }) => <div>{new Date(row.getValue("Dated")).toDateString()}</div>,
     enableSorting: true,
     enableHiding: true,
+    sortDescFirst: false,
   },
   {
     accessorKey: "Description",
@@ -53,6 +54,13 @@ export const columns: ColumnDef<Invoice>[] = [
     accessorKey: "Fiscal_Year",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Fiscal_Year" />,
     cell: ({ row }) => <div>{row.getValue("Fiscal_Year")}</div>,
+    enableSorting: true,
+    enableHiding: true,
+  },
+  {
+    accessorKey: "Month",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Month" />,
+    cell: ({ row }) => <div>{row.getValue("Month")}</div>,
     enableSorting: true,
     enableHiding: true,
   },
