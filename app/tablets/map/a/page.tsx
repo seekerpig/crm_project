@@ -390,7 +390,7 @@ export default async function TabletsMapViewBlockA() {
   });
 
   return (
-    <div className="">
+    <div className="relative">
       <ProtectedPage/>
       <div className="my-1 sticky left-0 top-0 bg-white/75">
         <span className="bg-white text-black px-2 py-1 rounded-full ms-10 border border-black">Available</span>
@@ -400,6 +400,8 @@ export default async function TabletsMapViewBlockA() {
         <span className="bg-purple-300 font-bold text-black px-2 py-1 rounded-full ms-10 ">Blocked</span>
       </div>
       {/* <button onClick={() => pushDataToFirebase()}>Push Data to Firebase</button> */}
+      <img src="/temple-icon.jpeg" alt="Block A" className="w-20 h-24 -right-[200px] absolute" />
+
       <div className="flex flex-col w-max">
         {(() => {
           let blkRowNumber: string;

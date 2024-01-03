@@ -11,6 +11,9 @@ import { collection, query, where, getDocs, doc, setDoc, getDoc, updateDoc } fro
 import { useState, useEffect } from "react";
 import TabletApplication from "./TabletApplication";
 import { set } from "lodash";
+import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/app/context/AuthProvider";
+import CheckEditPermission from "@/components/CheckEditPermission";
 
 function Tablet(props: Tablet) {
   const [newTablet, setNewTablet] = useState(props);
@@ -18,6 +21,10 @@ function Tablet(props: Tablet) {
   const [statusColorClass, setNewStatusColorClass] = useState("");
 
   const [applicationForm, setApplicationForm] = useState<TabletApplication | undefined>(undefined);
+  const { toast } = useToast();
+  const currentUser = useAuth();
+
+  const [hasEditPermission, setHasEditPermission] = useState(false);
 
   useEffect(() => {
     switch (newTablet.Status.toString()) {
@@ -80,18 +87,19 @@ function Tablet(props: Tablet) {
     const q = query(collection(db, "tabletapplications"), where("Tablet_Number", "==", props.Tablet_Number), where("Status", "==", "Current"));
     try {
       const querySnapshot = await getDocs(q);
-  
+
       querySnapshot.forEach((doc) => {
         setApplicationForm(doc.data() as TabletApplication);
       });
-  
-
     } catch (error) {
       console.error("Error fetching tablet application: ", error);
     }
-  
-  }
 
+    const hasEditPermission = await CheckEditPermission(currentUser);
+    if (hasEditPermission) {
+      setHasEditPermission(true);
+    }
+  }
 
   async function updateApplication(application: TabletApplication) {
     console.log("updateApplication", application.Status);
@@ -99,7 +107,7 @@ function Tablet(props: Tablet) {
       console.log("updateApplication here", application.Status);
       setApplicationForm(undefined);
       handleStatusChange("Available");
-  
+
       const status = "Available";
       let tablet: Tablet = {
         Tablet_Number: newTablet.Tablet_Number,
@@ -112,7 +120,7 @@ function Tablet(props: Tablet) {
         [props.Tablet_Number.toString()]: [status, ""],
       };
       const block = "Block" + props.Tablet_Number.charAt(0);
-  
+
       try {
         const tabletDocRef = doc(db, "tablets", block);
         await updateDoc(tabletDocRef, data);
@@ -120,26 +128,21 @@ function Tablet(props: Tablet) {
         setNewTablet(tablet);
         if (application.Application_Type === "IPT") {
           handleStatusChange("IPT");
-        }
-        else if (application.Status === "S") {
+        } else if (application.Status === "S") {
           handleStatusChange("Occupied (S)");
-        }
-        else if (application.Status === "N") {
+        } else if (application.Status === "N") {
           handleStatusChange("Occupied (N)");
         }
       } catch (error) {
         console.error("Error updating document: ", error);
       }
-    }
-    else {
+    } else {
       setApplicationForm(application);
       if (application.Application_Type === "IPT") {
         handleStatusChange("IPT");
-      }
-      else if (application.Status === "S") {
+      } else if (application.Status === "S") {
         handleStatusChange("Occupied (S)");
-      }
-      else if (application.Status === "N") {
+      } else if (application.Status === "N") {
         handleStatusChange("Occupied (N)");
       }
     }
@@ -151,7 +154,7 @@ function Tablet(props: Tablet) {
         <Dialog>
           {/* onclick fecth applicationTablet */}
           <DialogTrigger asChild>
-            <div onClick={() => fetchApplicationTablet()} className={Number(props.Column_Number) === 2 && props.Block !== "D" ? "ml-7 " : Number(props.Column_Number) === 1 && props.Block === "D" ? "ml-7" : " "}>
+            <div onClick={fetchApplicationTablet} className={Number(props.Column_Number) === 2 && props.Block !== "D" ? "ml-7 " : Number(props.Column_Number) === 1 && props.Block === "D" ? "ml-7" : " "}>
               <div className={` ${props.Status === "Not Available" ? "w-[43px] h-[51px] px-3 pt-[25px] m-1" : `${statusColorClass} cursor-pointer w-[43px] h-[51px] px-3 pt-[25px] pb-1 border border-zinc-700 rounded shadow flex-col justify-end items-center inline-flex m-1 `}`}>{props.Status !== "Not Available" && <div>{props.Column_Number}</div>}</div>
             </div>
           </DialogTrigger>
@@ -196,50 +199,52 @@ function Tablet(props: Tablet) {
                   Number_of_Months={applicationForm?.Number_of_Months || 0}
                 />
               ) : (
-                <div className="w-full flex flex-col">
-                  {/* if available can change status */}
-                  <Label htmlFor="changeStatus" className="mt-3 mb-1">
-                    Change Status to:
-                  </Label>
-                  <Select defaultValue={newTablet.Status as string} onValueChange={(value: string) => handleStatusChange(value)} value={status.toString()}>
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Select a Status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Status</SelectLabel>
-                        <SelectItem value="Available">
-                          <span className="bg-white font-bold text-black px-2 py-1 rounded-full border border-black">Available</span>
-                        </SelectItem>
-                        <SelectItem value="IPT">
-                          <span className="bg-green-300 font-bold text-black px-2 py-1 rounded-full  ">IPT</span>
-                        </SelectItem>
-                        <SelectItem value="Reserved">
-                          <span className="bg-yellow-200 font-bold text-black px-2 py-1 rounded-full  ">Reserved</span>
-                        </SelectItem>
-                        <SelectItem value="Occupied (S)">
-                          <span className="bg-red-300 font-bold text-black px-2 py-1 rounded-full  ">Occupied (S)</span>
-                        </SelectItem>
-                        <SelectItem value="Occupied (N)">
-                          <span className="bg-red-300 font-bold text-black px-2 py-1 rounded-full  ">Occupied (N)</span>
-                        </SelectItem>
-                        <SelectItem value="Blocked">
-                          <span className="bg-purple-300 font-bold text-black px-2 py-1 rounded-full ">Blocked</span>
-                        </SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                  {status !== "IPT" && status !== "Occupied (S)" && status !== "Occupied (N)" && (
-                    <div className="w-full mt-3">
-                      <Button className="mr-4" onClick={handleSaveTablet}>
-                        Save
-                      </Button>
-                    </div>
-                  )}
-                </div>
+                hasEditPermission && (
+                  <div className="w-full flex flex-col">
+                    {/* if available can change status */}
+                    <Label htmlFor="changeStatus" className="mt-3 mb-1">
+                      Change Status to:
+                    </Label>
+                    <Select defaultValue={newTablet.Status as string} onValueChange={(value: string) => handleStatusChange(value)} value={status.toString()}>
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Select a Status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Status</SelectLabel>
+                          <SelectItem value="Available">
+                            <span className="bg-white font-bold text-black px-2 py-1 rounded-full border border-black">Available</span>
+                          </SelectItem>
+                          <SelectItem value="IPT">
+                            <span className="bg-green-300 font-bold text-black px-2 py-1 rounded-full  ">IPT</span>
+                          </SelectItem>
+                          <SelectItem value="Reserved">
+                            <span className="bg-yellow-200 font-bold text-black px-2 py-1 rounded-full  ">Reserved</span>
+                          </SelectItem>
+                          <SelectItem value="Occupied (S)">
+                            <span className="bg-red-300 font-bold text-black px-2 py-1 rounded-full  ">Occupied (S)</span>
+                          </SelectItem>
+                          <SelectItem value="Occupied (N)">
+                            <span className="bg-red-300 font-bold text-black px-2 py-1 rounded-full  ">Occupied (N)</span>
+                          </SelectItem>
+                          <SelectItem value="Blocked">
+                            <span className="bg-purple-300 font-bold text-black px-2 py-1 rounded-full ">Blocked</span>
+                          </SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    {status !== "IPT" && status !== "Occupied (S)" && status !== "Occupied (N)" && (
+                      <div className="w-full mt-3">
+                        <Button className="mr-4" onClick={handleSaveTablet}>
+                          Save
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                )
               )}
               {/* if select IPT a form to fill in */}
-              {(status === "IPT" && applicationForm?.ApplicationID == undefined)&& (
+              {status === "IPT" && applicationForm?.ApplicationID == undefined && (
                 <TabletApplication
                   ApplicationID={applicationForm?.ApplicationID || ""}
                   Tablet_Number={newTablet.Tablet_Number}
@@ -271,7 +276,7 @@ function Tablet(props: Tablet) {
                 />
               )}
               {/* if select Occupied a form to fill in */}
-              {(status === "Occupied (S)" && applicationForm?.ApplicationID == undefined)&& (
+              {status === "Occupied (S)" && applicationForm?.ApplicationID == undefined && (
                 <TabletApplication
                   ApplicationID={applicationForm?.ApplicationID || ""}
                   Tablet_Number={newTablet.Tablet_Number}
@@ -302,7 +307,7 @@ function Tablet(props: Tablet) {
                   Number_of_Months={applicationForm?.Number_of_Months || 0}
                 />
               )}
-              {(status === "Occupied (N)" && applicationForm?.ApplicationID == undefined) && (
+              {status === "Occupied (N)" && applicationForm?.ApplicationID == undefined && (
                 <TabletApplication
                   ApplicationID={applicationForm?.ApplicationID || ""}
                   Tablet_Number={newTablet.Tablet_Number}
