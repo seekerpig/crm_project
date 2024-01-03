@@ -18,8 +18,10 @@ import { useToast } from "@/components/ui/use-toast";
 
 import { db } from "@/lib/firebase/firebase";
 import { updateDoc, doc, collection, deleteDoc, getDoc } from "firebase/firestore";
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+import { CheckEditPermission } from "@/components/CheckEditPermission";
+import { useAuth } from "@/app/context/AuthProvider";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -33,6 +35,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
   const [receiptNo, setReceiptNo] = React.useState(invoice.Receipt_No);
   const downloadablePdfRef = useRef(null);
   const { toast } = useToast();
+  const currentUser = useAuth();
 
   async function updateInvoicePaymentData(): Promise<void> {
     try {
@@ -43,7 +46,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
       const tabletCollectionRef = collection(db, "tabletapplications");
       const tabletAppID = invoice.ApplicationID.toString();
       const tabletRef = doc(tabletCollectionRef, tabletAppID);
-      
+
       const tabletMetadataCollectionRef = collection(db, "tablets");
       const tabletBlock = "Block" + invoice.Tablet_Number.charAt(0);
       const tabletMetadataRef = doc(tabletMetadataCollectionRef, tabletBlock);
@@ -52,7 +55,6 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
         ["IsPaid"]: true,
         ["Receipt_No"]: receiptNo.toString(),
       }).then(async () => {
-        
         const tabletApp = await getDoc(tabletRef);
         const tabletAppData = tabletApp.data() as TabletApplication;
         if (invoice.IsPaid == false && typeof tabletAppData.Outstanding_Amount === "number" && typeof tabletAppData.Number_of_Months === "number" && typeof invoice.Amount === "number" && tabletAppData.Outstanding_Amount - invoice.Amount < 1) {
@@ -60,23 +62,20 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
             ["Outstanding_Amount"]: 0,
             ["Number_of_Months"]: 0,
             ["Application_Type"]: "N",
-          })
+          });
 
           updateDoc(tabletMetadataRef, {
-            [invoice.Tablet_Number.toString()]: ["Occupied (N)", ""]
-          })
-          
-        }
-        else if (invoice.IsPaid == false && tabletAppData.Application_Type == "IPT" && invoice.Description == "Monthly Installment" && typeof tabletAppData.Outstanding_Amount === "number" && typeof tabletAppData.Number_of_Months === "number" && typeof invoice.Amount === "number") {
+            [invoice.Tablet_Number.toString()]: ["Occupied (N)", ""],
+          });
+        } else if (invoice.IsPaid == false && tabletAppData.Application_Type == "IPT" && invoice.Description == "Monthly Installment" && typeof tabletAppData.Outstanding_Amount === "number" && typeof tabletAppData.Number_of_Months === "number" && typeof invoice.Amount === "number") {
           updateDoc(tabletRef, {
             ["Outstanding_Amount"]: tabletAppData.Outstanding_Amount - invoice.Amount,
             ["Number_of_Months"]: tabletAppData.Number_of_Months - 1,
-          })
-        }
-        else if (invoice.IsPaid == false && tabletAppData.Application_Type == "IPT" && typeof tabletAppData.Outstanding_Amount === "number" && typeof tabletAppData.Number_of_Months === "number" && typeof invoice.Amount === "number") {
+          });
+        } else if (invoice.IsPaid == false && tabletAppData.Application_Type == "IPT" && typeof tabletAppData.Outstanding_Amount === "number" && typeof tabletAppData.Number_of_Months === "number" && typeof invoice.Amount === "number") {
           updateDoc(tabletRef, {
             ["Outstanding_Amount"]: tabletAppData.Outstanding_Amount - invoice.Amount,
-          })
+          });
         }
         toast({
           title: "Successful",
@@ -124,18 +123,18 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
 
     if (content) {
       html2canvas(content).then((canvas) => {
-        const imgData = canvas.toDataURL('image/png');
+        const imgData = canvas.toDataURL("image/png");
 
         const pdf = new jsPDF({
-          orientation: 'portrait',
+          orientation: "portrait",
         });
 
         const imgProps = pdf.getImageProperties(imgData);
         const pdfWidth = pdf.internal.pageSize.getWidth() + 30;
         const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        pdf.save('document.pdf');
+        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+        pdf.save("document.pdf");
       });
     } else {
       console.log("No content in downloadable pdf");
@@ -254,7 +253,12 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
             </div>
             <div className="w-full pb-10">
               <div className="w-full mt-3 flex flex-col items-center">
-                <Button onClick={() => {downloadPdf()}} className="w-[180px]">
+                <Button
+                  onClick={() => {
+                    downloadPdf();
+                  }}
+                  className="w-[180px]"
+                >
                   Download PDF
                 </Button>
               </div>
@@ -301,9 +305,34 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
         </AlertDialogContent>
       </AlertDialog>
       <DropdownMenuContent align="end" className="w-[160px]">
-        <DropdownMenuItem onClick={() => setDialogOpen(true)}>Mark as Paid</DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={async () => {
+              const hasEditPermission = await CheckEditPermission(currentUser);
+
+              if (hasEditPermission) {
+                setDialogOpen(true);
+              } else {
+                toast({
+                  title: "No Edit Permission",
+                  description: "Your current account has no edit permission",
+                });
+              }
+          }}>
+          Mark as Paid
+        </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setViewInvoice(true)}>Download Invoice</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => promptDeleteInvoice()}>Delete</DropdownMenuItem>
+        <DropdownMenuItem onClick={async () => {
+              const hasEditPermission = await CheckEditPermission(currentUser);
+
+              if (hasEditPermission) {
+                promptDeleteInvoice();
+              } else {
+                toast({
+                  title: "No Edit Permission",
+                  description: "Your current account has no edit permission",
+                });
+              }
+          }}>Delete</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
