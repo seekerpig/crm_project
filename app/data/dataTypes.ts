@@ -59,3 +59,8 @@ export interface Invoice {
   IsPaid: Boolean,
 }
 
+export interface User {
+  User_ID: string,
+  Email: string,
+  Permission: string,
+}
