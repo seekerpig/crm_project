@@ -14,13 +14,17 @@ import { collection, query, where, getDocs, doc, setDoc, getDoc, updateDoc, addD
 import { CreateInvoiceAsPaid } from "@/app/invoicemanagement/components/generateManualInvoice";
 import { Input } from "@/components/ui/input";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/app/context/AuthProvider";
+import CheckEditPermission from "@/components/CheckEditPermission";
 
 function TabletApplication(props: TabletApplication & { onSave: () => void } & { isEditable: boolean } & { updateApplication: (application: TabletApplication) => void }) {
   const { onSave, updateApplication, isEditable, ...initialApplication } = props;
   const [isEditing, setIsEditing] = useState(isEditable);
   const [application, setApplication] = useState({ ...initialApplication });
   const [oldApplication, setOldApplication] = useState({ ...initialApplication });
-
+  const { toast } = useToast();
+  const currentUser = useAuth();
   const handleEditClick = () => {
     setIsEditing(true);
   };
@@ -60,7 +64,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
         Status: "Current",
         Leasing_Date: application.Leasing_Date.toString(),
       };
-    
+
       try {
         const docRef = await addDoc(collection(db, "tabletapplications"), updatedApplication);
         await updateDoc(docRef, { ApplicationID: docRef.id });
@@ -69,7 +73,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
         props.updateApplication(updatedApplication);
         props.onSave();
         console.log(`Document with ID ${docRef.id} written successfully.`);
-        CreateInvoiceAsPaid(updatedApplication.Tablet_Number.toString(), updatedApplication.Amount_Received.valueOf(), updatedApplication.Application_Type.toString())
+        CreateInvoiceAsPaid(updatedApplication.Tablet_Number.toString(), updatedApplication.Amount_Received.valueOf(), updatedApplication.Application_Type.toString());
       } catch (e) {
         console.error("Error adding document: ", e);
       }
@@ -77,8 +81,6 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
 
     setIsEditing(false);
   };
-  
-
 
   const handleDeleteClick = async () => {
     // Add logic to delete the data from your database or state
@@ -188,14 +190,25 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
       ) : (
         application.Status !== "Archive" && (
           <div>
-            <Button onClick={handleEditClick} className="me-3">
+            <Button
+              onClick={async () => {
+                const hasEditPermission = await CheckEditPermission(currentUser);
+                if (hasEditPermission) {
+                  handleEditClick();
+                } else {
+                  toast({
+                    title: "No Edit Permission",
+                    description: "Your current account has no edit permission",
+                  });
+                }
+              }}
+              className="me-3"
+            >
               Edit
             </Button>
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button className="me-3">
-                  Archive
-                </Button>
+                <Button className="me-3">Archive</Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
@@ -204,7 +217,21 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction  onClick={handleDeleteClick}>Continue</AlertDialogAction>
+                  <AlertDialogAction
+                    onClick={async () => {
+                      const hasEditPermission = await CheckEditPermission(currentUser);
+                      if (hasEditPermission) {
+                        handleDeleteClick();
+                      } else {
+                        toast({
+                          title: "No Edit Permission",
+                          description: "Your current account has no edit permission",
+                        });
+                      }
+                    }}
+                  >
+                    Continue
+                  </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
