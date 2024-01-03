@@ -8,10 +8,13 @@ import {
 } from "@/lib/firebase/auth.js";
 
 import { useAuth } from "@/app/context/AuthProvider";
+import { getUserRole } from "@/lib/firebase/firebase";
+import { useEffect, useState } from "react";
 
 export function SideNavBar(className: React.HTMLAttributes<HTMLDivElement>) {
   const pathname = usePathname();
   const currentUser = useAuth();
+ 
   
   return (
     <div className={cn("pb-12", className)}>
