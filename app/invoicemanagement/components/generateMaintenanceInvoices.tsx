@@ -10,7 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Invoice, TabletApplication } from "@/app/data/dataTypes";
 import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/components/ui/use-toast";
-
+import { useAuth } from "@/app/context/AuthProvider";
+import CheckEditPermission from "@/components/CheckEditPermission";
 
 import { db } from "@/lib/firebase/firebase";
 import { collection, query, where, getDocs, doc, getDoc, writeBatch, addDoc, setDoc, updateDoc } from "firebase/firestore";
@@ -20,7 +21,7 @@ function GenerateMaintenanceInvoiceModal(props: any) {
   const { invoiceData } = props;
   const { toast } = useToast();
   const currentYear = new Date().getFullYear();
-
+  const currentUser = useAuth();
   const [selectedYear, setSelectedYear] = useState(currentYear);
   const [price, setSelectedPrice] = useState(30);
   const [showTable, setShowTable] = useState(false);
@@ -183,7 +184,18 @@ function GenerateMaintenanceInvoiceModal(props: any) {
               <Input type="number" step="0.01" id="number" placeholder="30" value={price} onChange={handlePriceChange} />
             </div>
             <div className="w-full mt-4">
-              <Button className="w-[180px]" onClick={handleGenerateMaintenanceInvoices}>
+              <Button className="w-[180px]" onClick={async () => {
+                  const hasEditPermission = await CheckEditPermission(currentUser);
+
+                  if (hasEditPermission) {
+                    handleGenerateMaintenanceInvoices();
+                  } else {
+                    toast({
+                      title: "No Edit Permission",
+                      description: "Your current account has no edit permission",
+                    });
+                  }
+                }}>
                 Generate Invoices
               </Button>
             </div>

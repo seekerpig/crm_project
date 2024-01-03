@@ -14,11 +14,14 @@ import { useToast } from "@/components/ui/use-toast";
 import { db } from "@/lib/firebase/firebase";
 import { collection, query, where, getDocs, doc, getDoc, writeBatch, addDoc, setDoc, updateDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
+import CheckEditPermission from "@/components/CheckEditPermission";
+import { useAuth } from "@/app/context/AuthProvider";
 
 function GenerateInstallmentInvoiceModal(props: any) {
   const { invoiceData } = props;
   const { toast } = useToast();
   const currentYear = new Date().getFullYear();
+  const currentUser = useAuth();
 
   const [selectedYear, setSelectedYear] = useState(currentYear);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth()); // default to January
@@ -152,14 +155,16 @@ function GenerateInstallmentInvoiceModal(props: any) {
         }
       }
     }
-    
+
     setDialogOpen(false);
   }
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button className="ml-3" variant="secondary" onClick={() => setShowTable(false)}>Generate Monthly Installment Invoice</Button>
+        <Button className="ml-3" variant="secondary" onClick={() => setShowTable(false)}>
+          Generate Monthly Installment Invoice
+        </Button>
       </DialogTrigger>
       <DialogContent className="w-full flex lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl overflow-y-scroll max-h-[80vh]">
         <DialogHeader className={`${showTable == false ? "w-full" : "hidden"}  `}>
@@ -215,14 +220,30 @@ function GenerateInstallmentInvoiceModal(props: any) {
               </Select>
             </div>
             <div className="w-full mt-4">
-              <Button className="w-[180px]" onClick={handleGenerateInstallmentInvoices}>
+              <Button
+                className="w-[180px]"
+                onClick={async () => {
+                  const hasEditPermission = await CheckEditPermission(currentUser);
+
+                  if (hasEditPermission) {
+                    handleGenerateInstallmentInvoices();
+                  } else {
+                    toast({
+                      title: "No Edit Permission",
+                      description: "Your current account has no edit permission",
+                    });
+                  }
+                }}
+              >
                 Generate Invoices
               </Button>
             </div>
           </div>
         </DialogHeader>
         <DialogHeader className={`${showTable == false ? "hidden" : "w-full"}  `}>
-          <DialogTitle>Please confirm the invoices to be generated for year {selectedYear},  month {selectedMonth}</DialogTitle>
+          <DialogTitle>
+            Please confirm the invoices to be generated for year {selectedYear}, month {selectedMonth}
+          </DialogTitle>
           <p>There is a total of {invoices.length} invoices to be generated</p>
           <div className="w-full">
             <Table>
