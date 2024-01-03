@@ -10,6 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Invoice, TabletApplication } from "@/app/data/dataTypes";
 import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/app/context/AuthProvider";
+import CheckEditPermission from "@/components/CheckEditPermission";
 
 import { db } from "@/lib/firebase/firebase";
 import { collection, query, where, getDocs, doc, getDoc, writeBatch, addDoc, setDoc, updateDoc } from "firebase/firestore";
@@ -110,6 +112,7 @@ function GenerateManualInvoiceModal() {
   const [amount, setAmount] = useState<number>(0);
   const [tabletNo, setTabletNo] = useState<string | undefined>();
   const [dialogOpen, setDialogOpen] = useState(false);
+  const currentUser = useAuth();
 
   async function finaliseGenerateInvoice() {
     // First need to find the tabletNo with the Current status and see if it exists.
@@ -247,7 +250,18 @@ function GenerateManualInvoiceModal() {
             </div>
           </div>
           <div className="w-full mt-3 flex flex-col items-center">
-            <Button onClick={() => finaliseGenerateInvoice()} className="w-[180px]">
+            <Button onClick={async () => {
+                  const hasEditPermission = await CheckEditPermission(currentUser);
+
+                  if (hasEditPermission) {
+                    finaliseGenerateInvoice();
+                  } else {
+                    toast({
+                      title: "No Edit Permission",
+                      description: "Your current account has no edit permission",
+                    });
+                  }
+                }} className="w-[180px]">
               Confirm Add Invoices
             </Button>
             <DialogDescription className="mt-3 mb-5">This action cannot be undone. You can delete the invoices manually if you want to revert.</DialogDescription>
