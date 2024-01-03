@@ -10,6 +10,8 @@ import { User } from "@/app/data/dataTypes";
 import { collection, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase/firebase";
 import { useToast } from "@/components/ui/use-toast";
+import CheckEditPermission from "@/components/CheckEditPermission";
+import { useAuth } from "@/app/context/AuthProvider";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -18,6 +20,7 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TData>) {
   const user: User = row.original as User;
   const { toast } = useToast();
+  const currentUser = useAuth();
 
   function setPermission(permission: string) {
     const collectionRef = collection(db, "users");
@@ -74,10 +77,54 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-[160px]">
-        <DropdownMenuItem onClick={() => setPermission("edit")}>Set Edit Permission</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setPermission("read")}>Set Read Only Permission</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => deleteUser()}>Delete User</DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={async () => {
+            const hasEditPermission = await CheckEditPermission(currentUser);
 
+            if (hasEditPermission) {
+              setPermission("edit");
+            } else {
+              toast({
+                title: "No Edit Permission",
+                description: "Your current account has no edit permission",
+              });
+            }
+          }}
+        >
+          Set Edit Permission
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={async () => {
+            const hasEditPermission = await CheckEditPermission(currentUser);
+
+            if (hasEditPermission) {
+              setPermission("read");
+            } else {
+              toast({
+                title: "No Edit Permission",
+                description: "Your current account has no edit permission",
+              });
+            }
+          }}
+        >
+          Set Read Only Permission
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={async () => {
+            const hasEditPermission = await CheckEditPermission(currentUser);
+
+            if (hasEditPermission) {
+              deleteUser();
+            } else {
+              toast({
+                title: "No Edit Permission",
+                description: "Your current account has no edit permission",
+              });
+            }
+          }}
+        >
+          Delete User
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
