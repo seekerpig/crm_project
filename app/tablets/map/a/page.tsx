@@ -390,7 +390,7 @@ export default async function TabletsMapViewBlockA() {
   });
 
   return (
-    <div className="relative">
+    <div className="">
       <ProtectedPage/>
       <div className="my-1 sticky left-0 top-0 bg-white/75">
         <span className="bg-white text-black px-2 py-1 rounded-full ms-10 border border-black">Available</span>
@@ -400,7 +400,7 @@ export default async function TabletsMapViewBlockA() {
         <span className="bg-purple-300 font-bold text-black px-2 py-1 rounded-full ms-10 ">Blocked</span>
       </div>
       {/* <button onClick={() => pushDataToFirebase()}>Push Data to Firebase</button> */}
-      <img src="/temple-icon.jpeg" alt="Block A" className="w-20 h-24 -right-[200px] absolute" />
+      {/* <img src="/temple-icon.jpeg" alt="Block A" className="w-10 h-12 right-2/4 absolute" /> */}
 
       <div className="flex flex-col w-max">
         {(() => {
@@ -426,7 +426,17 @@ export default async function TabletsMapViewBlockA() {
               );
               currentRow = tablet.Row_Number.toString();
             }
-            rowItems.push(<Tablet key={tablet.Tablet_Number.toString()} Block={tablet.Block} Row_Number={tablet.Row_Number} Column_Number={tablet.Column_Number} Status={tablet.Status} Tablet_Number={tablet.Tablet_Number} ApplicationID={tablet.ApplicationID} />);
+            if(tablet.Row_Number === "17" && tablet.Column_Number === "49") {
+
+              rowItems.push(<div className="">
+                <img src="/temple-icon.jpeg" alt="Block A" className="w-24 h-24 absolute"/>
+                <Tablet key={tablet.Tablet_Number.toString()} Block={tablet.Block} Row_Number={tablet.Row_Number} Column_Number={tablet.Column_Number} Status={tablet.Status} Tablet_Number={tablet.Tablet_Number} ApplicationID={tablet.ApplicationID} />
+                </div>);
+            }
+            else{
+              rowItems.push(<Tablet key={tablet.Tablet_Number.toString()} Block={tablet.Block} Row_Number={tablet.Row_Number} Column_Number={tablet.Column_Number} Status={tablet.Status} Tablet_Number={tablet.Tablet_Number} ApplicationID={tablet.ApplicationID} />);
+            }
+
             if (index === tablets.length - 1) {
               rows.push(
                 <div key={currentRow} className="flex flex-row">
