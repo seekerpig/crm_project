@@ -23,7 +23,7 @@ const Home = () => {
     setTabletApplications([]);
     setError("");
     const tabApplications = [] as TabletApplicationType[];
-    const queryTabletApplications = query(collection(db, "tabletapplications"), where("Applicant_IdentifiedCode", "==", nric));
+    const queryTabletApplications = query(collection(db, "tabletapplications"), where("Applicant_IdentifiedCode", "==", nric), where("Status", "==", "Current"));
     const queryTabletApplicationsSnapshot = await getDocs(queryTabletApplications);
     if (queryTabletApplicationsSnapshot.empty) {
       setError("No matching documents.");
