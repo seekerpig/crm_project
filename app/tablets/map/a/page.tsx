@@ -400,8 +400,6 @@ export default async function TabletsMapViewBlockA() {
         <span className="bg-purple-300 font-bold text-black px-2 py-1 rounded-full ms-10 ">Blocked</span>
       </div>
       {/* <button onClick={() => pushDataToFirebase()}>Push Data to Firebase</button> */}
-      {/* <img src="/temple-icon.jpeg" alt="Block A" className="w-10 h-12 right-2/4 absolute" /> */}
-
       <div className="flex flex-col w-max">
         {(() => {
           let blkRowNumber: string;
@@ -428,7 +426,7 @@ export default async function TabletsMapViewBlockA() {
             }
             if(tablet.Row_Number === "17" && tablet.Column_Number === "49") {
 
-              rowItems.push(<div className="">
+              rowItems.push(<div key={tablet.Tablet_Number.toString()} className="">
                 <img src="/temple-icon.jpeg" alt="Block A" className="w-24 h-24 absolute"/>
                 <Tablet key={tablet.Tablet_Number.toString()} Block={tablet.Block} Row_Number={tablet.Row_Number} Column_Number={tablet.Column_Number} Status={tablet.Status} Tablet_Number={tablet.Tablet_Number} ApplicationID={tablet.ApplicationID} />
                 </div>);
@@ -436,7 +434,6 @@ export default async function TabletsMapViewBlockA() {
             else{
               rowItems.push(<Tablet key={tablet.Tablet_Number.toString()} Block={tablet.Block} Row_Number={tablet.Row_Number} Column_Number={tablet.Column_Number} Status={tablet.Status} Tablet_Number={tablet.Tablet_Number} ApplicationID={tablet.ApplicationID} />);
             }
-
             if (index === tablets.length - 1) {
               rows.push(
                 <div key={currentRow} className="flex flex-row">
