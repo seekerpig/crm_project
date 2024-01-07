@@ -73,65 +73,22 @@ const Home = () => {
                           <TableHead>Tablet Number</TableHead>
                           <TableHead>Beneficiary 1 English Name</TableHead>
                           <TableHead>Beneficiary 1 Chinese Name</TableHead>
-                          <TableHead>Outstanding Amount</TableHead>
-                          <TableHead>Number of Months</TableHead>
-                          <TableHead>Manage</TableHead>
+                          <TableHead>Beneficiary 2 English Name</TableHead>
+                          <TableHead>Beneficiary 2 Chinese Name</TableHead>
+                          <TableHead>Beneficiary 3 English Name</TableHead>
+                          <TableHead>Beneficiary 3 Chinese Name</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {tabApplications.map((tabApplications) => (
                           <TableRow key={tabApplications.ApplicationID.toString()}>
-                            <TableCell>{tabApplications.ApplicationID}</TableCell>
                             <TableCell>{tabApplications.Tablet_Number}</TableCell>
                             <TableCell>{tabApplications.Beneficiary1_Name_English}</TableCell>
                             <TableCell>{tabApplications.Beneficiary1_Name_Chinese}</TableCell>
-                            <TableCell>{String(tabApplications.Outstanding_Amount)}</TableCell>
-                            <TableCell>{tabApplications.Number_of_Months?.toString()}</TableCell>
-                            <TableCell>
-                              <Dialog>
-                                {/* onclick fecth applicationTablet */}
-                                <DialogTrigger asChild>
-                                  <Button className="ml-3" variant="secondary">
-                                    View form
-                                  </Button>
-                                </DialogTrigger>
-                                <DialogContent className="w-full flex sm:max-w-[650px] sm:max-h-[800px]">
-                                  <DialogHeader className="w-full">
-                                    <TabletApplication
-                                      ApplicationID={tabApplications?.ApplicationID || ""}
-                                      Tablet_Number={tabApplications?.Tablet_Number || ""}
-                                      Leasing_Date={tabApplications?.Leasing_Date || new Date()}
-                                      Application_Type={tabApplications?.Application_Type || ""}
-                                      Beneficiary1_Name_English={tabApplications?.Beneficiary1_Name_English || ""}
-                                      Beneficiary1_Name_Chinese={tabApplications?.Beneficiary1_Name_Chinese || ""}
-                                      Beneficiary2_Name_English={tabApplications?.Beneficiary2_Name_English || ""}
-                                      Beneficiary2_Name_Chinese={tabApplications?.Beneficiary2_Name_Chinese || ""}
-                                      Beneficiary3_Name_English={tabApplications?.Beneficiary3_Name_English || ""}
-                                      Beneficiary3_Name_Chinese={tabApplications?.Beneficiary3_Name_Chinese || ""}
-                                      Applicant_Name_English={tabApplications?.Applicant_Name_English || ""}
-                                      Applicant_Name_Chinese={tabApplications?.Applicant_Name_Chinese || ""}
-                                      Applicant_Gender={tabApplications?.Applicant_Gender || ""}
-                                      Applicant_Address={tabApplications?.Applicant_Address || ""}
-                                      Applicant_IdentifiedCode={tabApplications?.Applicant_IdentifiedCode || ""}
-                                      Applicant_Relationship={tabApplications?.Applicant_Relationship || ""}
-                                      Applicant_ContactNumber={tabApplications?.Applicant_ContactNumber || ""}
-                                      Officer_In_Charge={tabApplications?.Officer_In_Charge || ""}
-                                      Amount_Received={tabApplications?.Amount_Received || 0}
-                                      Status={tabApplications?.Status || ""}
-                                      Remarks={tabApplications?.Remarks || ""}
-                                      Receipt_No={tabApplications?.Receipt_No || ""}
-                                      onSave={() => {}}
-                                      isEditable={false}
-                                      updateApplication={(application: TabletApplication) => {
-                                        // Handle the application update logic here
-                                      }}
-                                      Outstanding_Amount={tabApplications?.Outstanding_Amount || 0}
-                                      Number_of_Months={tabApplications?.Number_of_Months || 0}
-                                    />
-                                  </DialogHeader>
-                                </DialogContent>
-                              </Dialog>
-                            </TableCell>
+                            <TableCell>{tabApplications.Beneficiary2_Name_English}</TableCell>
+                            <TableCell>{tabApplications.Beneficiary2_Name_Chinese}</TableCell>
+                            <TableCell>{tabApplications.Beneficiary3_Name_English}</TableCell>
+                            <TableCell>{tabApplications.Beneficiary3_Name_Chinese}</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
