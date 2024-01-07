@@ -21,7 +21,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
   const currentUser = useAuth();
   React.useEffect(() => {
-    if (currentUser) {
+    if (currentUser && currentUser != "No User") {
       setFormMessage("User already logged in. Redirecting...");
       setTimeout(() => {
         router.push("/tablets/map/a");
