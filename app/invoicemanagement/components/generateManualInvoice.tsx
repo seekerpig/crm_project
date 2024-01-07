@@ -32,7 +32,7 @@ export async function CreateInvoiceAsPaid(tablet_number: string, amt: number, ap
       const docRef = doc(db, "invoicemetadata", new Date().getFullYear().toString());
       const docSnap = await getDoc(docRef);
 
-      let invoiceDescription: "Purchase of Tablet Leasing (Normal)" | "Purchase of Tablet (Special)" | "Installment Downpayment" | "Custom Payment" = "Custom Payment";
+      let invoiceDescription: "Purchase of Tablet Leasing (Normal)" | "Purchase of Tablet Leasing (Reserved)" | "Annual Fee for Maintenance of Ancestor Tablet" | "Purchase of Tablet (Special)" | "Monthly Installment" | "Installment Downpayment" | "Custom Payment" = "Custom Payment";
 
       switch (app_type) {
         case "N":
@@ -43,6 +43,9 @@ export async function CreateInvoiceAsPaid(tablet_number: string, amt: number, ap
           break;
         case "TIP":
           invoiceDescription = "Installment Downpayment";
+          break;
+        case "R":
+          invoiceDescription = "Purchase of Tablet Leasing (Reserved)";
           break;
         // Add additional cases if needed
         default:
@@ -110,6 +113,7 @@ function GenerateManualInvoiceModal() {
   const [amount, setAmount] = useState<number>(0);
   const [tabletNo, setTabletNo] = useState<string | undefined>();
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [remarks, setAdditionalRemarks] = useState("");
   const currentUser = useAuth();
 
   async function finaliseGenerateInvoice() {
@@ -153,6 +157,7 @@ function GenerateManualInvoiceModal() {
             Receipt_No: "",
             Amount: amount,
             Year_Positioned: new Date().getFullYear(),
+            AdditionalRemarks: remarks,
             IsPaid: false,
           };
 
@@ -181,6 +186,7 @@ function GenerateManualInvoiceModal() {
             Description: "Custom Payment",
             Receipt_No: "",
             Amount: amount,
+            AdditionalRemarks: remarks,
             Year_Positioned: new Date().getFullYear(),
             IsPaid: false,
           };
@@ -241,6 +247,17 @@ function GenerateManualInvoiceModal() {
                 value={amount.toString()}
                 onChange={(e) => {
                   setAmount(parseFloat(e.target.value));
+                }}
+              />
+              <Label htmlFor="remarks" className="mt-3 mb-1">
+                Remarks:
+              </Label>
+              <Input
+                id="remarks"
+                placeholder="e.g. Payment for XXX"
+                value={remarks}
+                onChange={(e) => {
+                  setAdditionalRemarks(e.target.value);
                 }}
               />
             </div>

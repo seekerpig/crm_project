@@ -1,5 +1,4 @@
 "use client";
-
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Row } from "@tanstack/react-table";
 
@@ -36,7 +35,96 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
   const downloadablePdfRef = useRef(null);
   const { toast } = useToast();
   const currentUser = useAuth();
+  const [descriptionDetails, setDescriptionDetails] = React.useState<string[]>([]);
+  const [paymentTotals, setPaymentTotals] = React.useState<number[]>([]);
 
+  async function updateDescriptionAndPaymentDetails() {
+    const tabletAppID = invoice.ApplicationID.toString();
+    const tabletRef = doc(db, "tabletapplications", tabletAppID);
+
+    const tablet = (await getDoc(tabletRef)).data() as TabletApplication;
+    if (invoice.Description == "Purchase of Tablet Leasing (Normal)") {
+      let desc = [];
+      let costs = [];
+      desc.push("Purchase of Tablet Leasing Cost");
+      costs.push(tablet.PurchaseOfTabletCost.valueOf());
+      costs.push(tablet.TabletCost.valueOf());
+      desc.push("Cost of Tablet");
+      if (tablet.SelectionCost && tablet.SelectionCost.valueOf() > 0) {
+        desc.push("Cost of Selection");
+        costs.push(tablet.SelectionCost.valueOf());
+      }
+      setDescriptionDetails(desc);
+      setPaymentTotals(costs);
+    } else if (invoice.Description == "Purchase of Tablet (Special)") {
+      let desc = [];
+      let costs = [];
+      desc.push("Purchase of Tablet Cost");
+      costs.push(tablet.PurchaseOfTabletCost.valueOf());
+      costs.push(tablet.TabletCost.valueOf());
+      desc.push("Cost of Tablet");
+      if (tablet.SelectionCost && tablet.SelectionCost.valueOf() > 0) {
+        desc.push("Cost of Selection");
+        costs.push(tablet.SelectionCost.valueOf());
+      }
+      setDescriptionDetails(desc);
+      setPaymentTotals(costs);
+    } else if (invoice.Description == "Installment Downpayment") {
+      let desc = [];
+      let costs = [];
+      desc.push("Purchase of Tablet Cost");
+      costs.push(tablet.PurchaseOfTabletCost.valueOf());
+      costs.push(tablet.TabletCost.valueOf());
+      desc.push("Cost of Tablet");
+      if (tablet.SelectionCost && tablet.SelectionCost.valueOf() > 0) {
+        desc.push("Cost of Selection");
+        costs.push(tablet.SelectionCost.valueOf());
+      }
+      setDescriptionDetails(desc);
+      setPaymentTotals(costs);
+    } else if (invoice.Description == "Annual Fee for Maintenance of Ancestor Tablet") {
+      let desc = [];
+      let costs = [];
+      desc.push("Annual Fee for Maintenance of Ancestor Tablet");
+      costs.push(invoice.Amount.valueOf());
+      setDescriptionDetails(desc);
+      setPaymentTotals(costs);
+    } else if (invoice.Description == "Purchase of Tablet Leasing (Reserved)") {
+      let desc = [];
+      let costs = [];
+      desc.push("Purchase of Tablet Cost");
+      costs.push(tablet.PurchaseOfTabletCost.valueOf());
+      costs.push(tablet.TabletCost.valueOf());
+      desc.push("Cost of Tablet");
+      if (tablet.SelectionCost && tablet.SelectionCost.valueOf() > 0) {
+        desc.push("Cost of Selection");
+        costs.push(tablet.SelectionCost.valueOf());
+      }
+      setDescriptionDetails(desc);
+      setPaymentTotals(costs);
+    } else if (invoice.Description == "Monthly Installment") {
+      let desc = [];
+      let costs = [];
+      desc.push("Monthly Installment for Tablet");
+      costs.push(invoice.Amount.valueOf());
+      setDescriptionDetails(desc);
+      setPaymentTotals(costs);
+    } else if (invoice.Description == "Custom Payment") {
+      let desc = [];
+      let costs = [];
+      if (invoice.AdditionalRemarks && invoice.AdditionalRemarks != "") {
+        desc.push(invoice.AdditionalRemarks.toString());
+      }
+      else {
+        desc.push("Custom Payment");
+      }
+      costs.push(invoice.Amount.valueOf())
+      setDescriptionDetails(desc);
+      setPaymentTotals(costs);
+    }
+
+    setViewInvoice(true);
+  }
   async function updateInvoicePaymentData(): Promise<void> {
     try {
       const collectionRef = collection(db, "invoices");
@@ -57,7 +145,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
       }).then(async () => {
         const tabletApp = await getDoc(tabletRef);
         const tabletAppData = tabletApp.data() as TabletApplication;
-        if (invoice.IsPaid == false && typeof tabletAppData.Outstanding_Amount === "number" && typeof tabletAppData.Number_of_Months === "number" && typeof invoice.Amount === "number" && tabletAppData.Outstanding_Amount - invoice.Amount < 1) {
+        if (invoice.IsPaid == false && tabletAppData.Application_Type == "TIP" && typeof tabletAppData.Outstanding_Amount === "number" && typeof tabletAppData.Number_of_Months === "number" && typeof invoice.Amount === "number" && tabletAppData.Outstanding_Amount - invoice.Amount < 1) {
           updateDoc(tabletRef, {
             ["Outstanding_Amount"]: 0,
             ["Number_of_Months"]: 0,
@@ -190,14 +278,13 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                     <div className="w-full flex flex-row justify-center py-2 border-b-2 border-black">
                       <p className="font-bold">Description</p>
                     </div>
-                    <p className="pl-2">{invoice.Description}</p>
+                    {descriptionDetails.map((description, index) => (
+                      <div key={index}>
+                      <p className="pl-2" key={index}>{description}</p>
+                      <br/>
+                      </div>
+                    ))}
                     <br />
-                    {invoice.Description == "Monthly Installment" && <p className="pl-2">For Monthly Installment</p>}
-                    {invoice.Description == "Annual Fee for Maintenance of Ancestor Tablet" && <p className="pl-2">For fiscal year {invoice.Fiscal_Year?.toString()}</p>}
-                    {invoice.Description == "Purchase of Tablet Leasing (Normal)" && <p className="pl-2">Purchase of Tablet Leasing (Normal)</p>}
-                    {invoice.Description == "Purchase of Tablet (Special)" && <p className="pl-2">Purchase of Tablet (Special)</p>}
-                    {invoice.Description == "Installment Downpayment" && <p className="pl-2">Installment Downpayment</p>}
-                    {invoice.Description == "Custom Payment" && <p className="pl-2">Installment Downpayment</p>}
 
                     <div className="w-full flex flex-row justify-end py-2 pr-3 border-t-2 border-black absolute bottom-0">
                       <p className="font-bold">Total Amount:</p>
@@ -215,9 +302,12 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                       </div>
                       <div className="two-col h-full w-full flex flex-row">
                         <div className="col-1 h-full w-2/6 border-r-2 border-black">
-                          <p className="pl-2">&nbsp;</p>
-                          <br />
-                          <p className="pl-2">${invoice.Amount.toString()}</p>
+                        {paymentTotals.map((cost, index) => (
+                          <div key={index}>
+                      <p className="pl-2" key={index}>${cost}</p>
+                      <br />
+                      </div>
+                    ))}
                         </div>
                         <div className="col-2 h-full pb-[42px] w-4/6">
                           <div className="w-full h-full flex flex-row items-center justify-center">
@@ -246,13 +336,22 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                   </p>
                 </div>
                 <div className="ml-[50px] max-w-[300px]">
-                  <p className="mb-3"><b>Bank Details</b></p>
+                  <p className="mb-3">
+                    <b>Bank Details</b>
+                  </p>
                   {/*eslint-disable-next-line @next/next/no-img-element*/}
-                  <p><b>Acc Name:</b> Chin Khong Kow Poon Guan San Toh Tong</p>
-                  <p><b>Bank Name:</b> UOB BANK</p>
-                  <p><b>Bank Acc No:</b> 3433007210</p>
-                  <p><b>PayNow UEN:</b> S99SS0091G</p>
-
+                  <p>
+                    <b>Acc Name:</b> Chin Khong Kow Poon Guan San Toh Tong
+                  </p>
+                  <p>
+                    <b>Bank Name:</b> UOB BANK
+                  </p>
+                  <p>
+                    <b>Bank Acc No:</b> 3433007210
+                  </p>
+                  <p>
+                    <b>PayNow UEN:</b> S99SS0091G
+                  </p>
                 </div>
                 <div className="ml-[50px]">
                   <p className="mb-3">Paynow QR Code:</p>
@@ -318,32 +417,37 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
       <DropdownMenuContent align="end" className="w-[160px]">
         <DropdownMenuItem
           onClick={async () => {
-              const hasEditPermission = await CheckEditPermission(currentUser);
+            const hasEditPermission = await CheckEditPermission(currentUser);
 
-              if (hasEditPermission) {
-                setDialogOpen(true);
-              } else {
-                toast({
-                  title: "No Edit Permission",
-                  description: "Your current account has no edit permission",
-                });
-              }
-          }}>
+            if (hasEditPermission) {
+              setDialogOpen(true);
+            } else {
+              toast({
+                title: "No Edit Permission",
+                description: "Your current account has no edit permission",
+              });
+            }
+          }}
+        >
           Mark as Paid
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setViewInvoice(true)}>Download Invoice</DropdownMenuItem>
-        <DropdownMenuItem onClick={async () => {
-              const hasEditPermission = await CheckEditPermission(currentUser);
+        <DropdownMenuItem onClick={async () => await updateDescriptionAndPaymentDetails()}>Download Invoice</DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={async () => {
+            const hasEditPermission = await CheckEditPermission(currentUser);
 
-              if (hasEditPermission) {
-                promptDeleteInvoice();
-              } else {
-                toast({
-                  title: "No Edit Permission",
-                  description: "Your current account has no edit permission",
-                });
-              }
-          }}>Delete</DropdownMenuItem>
+            if (hasEditPermission) {
+              promptDeleteInvoice();
+            } else {
+              toast({
+                title: "No Edit Permission",
+                description: "Your current account has no edit permission",
+              });
+            }
+          }}
+        >
+          Delete
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
