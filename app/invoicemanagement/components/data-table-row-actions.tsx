@@ -61,11 +61,11 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
           updateDoc(tabletRef, {
             ["Outstanding_Amount"]: 0,
             ["Number_of_Months"]: 0,
-            ["Application_Type"]: "N",
+            ["Application_Type"]: "R",
           });
 
           updateDoc(tabletMetadataRef, {
-            [invoice.Tablet_Number.toString()]: ["Occupied (N)", ""],
+            [invoice.Tablet_Number.toString()]: ["Reserved", ""],
           });
         } else if (invoice.IsPaid == false && tabletAppData.Application_Type == "TIP" && invoice.Description == "Monthly Installment" && typeof tabletAppData.Outstanding_Amount === "number" && typeof tabletAppData.Number_of_Months === "number" && typeof invoice.Amount === "number") {
           updateDoc(tabletRef, {

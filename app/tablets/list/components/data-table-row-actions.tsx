@@ -57,7 +57,9 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                 Applicant_Relationship={applicationForm?.Applicant_Relationship || ""}
                 Applicant_ContactNumber={applicationForm?.Applicant_ContactNumber || ""}
                 Officer_In_Charge={applicationForm?.Officer_In_Charge || ""}
-                Amount_Received={applicationForm?.Amount_Received || 0}
+                PurchaseOfTabletCost={applicationForm?.PurchaseOfTabletCost || 0}
+                TabletCost={applicationForm?.TabletCost || 0}
+                SelectionCost={applicationForm?.SelectionCost || 0}
                 Status={applicationForm?.Status || ""}
                 Remarks={applicationForm?.Remarks || ""}
                 Receipt_No={applicationForm?.Receipt_No || ""}

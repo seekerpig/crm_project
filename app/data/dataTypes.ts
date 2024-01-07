@@ -24,7 +24,7 @@ export interface TabletApplication {
   SecondContact_IdentifiedCode?: String,
   SecondContact_Gender?: String,
   Officer_In_Charge: String,
-  PurchaseOfTablet: Number;
+  PurchaseOfTabletCost: Number;
   TabletCost: Number,
   SelectionCost?: Number,
   Receipt_No?: String,
@@ -53,7 +53,7 @@ export interface Invoice {
   Payee_Name: String,
   Payee_Address: String,
   Description: "Purchase of Tablet Leasing (Normal)" | "Purchase of Tablet Leasing (Reserved)" | "Annual Fee for Maintenance of Ancestor Tablet" | "Purchase of Tablet (Special)" | "Monthly Installment" | "Installment Downpayment" | "Custom Payment",
-  Fiscal_Year: Number,
+  Fiscal_Year?: Number,
   Receipt_No: String,
   Amount: Number,
   Year_Positioned: Number,
