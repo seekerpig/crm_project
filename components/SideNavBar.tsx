@@ -3,9 +3,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import {
-	signOut,
-} from "@/lib/firebase/auth.js";
+import { signOut } from "@/lib/firebase/auth.js";
 
 import { useAuth } from "@/app/context/AuthProvider";
 import { getUserRole } from "@/lib/firebase/firebase";
@@ -14,11 +12,18 @@ import { useEffect, useState } from "react";
 export function SideNavBar(className: React.HTMLAttributes<HTMLDivElement>) {
   const pathname = usePathname();
   const currentUser = useAuth();
- 
-  
-  return (
-    currentUser && <div className={cn("pb-12", className)}>
+
+  return currentUser ? (
+    <div className={cn("pb-12", className)}>
       <div className="space-y-4 py-4">
+        <Link href="/">
+          <div className="pl-5 flex items-center hover:opacity-50">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/temple-icon.jpeg" alt="temple-icon" className="w-[40px] h-[50px]" />
+            <h2 className="mb-2 px-4 text-xl font-semibold tracking-tight">真空教本元山道堂</h2>
+          </div>
+        </Link>
+
         <div className="px-3 py-2">
           <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">Tablets Map</h2>
           <div className="space-y-1">
@@ -118,16 +123,16 @@ export function SideNavBar(className: React.HTMLAttributes<HTMLDivElement>) {
         <div className="py-2">
           <h2 className="relative px-7 text-lg font-semibold tracking-tight hidd">User</h2>
           <div className="space-y-1 p-2">
-            <div className={currentUser?.email ? 'block' : 'hidden'} onClick={signOut}>
+            <div className={currentUser?.email ? "block" : "hidden"} onClick={signOut}>
               <Button variant="ghost" className="w-full justify-start">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 h-4 w-4">
                   <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
                   <circle cx="12" cy="7" r="4" />
                 </svg>
-                {currentUser?.email ? currentUser?.email : 'Error'}
+                {currentUser?.email ? currentUser?.email : "Error"}
               </Button>
             </div>
-            <Link href="/login" className={currentUser?.email ? 'hidden' : 'block'}>
+            <Link href="/login" className={currentUser?.email ? "hidden" : "block"}>
               <Button variant={`${pathname === "/login" ? "secondary" : "ghost"}`} className="w-full justify-start">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 h-4 w-4">
                   <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
@@ -138,6 +143,27 @@ export function SideNavBar(className: React.HTMLAttributes<HTMLDivElement>) {
             </Link>
           </div>
         </div>
+      </div>
+    </div>
+  ) : (
+    <div className={cn("pb-12", className)}>
+      <div className="space-y-4 py-4">
+        <Link href="/">
+          <div className="pl-5 flex items-center hover:opacity-50">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/temple-icon.jpeg" alt="temple-icon" className="w-[40px] h-[50px]" />
+            <h2 className="mb-2 px-4 text-xl font-semibold tracking-tight">真空教本元山道堂</h2>
+          </div>
+        </Link>
+        <Link href="/login" className={currentUser?.email ? "hidden" : "block"}>
+          <Button variant={`${pathname === "/login" ? "secondary" : "ghost"}`} className="w-full justify-start">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 h-4 w-4">
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            Sign In
+          </Button>
+        </Link>
       </div>
     </div>
   );
