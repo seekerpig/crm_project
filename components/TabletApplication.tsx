@@ -18,10 +18,24 @@ import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/app/context/AuthProvider";
 import CheckEditPermission from "@/components/CheckEditPermission";
 
+import { CalendarIcon } from "@radix-ui/react-icons";
+import { format } from "date-fns";
+
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { stat } from "fs";
+import { set } from "lodash";
+
 function TabletApplication(props: TabletApplication & { onSave: () => void } & { isEditable: boolean } & { updateApplication: (application: TabletApplication) => void }) {
   const { onSave, updateApplication, isEditable, ...initialApplication } = props;
   const [isEditing, setIsEditing] = useState(isEditable);
-  const [application, setApplication] = useState({ ...initialApplication });
+  const [application, setApplication] = useState({
+    ...initialApplication,
+    TabletCost: initialApplication.TabletCost || 0,
+    PurchaseOfTabletCost: initialApplication.PurchaseOfTabletCost || 0,
+    SelectionCost: initialApplication.SelectionCost || 0,
+  });
   const [oldApplication, setOldApplication] = useState({ ...initialApplication });
   const { toast } = useToast();
   const currentUser = useAuth();
@@ -29,11 +43,21 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
     setIsEditing(true);
   };
 
+  useEffect(() => {
+    const tabletCost = Number(application.TabletCost) || 0;
+    const purchaseCost = Number(application.PurchaseOfTabletCost) || 0;
+    const selectionCost = Number(application.SelectionCost) || 0;
+
+    const outAmt = tabletCost + purchaseCost + selectionCost;
+
+    setApplication({ ...application, Outstanding_Amount: outAmt });
+  }, [application.TabletCost, application.PurchaseOfTabletCost, application.SelectionCost]);
+
   const [checkFields, setCheckFields] = useState(false);
   const handleCheckFields = () => {
     setCheckFields(true);
-    if (application.Applicant_Name_English != "" && application.Applicant_Name_English != "" && application.Applicant_Address != "" && application.Applicant_IdentifiedCode != "" && application.Applicant_Gender != "" && application.Applicant_Relationship != "" && application.Applicant_ContactNumber != "" && application.Officer_In_Charge != "" && Number(application.Amount_Received) > 0 && application.Receipt_No != "") {
-      if (application.Application_Type === "TIP" && Number(application.Number_of_Months) > 0 && Number(application.Outstanding_Amount) > 0) {
+    if (application.Applicant_Name_English != "" && application.Applicant_Name_English != "" && application.Applicant_Address != "" && application.Applicant_IdentifiedCode != "" && application.Applicant_Gender != "" && application.Applicant_Relationship != "" && application.Applicant_ContactNumber != "" && application.Officer_In_Charge != "" && Number(application.Amount_Received) > 0 && application.Receipt_No != "" && Number(application.PurchaseOfTabletCost) > 0 && Number(application.TabletCost) > 0) {
+      if (application.Application_Type === "TIP" && Number(application.Number_of_Months) > 0) {
         setCheckFields(false);
         handleSaveClick();
       } else if (application.Application_Type !== "TIP") {
@@ -48,11 +72,28 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
     // edit the data
     if (application.ApplicationID) {
       try {
-        console.log(application.ApplicationID.toString());
-        const tabletDocRef = doc(db, "tabletapplications", application.ApplicationID.toString());
-        await updateDoc(tabletDocRef, application);
-        console.log(`Document with ID ${application.ApplicationID.toString()} written successfully.`);
-        props.updateApplication(application);
+        const updatedApplication = {
+          ...application,
+        };
+        if (status !== "Reserved") {
+          if (status === "Occupied (S)") {
+            updatedApplication.Application_Type = "S";
+            console.log("Occupied (S)");
+          }
+          else if (status === "Occupied (N)") {
+            updatedApplication.Application_Type = "N";
+          }
+          setApplication(updatedApplication);
+        }
+
+        console.log(status)
+        console.log(updatedApplication.Application_Type)
+        console.log(updatedApplication.ApplicationID.toString());
+        const tabletDocRef = doc(db, "tabletapplications", updatedApplication.ApplicationID.toString());
+        await updateDoc(tabletDocRef, updatedApplication);
+        console.log(`Document with ID ${updatedApplication.ApplicationID.toString()} written successfully.`);
+        props.updateApplication(updatedApplication);
+        
       } catch (error) {
         console.error("Error updating document: ", error);
       }
@@ -117,6 +158,9 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
           SecondContact_Gender: "",
           Officer_In_Charge: "",
           Amount_Received: 0,
+          PurchaseOfTabletCost: 0,
+          TabletCost: 0,
+          SelectionCost: 0,
           Receipt_No: "",
           Payment_Comments: "",
           Remarks: "",
@@ -166,6 +210,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
     setIsEditing(false);
   };
 
+  const [status, setStatus] = useState("Reserved");
   return (
     <>
       {isEditing ? (
@@ -239,6 +284,30 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
         )
       )}
       <div className="overflow-y-auto ">
+        {(application.Application_Type == "R" && application.ApplicationID && isEditing) && <div className="my-2">
+          <Label htmlFor="changeStatus" className="mt-3 mb-1">
+            Change Status to:
+          </Label>
+            <Select defaultValue={status as string} onValueChange={(value : string) =>{ setStatus(value)}} value={status.toString()}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select a Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Status</SelectLabel>
+                <SelectItem value="Reserved">
+                            <span className="bg-yellow-200 font-bold text-black px-2 py-1 rounded-full  ">Reserved</span>
+                          </SelectItem>
+                <SelectItem value="Occupied (S)">
+                  <span className="bg-red-300 font-bold text-black px-2 py-1 rounded-full  ">Occupied (S)</span>
+                </SelectItem>
+                <SelectItem value="Occupied (N)">
+                  <span className="bg-red-300 font-bold text-black px-2 py-1 rounded-full  ">Occupied (N)</span>
+                </SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>}
         <table className="w-full">
           <tbody>
             <tr className="border border-gray-300">
@@ -254,52 +323,23 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 <strong>Leasing Date</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
-                <span>{String(application.Leasing_Date).substring(0, 10)}</span>
+                {isEditing ? (
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant={"outline"} className={cn("w-[240px] justify-start text-left font-normal", !application.Leasing_Date && "text-muted-foreground")}>
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {application.Leasing_Date ? format(new Date(application.Leasing_Date as string), "PPP") : <span>Pick a date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0 z-50" align="start">
+                      <Calendar mode="single" selected={application.Leasing_Date ? new Date(application.Leasing_Date as string) : undefined} onSelect={(date) => setApplication({ ...application, Leasing_Date: date?.toString() || "" })} initialFocus />
+                    </PopoverContent>
+                  </Popover>
+                ) : (
+                  <span>{String(application.Leasing_Date).substring(0, 10)}</span>
+                )}
               </td>
             </tr>
-            {application.Application_Type == "TIP" && (
-              <>
-                <tr className="border border-gray-300">
-                  <td colSpan={1} className="border border-gray-300 p-1">
-                    <strong>Number of Months*</strong>
-                  </td>
-                  <td colSpan={1} className="p-1 w-64">
-                    {isEditing ? (
-                      <Input
-                        type="Number"
-                        value={application.Number_of_Months?.toString()}
-                        onChange={(e) => {
-                          setApplication({ ...application, Number_of_Months: parseFloat(e.target.value) });
-                        }}
-                      />
-                    ) : (
-                      <span>{application.Number_of_Months?.toString()}</span>
-                    )}
-                    {checkFields && (application.Number_of_Months?.valueOf() ?? 0) <= 0 && <p className="text-sm text-red-500"> Please enter valid amount</p>}
-                  </td>
-                </tr>
-                <tr className="border border-gray-300">
-                  <td colSpan={1} className="border border-gray-300 p-1">
-                    <strong>Outstanding Amount*</strong>
-                  </td>
-                  <td colSpan={1} className="p-1 w-64">
-                    {isEditing ? (
-                      <Input
-                        type="Number"
-                        value={application.Outstanding_Amount?.toString()}
-                        onChange={(e) => {
-                          setApplication({ ...application, Outstanding_Amount: parseFloat(e.target.value) });
-                        }}
-                      />
-                    ) : (
-                      <span>{application.Outstanding_Amount?.toString()}</span>
-                    )}
-                    {checkFields && (application.Outstanding_Amount?.valueOf() ?? 0) <= 0 && <p className="text-sm text-red-500"> Please enter valid amount</p>}
-                  </td>
-                </tr>
-              </>
-            )}
-
             <tr className="h-5"></tr>
             <tr className="border border-gray-300 ">
               <td colSpan={1} className="border border-gray-300 p-1">
@@ -687,7 +727,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
             </tr>
             <tr className="border border-gray-300">
               <td colSpan={1} className="border border-gray-300 p-1">
-                <strong>Telephone Nos/Home or Mobile*</strong>
+                <strong>Telephone Nos/Home or Mobile</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
@@ -729,6 +769,93 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 {checkFields && application.Officer_In_Charge == "" && <p className="text-sm text-red-500"> Please enter officer in charge</p>}
               </td>
             </tr>
+            <tr className="border border-gray-300">
+              <td colSpan={1} className="border border-gray-300 p-1">
+                <strong>Purchase of Tablet Cost*</strong>
+              </td>
+              <td colSpan={1} className="p-1 w-64">
+                {isEditing ? (
+                  <Input
+                    type="Number"
+                    value={application.PurchaseOfTabletCost?.toString()}
+                    onChange={(e) => {
+                      setApplication({ ...application, PurchaseOfTabletCost: parseFloat(e.target.value) });
+                    }}
+                  />
+                ) : (
+                  <span>{application.PurchaseOfTabletCost?.toString()}</span>
+                )}
+                {checkFields && (application.PurchaseOfTabletCost?.valueOf() ?? 0) <= 0 && <p className="text-sm text-red-500"> Please enter valid amount</p>}
+              </td>
+            </tr>
+            <tr className="border border-gray-300">
+              <td colSpan={1} className="border border-gray-300 p-1">
+                <strong>Tablet Cost*</strong>
+              </td>
+              <td colSpan={1} className="p-1 w-64">
+                {isEditing ? (
+                  <Input
+                    type="Number"
+                    value={application.TabletCost?.toString()}
+                    onChange={(e) => {
+                      setApplication({ ...application, TabletCost: parseFloat(e.target.value) });
+                    }}
+                  />
+                ) : (
+                  <span>{application.TabletCost?.toString()}</span>
+                )}
+                {checkFields && (application.TabletCost?.valueOf() ?? 0) <= 0 && <p className="text-sm text-red-500"> Please enter valid amount</p>}
+              </td>
+            </tr>
+            <tr className="border border-gray-300">
+              <td colSpan={1} className="border border-gray-300 p-1">
+                <strong>Selection Cost</strong>
+              </td>
+              <td colSpan={1} className="p-1 w-64">
+                {isEditing ? (
+                  <Input
+                    type="Number"
+                    value={application.SelectionCost?.toString()}
+                    onChange={(e) => {
+                      setApplication({ ...application, SelectionCost: parseFloat(e.target.value) });
+                    }}
+                  />
+                ) : (
+                  <span>{application.SelectionCost?.toString()}</span>
+                )}
+              </td>
+            </tr>
+            {application.Application_Type == "TIP" && (
+              <>
+                <tr className="border border-gray-300">
+                  <td colSpan={1} className="border border-gray-300 p-1">
+                    <strong>Number of Months*</strong>
+                  </td>
+                  <td colSpan={1} className="p-1 w-64">
+                    {isEditing ? (
+                      <Input
+                        type="Number"
+                        value={application.Number_of_Months?.toString()}
+                        onChange={(e) => {
+                          setApplication({ ...application, Number_of_Months: parseFloat(e.target.value) });
+                        }}
+                      />
+                    ) : (
+                      <span>{application.Number_of_Months?.toString()}</span>
+                    )}
+                    {checkFields && (application.Number_of_Months?.valueOf() ?? 0) <= 0 && <p className="text-sm text-red-500"> Please enter valid amount</p>}
+                  </td>
+                </tr>
+                <tr className="border border-gray-300">
+                  <td colSpan={1} className="border border-gray-300 p-1">
+                    <strong>Outstanding Amount</strong>
+                  </td>
+                  <td colSpan={1} className="p-1 w-64">
+                    <span>{application.Outstanding_Amount?.toString()}</span>
+                  </td>
+                </tr>
+              </>
+            )}
             <tr className="border border-gray-300">
               <td colSpan={1} className="border border-gray-300 p-1">
                 <strong>Amount received/收到金额*</strong>
@@ -773,7 +900,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
-                  <input
+                  <Input
                     type="text"
                     value={application.Payment_Comments?.toString()}
                     onChange={(e) => {
