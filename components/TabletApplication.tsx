@@ -33,10 +33,10 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
   const handleCheckFields = () => {
     setCheckFields(true);
     if (application.Applicant_Name_English != "" && application.Applicant_Name_English != "" && application.Applicant_Address != "" && application.Applicant_IdentifiedCode != "" && application.Applicant_Gender != "" && application.Applicant_Relationship != "" && application.Applicant_ContactNumber != "" && application.Officer_In_Charge != "" && Number(application.Amount_Received) > 0 && application.Receipt_No != "") {
-      if (application.Application_Type === "IPT" && Number(application.Number_of_Months) > 0 && Number(application.Outstanding_Amount) > 0) {
+      if (application.Application_Type === "TIP" && Number(application.Number_of_Months) > 0 && Number(application.Outstanding_Amount) > 0) {
         setCheckFields(false);
         handleSaveClick();
-      } else if (application.Application_Type !== "IPT") {
+      } else if (application.Application_Type !== "TIP") {
         setCheckFields(false);
         handleSaveClick();
       }
@@ -257,7 +257,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 <span>{String(application.Leasing_Date).substring(0, 10)}</span>
               </td>
             </tr>
-            {application.Application_Type == "IPT" && (
+            {application.Application_Type == "TIP" && (
               <>
                 <tr className="border border-gray-300">
                   <td colSpan={1} className="border border-gray-300 p-1">
