@@ -59,6 +59,7 @@ export interface Invoice {
   Year_Positioned: Number,
   Month?: Number,
   IsPaid: Boolean,
+  AdditionalRemarks?: String,
 }
 
 export interface User {
