@@ -201,10 +201,28 @@ export const columns: ColumnDef<TabletApplication>[] = [
     enableHiding: true,
   },
   {
-    accessorKey: "Amount_Received",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Amount_Received" />,
+    accessorKey: "PurchaseOfTabletCost",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="PurchaseOfTabletCost" />,
     cell: ({ row }) => {
-      return <div>{row.getValue("Amount_Received")}</div>;
+      return <div>{row.getValue("PurchaseOfTabletCost")}</div>;
+    },
+    enableSorting: false,
+    enableHiding: true,
+  },
+  {
+    accessorKey: "TabletCost",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="TabletCost" />,
+    cell: ({ row }) => {
+      return <div>{row.getValue("TabletCost")}</div>;
+    },
+    enableSorting: false,
+    enableHiding: true,
+  },
+  {
+    accessorKey: "SelectionCost",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="SelectionCost" />,
+    cell: ({ row }) => {
+      return <div>{row.getValue("SelectionCost")}</div>;
     },
     enableSorting: false,
     enableHiding: true,
