@@ -47,20 +47,20 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
     const tabletCost = Number(application.TabletCost) || 0;
     const purchaseCost = Number(application.PurchaseOfTabletCost) || 0;
     const selectionCost = Number(application.SelectionCost) || 0;
-
-    const outAmt = tabletCost + purchaseCost + selectionCost;
+    const amountReceived = Number(application.Amount_Received) || 0;
+    const outAmt = tabletCost + purchaseCost + selectionCost - amountReceived;
 
     setApplication({ ...application, Outstanding_Amount: outAmt });
-  }, [application.TabletCost, application.PurchaseOfTabletCost, application.SelectionCost]);
+  }, [application.Amount_Received, application.TabletCost, application.PurchaseOfTabletCost, application.SelectionCost]);
 
   const [checkFields, setCheckFields] = useState(false);
   const handleCheckFields = () => {
     setCheckFields(true);
     if (application.Applicant_Name_English != "" && application.Applicant_Name_English != "" && application.Applicant_Address != "" && application.Applicant_IdentifiedCode != "" && application.Applicant_Gender != "" && application.Applicant_Relationship != "" && application.Applicant_ContactNumber != "" && application.Officer_In_Charge != "" && Number(application.Amount_Received) > 0 && application.Receipt_No != "" && Number(application.PurchaseOfTabletCost) > 0 && Number(application.TabletCost) > 0) {
-      if (application.Application_Type === "TIP" && Number(application.Number_of_Months) > 0) {
+      if (application.Application_Type === "TIP" && Number(application.Number_of_Months) > 0 && Number(application.Outstanding_Amount) >= 0) {
         setCheckFields(false);
         handleSaveClick();
-      } else if (application.Application_Type !== "TIP") {
+      } else if (application.Application_Type !== "TIP" && Number(application.Outstanding_Amount)==0) {
         setCheckFields(false);
         handleSaveClick();
       }
@@ -846,16 +846,17 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                     {checkFields && (application.Number_of_Months?.valueOf() ?? 0) <= 0 && <p className="text-sm text-red-500"> Please enter valid amount</p>}
                   </td>
                 </tr>
-                <tr className="border border-gray-300">
+              </>
+            )}
+                            <tr className="border border-gray-300">
                   <td colSpan={1} className="border border-gray-300 p-1">
                     <strong>Outstanding Amount</strong>
                   </td>
                   <td colSpan={1} className="p-1 w-64">
                     <span>{application.Outstanding_Amount?.toString()}</span>
+                    {checkFields && (application.Outstanding_Amount?.valueOf() ?? 0) < 0 && <p className="text-sm text-red-500">Not a vaild amount</p>}
                   </td>
                 </tr>
-              </>
-            )}
             <tr className="border border-gray-300">
               <td colSpan={1} className="border border-gray-300 p-1">
                 <strong>Amount received/收到金额*</strong>
