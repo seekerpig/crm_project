@@ -267,6 +267,18 @@ export const columns: ColumnDef<TabletApplication>[] = [
     enableHiding: false,
   },
   {
+    accessorKey: "Amount_Received",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Amount_Received" />,
+    cell: ({ row }) => {
+      return <div>{row.getValue("Amount_Received")}</div>;
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
     accessorKey: "Outstanding_Amount",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Outstanding_Amount" />,
     cell: ({ row }) => <div>{row.getValue("Outstanding_Amount")}</div>,
