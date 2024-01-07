@@ -28,7 +28,7 @@ function Tablet(props: Tablet) {
 
   useEffect(() => {
     switch (newTablet.Status.toString()) {
-      case "IPT":
+      case "TIP":
         setNewStatusColorClass("bg-green-300 font-bold"); // Green
         break;
       case "Reserved":
@@ -126,8 +126,8 @@ function Tablet(props: Tablet) {
         await updateDoc(tabletDocRef, data);
         console.log(`Document with ID ${block} written successfully.`);
         setNewTablet(tablet);
-        if (application.Application_Type === "IPT") {
-          handleStatusChange("IPT");
+        if (application.Application_Type === "TIP") {
+          handleStatusChange("TIP");
         } else if (application.Status === "S") {
           handleStatusChange("Occupied (S)");
         } else if (application.Status === "N") {
@@ -138,8 +138,8 @@ function Tablet(props: Tablet) {
       }
     } else {
       setApplicationForm(application);
-      if (application.Application_Type === "IPT") {
-        handleStatusChange("IPT");
+      if (application.Application_Type === "TIP") {
+        handleStatusChange("TIP");
       } else if (application.Status === "S") {
         handleStatusChange("Occupied (S)");
       } else if (application.Status === "N") {
@@ -166,9 +166,9 @@ function Tablet(props: Tablet) {
                   <div>{props.Column_Number}</div>
                 </div>
               </DialogTitle>
-              {/* if IPT or Occupied show the details */}
+              {/* if TIP or Occupied show the details */}
 
-              {(newTablet.Status === "IPT" || newTablet.Status === "Occupied (S)" || newTablet.Status === "Occupied (N)") && applicationForm ? (
+              {(newTablet.Status === "TIP" || newTablet.Status === "Occupied (S)" || newTablet.Status === "Occupied (N)") && applicationForm ? (
                 <TabletApplication
                   ApplicationID={applicationForm?.ApplicationID || ""}
                   Tablet_Number={applicationForm?.Tablet_Number || ""}
@@ -215,8 +215,8 @@ function Tablet(props: Tablet) {
                           <SelectItem value="Available">
                             <span className="bg-white font-bold text-black px-2 py-1 rounded-full border border-black">Available</span>
                           </SelectItem>
-                          <SelectItem value="IPT">
-                            <span className="bg-green-300 font-bold text-black px-2 py-1 rounded-full  ">IPT</span>
+                          <SelectItem value="TIP">
+                            <span className="bg-green-300 font-bold text-black px-2 py-1 rounded-full  ">TIP</span>
                           </SelectItem>
                           <SelectItem value="Reserved">
                             <span className="bg-yellow-200 font-bold text-black px-2 py-1 rounded-full  ">Reserved</span>
@@ -233,7 +233,7 @@ function Tablet(props: Tablet) {
                         </SelectGroup>
                       </SelectContent>
                     </Select>
-                    {status !== "IPT" && status !== "Occupied (S)" && status !== "Occupied (N)" && (
+                    {status !== "TIP" && status !== "Occupied (S)" && status !== "Occupied (N)" && (
                       <div className="w-full mt-3">
                         <Button className="mr-4" onClick={handleSaveTablet}>
                           Save
@@ -243,13 +243,13 @@ function Tablet(props: Tablet) {
                   </div>
                 )
               )}
-              {/* if select IPT a form to fill in */}
-              {status === "IPT" && applicationForm?.ApplicationID == undefined && (
+              {/* if select TIP a form to fill in */}
+              {status === "TIP" && applicationForm?.ApplicationID == undefined && (
                 <TabletApplication
                   ApplicationID={applicationForm?.ApplicationID || ""}
                   Tablet_Number={newTablet.Tablet_Number}
                   Leasing_Date={applicationForm?.Leasing_Date || new Date().toISOString()}
-                  Application_Type={"IPT"}
+                  Application_Type={"TIP"}
                   Beneficiary1_Name_English={applicationForm?.Beneficiary1_Name_English || ""}
                   Beneficiary1_Name_Chinese={applicationForm?.Beneficiary1_Name_Chinese || ""}
                   Beneficiary2_Name_English={applicationForm?.Beneficiary2_Name_English || ""}

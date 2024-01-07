@@ -41,7 +41,7 @@ export async function CreateInvoiceAsPaid(tablet_number: string, amt: number, ap
         case "S":
           invoiceDescription = "Purchase of Tablet (Special)";
           break;
-        case "IPT":
+        case "TIP":
           invoiceDescription = "Installment Downpayment";
           break;
         // Add additional cases if needed
@@ -55,7 +55,7 @@ export async function CreateInvoiceAsPaid(tablet_number: string, amt: number, ap
         let currentLatestInvoiceNumber: number = Number(docSnap.data().latestInvoiceNo);
         currentLatestInvoiceNumber++;
 
-        // Check whether if the app data is of IPT type
+        // Check whether if the app data is of TIP type
         const newInvoice: Invoice = {
           InvoiceNo: new Date().getFullYear().toString().substring(2) + currentLatestInvoiceNumber.toString().padStart(3, "0"),
           ApplicationID: tabletApp.ApplicationID,
@@ -142,7 +142,7 @@ function GenerateManualInvoiceModal() {
           let currentLatestInvoiceNumber: number = Number(docSnap.data().latestInvoiceNo);
           currentLatestInvoiceNumber++;
 
-          // Check whether if the app data is of IPT type
+          // Check whether if the app data is of TIP type
           const newInvoice: Invoice = {
             InvoiceNo: new Date().getFullYear().toString().substring(2) + currentLatestInvoiceNumber.toString().padStart(3, "0"),
             ApplicationID: tabletApp.ApplicationID,
