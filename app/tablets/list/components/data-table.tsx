@@ -8,6 +8,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 
 import { DataTablePagination } from "../components/data-table-pagination";
 import { DataTableToolbar } from "../components/data-table-toolbar";
+import { Button } from "@/components/ui/button";
+import { TabletApplication, Invoice } from "@/app/data/dataTypes";
+
+import { db } from "@/lib/firebase/firebase";
+import { query, collection, getDocs, setDoc, doc } from "firebase/firestore"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
