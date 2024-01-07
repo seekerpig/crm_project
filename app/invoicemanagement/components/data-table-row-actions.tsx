@@ -177,7 +177,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                       <b>Invoice No:</b> {invoice.InvoiceNo}
                     </p>
                     <p>
-                      <b>Dated:</b> {invoice.Dated}
+                      <b>Dated:</b> {new Date(invoice.Dated.toString()).toDateString()}
                     </p>
                     <p>
                       <b>Terms:</b> {invoice.Terms}
@@ -193,10 +193,11 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                     <p className="pl-2">{invoice.Description}</p>
                     <br />
                     {invoice.Description == "Monthly Installment" && <p className="pl-2">For Monthly Installment</p>}
-                    {invoice.Description == "Annual Fee for Maintenance of Ancestor Tablet" && <p className="pl-2">For fiscal year {invoice.Fiscal_Year.toString()}</p>}
+                    {invoice.Description == "Annual Fee for Maintenance of Ancestor Tablet" && <p className="pl-2">For fiscal year {invoice.Fiscal_Year?.toString()}</p>}
                     {invoice.Description == "Purchase of Tablet Leasing (Normal)" && <p className="pl-2">Purchase of Tablet Leasing (Normal)</p>}
                     {invoice.Description == "Purchase of Tablet (Special)" && <p className="pl-2">Purchase of Tablet (Special)</p>}
                     {invoice.Description == "Installment Downpayment" && <p className="pl-2">Installment Downpayment</p>}
+                    {invoice.Description == "Custom Payment" && <p className="pl-2">Installment Downpayment</p>}
 
                     <div className="w-full flex flex-row justify-end py-2 pr-3 border-t-2 border-black absolute bottom-0">
                       <p className="font-bold">Total Amount:</p>
@@ -244,8 +245,18 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                     <b>Mobile Phone:</b> 91052737
                   </p>
                 </div>
-                <div className="ml-[300px]">
+                <div className="ml-[50px] max-w-[300px]">
+                  <p className="mb-3"><b>Bank Details</b></p>
+                  {/*eslint-disable-next-line @next/next/no-img-element*/}
+                  <p><b>Acc Name:</b> Chin Khong Kow Poon Guan San Toh Tong</p>
+                  <p><b>Bank Name:</b> UOB BANK</p>
+                  <p><b>Bank Acc No:</b> 3433007210</p>
+                  <p><b>PayNow UEN:</b> S99SS0091G</p>
+
+                </div>
+                <div className="ml-[50px]">
                   <p className="mb-3">Paynow QR Code:</p>
+
                   {/*eslint-disable-next-line @next/next/no-img-element*/}
                   <img className="w-[150px] h-[150px]" src="./paynow.png" alt="paynow" />
                 </div>
