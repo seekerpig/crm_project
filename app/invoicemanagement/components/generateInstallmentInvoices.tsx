@@ -37,7 +37,7 @@ function GenerateInstallmentInvoiceModal(props: any) {
   };
 
   async function getInvoicesForApplicationsIPTType(year: string, month: number) {
-    const queryTabletApplications = query(collection(db, "tabletapplications"), where("Application_Type", "==", "IPT"), where("Status", "==", "Current"));
+    const queryTabletApplications = query(collection(db, "tabletapplications"), where("Application_Type", "==", "TIP"), where("Status", "==", "Current"));
 
     const querySnapshotTabletApplications = await getDocs(queryTabletApplications);
 
@@ -56,17 +56,16 @@ function GenerateInstallmentInvoiceModal(props: any) {
           Payee_Name: tabletApplication.Applicant_Name_English,
           Payee_Address: tabletApplication.Applicant_Address,
           Description: "Monthly Installment",
-          Fiscal_Year: Number(year),
           Receipt_No: "",
           Amount: parseFloat((parseFloat(tabletApplication.Outstanding_Amount.toString()) / parseInt(tabletApplication.Number_of_Months.toString())).toFixed(2)),
-          Year_Positioned: new Date(tabletApplication.Leasing_Date.toString()).getFullYear(),
+          Year_Positioned: Number(year),
           Month: month,
           IsPaid: false,
         };
 
         // Need to check whether invoice of this month for this appID exists. If so, don't allow create.
         //console.log("Trying invoice: ", tabletApplication.ApplicationID);
-        const queryInvoice = query(collection(db, "invoices"), where("Month", "==", month), where("Fiscal_Year", "==", parseInt(year)), where("ApplicationID", "==", tabletApplication.ApplicationID.toString()));
+        const queryInvoice = query(collection(db, "invoices"), where("Month", "==", month), where("Year_Positioned", "==", parseInt(year)), where("ApplicationID", "==", tabletApplication.ApplicationID.toString()));
         const queryInvoiceSnapshot = await getDocs(queryInvoice);
 
         // Need to check whether the total number of unpaid invoices generated for this appID already reaches the remaining number of months, if so, don't allow additional generation
@@ -98,7 +97,7 @@ function GenerateInstallmentInvoiceModal(props: any) {
   };
   async function finaliseGenerateInvoice() {
     if (invoices.length > 0) {
-      const docRef = doc(db, "invoicemetadata", selectedYear.toString());
+      const docRef = doc(db, "invoicemetadata", new Date().getFullYear().toString());
       const docSnap = await getDoc(docRef);
 
       const batchedWrite = writeBatch(db);
@@ -110,7 +109,7 @@ function GenerateInstallmentInvoiceModal(props: any) {
 
         try {
           for (const invoice of invoices) {
-            invoice.InvoiceNo = selectedYear.toString().substring(2) + currentLatestInvoiceNumber.toString().padStart(3, "0");
+            invoice.InvoiceNo = new Date().getFullYear().toString().substring(2) + currentLatestInvoiceNumber.toString().padStart(3, "0");
             const invoiceDocRef = doc(db, "invoices", invoice.InvoiceNo.toString());
             setDoc(invoiceDocRef, invoice);
             currentLatestInvoiceNumber++;
@@ -137,7 +136,7 @@ function GenerateInstallmentInvoiceModal(props: any) {
         let currentLatestInvoiceNumber: number = 1;
         try {
           for (const invoice of invoices) {
-            invoice.InvoiceNo = selectedYear.toString().substring(2) + currentLatestInvoiceNumber.toString().padStart(3, "0");
+            invoice.InvoiceNo = new Date().getFullYear().toString().substring(2) + currentLatestInvoiceNumber.toString().padStart(3, "0");
             const invoiceDocRef = doc(db, "invoices", invoice.InvoiceNo.toString());
             setDoc(invoiceDocRef, invoice);
             currentLatestInvoiceNumber++;
@@ -267,7 +266,6 @@ function GenerateInstallmentInvoiceModal(props: any) {
               <TableBody>
                 {invoices.map((invoice) => (
                   <TableRow key={invoice.ApplicationID.toString()}>
-                    <TableCell>{invoice.Fiscal_Year.toString()}</TableCell>
                     <TableCell>{new Date(invoice.Dated.toString()).toDateString()}</TableCell>
                     <TableCell>{invoice.Terms}</TableCell>
                     <TableCell>{invoice.Tablet_Number}</TableCell>

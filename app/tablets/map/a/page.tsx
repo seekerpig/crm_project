@@ -394,7 +394,7 @@ export default async function TabletsMapViewBlockA() {
       <ProtectedPage/>
       <div className="my-1 sticky left-0 top-0 bg-white/75">
         <span className="bg-white text-black px-2 py-1 rounded-full ms-10 border border-black">Available</span>
-        <span className="bg-green-300 font-bold text-black px-2 py-1 rounded-full ms-10 ">IPT</span>
+        <span className="bg-green-300 font-bold text-black px-2 py-1 rounded-full ms-10 ">TIP</span>
         <span className="bg-yellow-200 font-bold text-black px-2 py-1 rounded-full ms-10 ">Reserved</span>
         <span className="bg-red-300 font-bold text-black px-2 py-1 rounded-full ms-10 ">Occupied</span>
         <span className="bg-purple-300 font-bold text-black px-2 py-1 rounded-full ms-10 ">Blocked</span>
