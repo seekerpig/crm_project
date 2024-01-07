@@ -37,7 +37,7 @@ function GenerateInstallmentInvoiceModal(props: any) {
   };
 
   async function getInvoicesForApplicationsIPTType(year: string, month: number) {
-    const queryTabletApplications = query(collection(db, "tabletapplications"), where("Application_Type", "==", "IPT"), where("Status", "==", "Current"));
+    const queryTabletApplications = query(collection(db, "tabletapplications"), where("Application_Type", "==", "TIP"), where("Status", "==", "Current"));
 
     const querySnapshotTabletApplications = await getDocs(queryTabletApplications);
 

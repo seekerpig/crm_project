@@ -67,12 +67,12 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
           updateDoc(tabletMetadataRef, {
             [invoice.Tablet_Number.toString()]: ["Occupied (N)", ""],
           });
-        } else if (invoice.IsPaid == false && tabletAppData.Application_Type == "IPT" && invoice.Description == "Monthly Installment" && typeof tabletAppData.Outstanding_Amount === "number" && typeof tabletAppData.Number_of_Months === "number" && typeof invoice.Amount === "number") {
+        } else if (invoice.IsPaid == false && tabletAppData.Application_Type == "TIP" && invoice.Description == "Monthly Installment" && typeof tabletAppData.Outstanding_Amount === "number" && typeof tabletAppData.Number_of_Months === "number" && typeof invoice.Amount === "number") {
           updateDoc(tabletRef, {
             ["Outstanding_Amount"]: tabletAppData.Outstanding_Amount - invoice.Amount,
             ["Number_of_Months"]: tabletAppData.Number_of_Months - 1,
           });
-        } else if (invoice.IsPaid == false && tabletAppData.Application_Type == "IPT" && typeof tabletAppData.Outstanding_Amount === "number" && typeof tabletAppData.Number_of_Months === "number" && typeof invoice.Amount === "number") {
+        } else if (invoice.IsPaid == false && tabletAppData.Application_Type == "TIP" && typeof tabletAppData.Outstanding_Amount === "number" && typeof tabletAppData.Number_of_Months === "number" && typeof invoice.Amount === "number") {
           updateDoc(tabletRef, {
             ["Outstanding_Amount"]: tabletAppData.Outstanding_Amount - invoice.Amount,
           });

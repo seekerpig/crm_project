@@ -34,8 +34,8 @@ export const statuses = [
     label: "S",
   },
   {
-    value: "IPT",
-    label: "IPT",
+    value: "TIP",
+    label: "TIP",
   }
 ]
 
