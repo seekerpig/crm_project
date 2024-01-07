@@ -78,7 +78,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
       costs.push(0);
       if (tablet.SelectionCost && tablet.SelectionCost.valueOf() > 0) {
         desc.push("Cost of Selection ($" + tablet.SelectionCost.valueOf() + ")");
-        0;
+        costs.push(0);
       }
       desc.push("Installment Downpayment");
       costs.push(invoice.Amount.valueOf());
