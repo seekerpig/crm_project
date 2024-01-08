@@ -128,9 +128,9 @@ function Tablet(props: Tablet) {
         setNewTablet(tablet);
         if (application.Application_Type === "TIP") {
           handleStatusChange("TIP");
-        } else if (application.Status === "S") {
+        } else if (application.Application_Type === "S") {
           handleStatusChange("Occupied (S)");
-        } else if (application.Status === "N") {
+        } else if (application.Application_Type === "N") {
           handleStatusChange("Occupied (N)");
         }
       } catch (error) {
@@ -138,12 +138,39 @@ function Tablet(props: Tablet) {
       }
     } else {
       setApplicationForm(application);
+      let status = "";
       if (application.Application_Type === "TIP") {
         handleStatusChange("TIP");
-      } else if (application.Status === "S") {
+        status = "TIP";
+      } else if (application.Application_Type === "S") {
         handleStatusChange("Occupied (S)");
-      } else if (application.Status === "N") {
+        status = "Occupied (S)";
+      } else if (application.Application_Type === "N") {
         handleStatusChange("Occupied (N)");
+        status = "Occupied (N)";
+      } else if (application.Application_Type === "R") {
+        handleStatusChange("Reserved");
+        status = "Reserved";
+      }
+      let tablet: Tablet = {
+        Tablet_Number: newTablet.Tablet_Number,
+        Block: newTablet.Block,
+        Row_Number: newTablet.Row_Number,
+        Column_Number: newTablet.Column_Number,
+        Status: status,
+      };
+      const data = {
+        [props.Tablet_Number.toString()]: [status, ""],
+      };
+      const block = "Block" + props.Tablet_Number.charAt(0);
+
+      try {
+        const tabletDocRef = doc(db, "tablets", block);
+        await updateDoc(tabletDocRef, data);
+        console.log(`Document with ID ${block} written successfully.`);
+        setNewTablet(tablet);
+      } catch (error) {
+        console.error("Error updating document: ", error);
       }
     }
   }
@@ -168,7 +195,7 @@ function Tablet(props: Tablet) {
               </DialogTitle>
               {/* if TIP or Occupied show the details */}
 
-              {(newTablet.Status === "TIP" || newTablet.Status === "Occupied (S)" || newTablet.Status === "Occupied (N)") && applicationForm ? (
+              {(newTablet.Status === "TIP" || newTablet.Status === "Occupied (S)" || newTablet.Status === "Occupied (N)" || newTablet.Status === "Reserved") && applicationForm ? (
                 <TabletApplication
                   ApplicationID={applicationForm?.ApplicationID || ""}
                   Tablet_Number={applicationForm?.Tablet_Number || ""}
@@ -189,6 +216,9 @@ function Tablet(props: Tablet) {
                   Applicant_ContactNumber={applicationForm?.Applicant_ContactNumber || ""}
                   Officer_In_Charge={applicationForm?.Officer_In_Charge || ""}
                   Amount_Received={applicationForm?.Amount_Received || 0}
+                  PurchaseOfTabletCost={applicationForm?.PurchaseOfTabletCost || 0}
+                  TabletCost={applicationForm?.TabletCost || 0}
+                  SelectionCost={applicationForm?.SelectionCost || 0}
                   Status={applicationForm?.Status || ""}
                   Remarks={applicationForm?.Remarks || ""}
                   Receipt_No={applicationForm?.Receipt_No || ""}
@@ -233,7 +263,7 @@ function Tablet(props: Tablet) {
                         </SelectGroup>
                       </SelectContent>
                     </Select>
-                    {status !== "TIP" && status !== "Occupied (S)" && status !== "Occupied (N)" && (
+                    {status !== "TIP" && status !== "Occupied (S)" && status !== "Occupied (N)" && status !== "Reserved" && (
                       <div className="w-full mt-3">
                         <Button className="mr-4" onClick={handleSaveTablet}>
                           Save
@@ -265,6 +295,9 @@ function Tablet(props: Tablet) {
                   Applicant_ContactNumber={applicationForm?.Applicant_ContactNumber || ""}
                   Officer_In_Charge={applicationForm?.Officer_In_Charge || ""}
                   Amount_Received={applicationForm?.Amount_Received || 0}
+                  PurchaseOfTabletCost={applicationForm?.PurchaseOfTabletCost || 0}
+                  TabletCost={applicationForm?.TabletCost || 0}
+                  SelectionCost={applicationForm?.SelectionCost || 0}
                   Status={applicationForm?.Status || ""}
                   Remarks={applicationForm?.Remarks || ""}
                   Receipt_No={applicationForm?.Receipt_No || ""}
@@ -297,6 +330,9 @@ function Tablet(props: Tablet) {
                   Applicant_ContactNumber={applicationForm?.Applicant_ContactNumber || ""}
                   Officer_In_Charge={applicationForm?.Officer_In_Charge || ""}
                   Amount_Received={applicationForm?.Amount_Received || 0}
+                  PurchaseOfTabletCost={applicationForm?.PurchaseOfTabletCost || 0}
+                  TabletCost={applicationForm?.TabletCost || 0}
+                  SelectionCost={applicationForm?.SelectionCost || 0}
                   Status={applicationForm?.Status || ""}
                   Remarks={applicationForm?.Remarks || ""}
                   Receipt_No={applicationForm?.Receipt_No || ""}
@@ -328,6 +364,43 @@ function Tablet(props: Tablet) {
                   Applicant_ContactNumber={applicationForm?.Applicant_ContactNumber || ""}
                   Officer_In_Charge={applicationForm?.Officer_In_Charge || ""}
                   Amount_Received={applicationForm?.Amount_Received || 0}
+                  PurchaseOfTabletCost={applicationForm?.PurchaseOfTabletCost || 0}
+                  TabletCost={applicationForm?.TabletCost || 0}
+                  SelectionCost={applicationForm?.SelectionCost || 0}
+                  Status={applicationForm?.Status || ""}
+                  Remarks={applicationForm?.Remarks || ""}
+                  Receipt_No={applicationForm?.Receipt_No || ""}
+                  onSave={handleSaveTablet}
+                  isEditable={true}
+                  updateApplication={updateApplication}
+                  Outstanding_Amount={applicationForm?.Outstanding_Amount || 0}
+                  Number_of_Months={applicationForm?.Number_of_Months || 0}
+                />
+              )}
+              {status === "Reserved" && applicationForm?.ApplicationID == undefined && (
+                <TabletApplication
+                  ApplicationID={applicationForm?.ApplicationID || ""}
+                  Tablet_Number={newTablet.Tablet_Number}
+                  Leasing_Date={applicationForm?.Leasing_Date || new Date().toISOString()}
+                  Application_Type={"R"}
+                  Beneficiary1_Name_English={applicationForm?.Beneficiary1_Name_English || ""}
+                  Beneficiary1_Name_Chinese={applicationForm?.Beneficiary1_Name_Chinese || ""}
+                  Beneficiary2_Name_English={applicationForm?.Beneficiary2_Name_English || ""}
+                  Beneficiary2_Name_Chinese={applicationForm?.Beneficiary2_Name_Chinese || ""}
+                  Beneficiary3_Name_English={applicationForm?.Beneficiary3_Name_English || ""}
+                  Beneficiary3_Name_Chinese={applicationForm?.Beneficiary3_Name_Chinese || ""}
+                  Applicant_Name_English={applicationForm?.Applicant_Name_English || ""}
+                  Applicant_Name_Chinese={applicationForm?.Applicant_Name_Chinese || ""}
+                  Applicant_Gender={applicationForm?.Applicant_Gender || ""}
+                  Applicant_Address={applicationForm?.Applicant_Address || ""}
+                  Applicant_IdentifiedCode={applicationForm?.Applicant_IdentifiedCode || ""}
+                  Applicant_Relationship={applicationForm?.Applicant_Relationship || ""}
+                  Applicant_ContactNumber={applicationForm?.Applicant_ContactNumber || ""}
+                  Officer_In_Charge={applicationForm?.Officer_In_Charge || ""}
+                  Amount_Received={applicationForm?.Amount_Received || 0}
+                  PurchaseOfTabletCost={applicationForm?.PurchaseOfTabletCost || 0}
+                  TabletCost={applicationForm?.TabletCost || 0}
+                  SelectionCost={applicationForm?.SelectionCost || 0}
                   Status={applicationForm?.Status || ""}
                   Remarks={applicationForm?.Remarks || ""}
                   Receipt_No={applicationForm?.Receipt_No || ""}

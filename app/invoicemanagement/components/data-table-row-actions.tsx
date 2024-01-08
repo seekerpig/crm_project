@@ -72,14 +72,17 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
     } else if (invoice.Description == "Installment Downpayment") {
       let desc = [];
       let costs = [];
-      desc.push("Purchase of Tablet Cost");
-      costs.push(tablet.PurchaseOfTabletCost.valueOf());
-      costs.push(tablet.TabletCost.valueOf());
-      desc.push("Cost of Tablet");
+      desc.push("Purchase of Tablet Cost ($" + tablet.PurchaseOfTabletCost.valueOf() + ")");
+      desc.push("Cost of Tablet ($" + tablet.TabletCost.valueOf() + ")");
+      costs.push(0);
+      costs.push(0);
       if (tablet.SelectionCost && tablet.SelectionCost.valueOf() > 0) {
-        desc.push("Cost of Selection");
-        costs.push(tablet.SelectionCost.valueOf());
+        desc.push("Cost of Selection ($" + tablet.SelectionCost.valueOf() + ")");
+        costs.push(0);
       }
+      desc.push("Installment Downpayment");
+      costs.push(invoice.Amount.valueOf());
+
       setDescriptionDetails(desc);
       setPaymentTotals(costs);
     } else if (invoice.Description == "Annual Fee for Maintenance of Ancestor Tablet") {
@@ -304,7 +307,8 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                         <div className="col-1 h-full w-2/6 border-r-2 border-black">
                         {paymentTotals.map((cost, index) => (
                           <div key={index}>
-                      <p className="pl-2" key={index}>${cost}</p>
+                            {cost == 0 ? <p className="pl-2" key={index}>&nbsp;</p> : <p className="pl-2" key={index}>${cost}</p>}
+                      
                       <br />
                       </div>
                     ))}

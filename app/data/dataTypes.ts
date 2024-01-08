@@ -27,6 +27,7 @@ export interface TabletApplication {
   PurchaseOfTabletCost: Number;
   TabletCost: Number,
   SelectionCost?: Number,
+  Amount_Received: Number,
   Receipt_No?: String,
   Outstanding_Amount?: Number,
   Number_of_Months?: Number,
