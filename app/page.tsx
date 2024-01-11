@@ -69,7 +69,7 @@ const Home = () => {
                     <Table>
                       <TableHeader>
                         <TableRow>
-                          <TableHead>Application ID</TableHead>
+                          <TableHead>Applicant IC</TableHead>
                           <TableHead>Tablet Number</TableHead>
                           <TableHead>Beneficiary 1 English Name</TableHead>
                           <TableHead>Beneficiary 1 Chinese Name</TableHead>
@@ -82,6 +82,7 @@ const Home = () => {
                       <TableBody>
                         {tabApplications.map((tabApplications) => (
                           <TableRow key={tabApplications.ApplicationID.toString()}>
+                            <TableCell>{tabApplications.Applicant_IdentifiedCode}</TableCell>
                             <TableCell>{tabApplications.Tablet_Number}</TableCell>
                             <TableCell>{tabApplications.Beneficiary1_Name_English}</TableCell>
                             <TableCell>{tabApplications.Beneficiary1_Name_Chinese}</TableCell>
