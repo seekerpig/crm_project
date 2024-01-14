@@ -157,6 +157,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
           Status: "",
           Number_of_Months: 0,
           Outstanding_Amount: 0,
+          TotalCostOfPurchase: 0
         };
         setApplication(data);
         props.updateApplication(data);
