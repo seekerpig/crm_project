@@ -62,7 +62,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
       });
 
       html2canvas(content2).then((canvas) => {
-        const imgData = canvas.toDataURL("image2/png");
+        const imgData = canvas.toDataURL("image/png");
 
         const imgProps = pdf.getImageProperties(imgData);
         const pdfWidth = pdf.internal.pageSize.getWidth();
