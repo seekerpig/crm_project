@@ -617,7 +617,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                       <div className="w-3/4 flex mt-20 mb-5">
                         <div className="text-center flex-auto">
                           <div className="signature border-black border-b-2"></div>
-                          <p>Applicant&apos;s Signature</p>
+                          <p>Applicant&apos;s  Signature</p>
                           <p>申请人签名</p>
                         </div>
                         <div className="flex-auto text-center">
@@ -626,8 +626,8 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                         </div>
                         <div className="text-center flex-auto">
                           <div className="signature border-black border-b-2"></div>
-                          <p>Applicant&apos;s Signature</p>
-                          <p>申请人签名</p>
+                          <p>Officer&apos;s Signature / Name</p>
+                          <p>管理员签名</p>
                         </div>
                       </div>
                       <table className="w-3/4">
