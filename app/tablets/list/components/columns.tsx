@@ -228,6 +228,15 @@ export const columns: ColumnDef<TabletApplication>[] = [
     enableHiding: true,
   },
   {
+    accessorKey: "TotalCostOfPurchase",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="TotalCostOfPurchase" />,
+    cell: ({ row }) => {
+      return <div>{row.getValue("TotalCostOfPurchase")}</div>;
+    },
+    enableSorting: false,
+    enableHiding: true,
+  },
+  {
     accessorKey: "Receipt_No",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Receipt_No" />,
     cell: ({ row }) => {

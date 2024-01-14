@@ -60,6 +60,8 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                 PurchaseOfPlacementCost={applicationForm?.PurchaseOfPlacementCost || 0}
                 TabletCost={applicationForm?.TabletCost || 0}
                 SelectionOfPlacementCost={applicationForm?.SelectionOfPlacementCost || 0}
+                TotalCostOfPurchase={applicationForm?.TotalCostOfPurchase || 0}
+                Amount_Received={applicationForm?.Amount_Received || 0}
                 Status={applicationForm?.Status || ""}
                 Remarks={applicationForm?.Remarks || ""}
                 Receipt_No={applicationForm?.Receipt_No || ""}
