@@ -227,6 +227,7 @@ function Tablet(props: Tablet) {
                   updateApplication={updateApplication}
                   Outstanding_Amount={applicationForm?.Outstanding_Amount || 0}
                   Number_of_Months={applicationForm?.Number_of_Months || 0}
+                  TotalCostOfPurchase={applicationForm?.TotalCostOfPurchase || 0}
                 />
               ) : (
                 hasEditPermission && (
@@ -306,6 +307,7 @@ function Tablet(props: Tablet) {
                   updateApplication={updateApplication}
                   Outstanding_Amount={applicationForm?.Outstanding_Amount || 0}
                   Number_of_Months={applicationForm?.Number_of_Months || 0}
+                  TotalCostOfPurchase={applicationForm?.TotalCostOfPurchase || 0}
                 />
               )}
               {/* if select Occupied a form to fill in */}
@@ -341,6 +343,7 @@ function Tablet(props: Tablet) {
                   updateApplication={updateApplication}
                   Outstanding_Amount={applicationForm?.Outstanding_Amount || 0}
                   Number_of_Months={applicationForm?.Number_of_Months || 0}
+                  TotalCostOfPurchase={applicationForm?.TotalCostOfPurchase || 0}
                 />
               )}
               {status === "Occupied (N)" && applicationForm?.ApplicationID == undefined && (
@@ -375,6 +378,7 @@ function Tablet(props: Tablet) {
                   updateApplication={updateApplication}
                   Outstanding_Amount={applicationForm?.Outstanding_Amount || 0}
                   Number_of_Months={applicationForm?.Number_of_Months || 0}
+                  TotalCostOfPurchase={applicationForm?.TotalCostOfPurchase || 0}
                 />
               )}
               {status === "Reserved" && applicationForm?.ApplicationID == undefined && (
@@ -409,6 +413,7 @@ function Tablet(props: Tablet) {
                   updateApplication={updateApplication}
                   Outstanding_Amount={applicationForm?.Outstanding_Amount || 0}
                   Number_of_Months={applicationForm?.Number_of_Months || 0}
+                  TotalCostOfPurchase={applicationForm?.TotalCostOfPurchase || 0}
                 />
               )}
             </DialogHeader>

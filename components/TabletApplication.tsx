@@ -157,6 +157,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
           Status: "",
           Number_of_Months: 0,
           Outstanding_Amount: 0,
+          TotalCostOfPurchase: 0
         };
         setApplication(data);
         props.updateApplication(data);
@@ -761,7 +762,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
             </tr>
             <tr className="border border-gray-300">
               <td colSpan={1} className="border border-gray-300 p-1">
-                <strong>Purchase of Tablet Cost*</strong>
+                <strong>Purchase of placement*</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
@@ -774,7 +775,8 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                       const SelectionOfPlacementCost = Number(application.SelectionOfPlacementCost) || 0;
                       const amountReceived = Number(application.Amount_Received) || 0;
                       const outAmt = tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
-                      setApplication({ ...application, PurchaseOfPlacementCost: parseFloat(e.target.value), Outstanding_Amount: outAmt });
+                      const totalcost = tabletCost + purchaseCost + SelectionOfPlacementCost
+                      setApplication({ ...application, PurchaseOfPlacementCost: parseFloat(e.target.value), Outstanding_Amount: outAmt, TotalCostOfPurchase: totalcost });
                     }}
                   />
                 ) : (
@@ -798,7 +800,8 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                       const SelectionOfPlacementCost = Number(application.SelectionOfPlacementCost) || 0;
                       const amountReceived = Number(application.Amount_Received) || 0;
                       const outAmt = tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
-                      setApplication({ ...application, TabletCost: parseFloat(e.target.value), Outstanding_Amount: outAmt });
+                      const totalcost = tabletCost + purchaseCost + SelectionOfPlacementCost
+                      setApplication({ ...application, TabletCost: parseFloat(e.target.value), Outstanding_Amount: outAmt, TotalCostOfPurchase: totalcost });
                     }}
                   />
                 ) : (
@@ -809,7 +812,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
             </tr>
             <tr className="border border-gray-300">
               <td colSpan={1} className="border border-gray-300 p-1">
-                <strong>Selection Cost</strong>
+                <strong>Selection of placement</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
@@ -822,7 +825,8 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                       const SelectionOfPlacementCost = Number(e.target.value) || 0;
                       const amountReceived = Number(application.Amount_Received) || 0;
                       const outAmt = tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
-                      setApplication({ ...application, SelectionOfPlacementCost: parseFloat(e.target.value), Outstanding_Amount: outAmt });
+                      const totalcost = tabletCost + purchaseCost + SelectionOfPlacementCost
+                      setApplication({ ...application, SelectionOfPlacementCost: parseFloat(e.target.value), Outstanding_Amount: outAmt, TotalCostOfPurchase: totalcost });
                     }}
                   />
                 ) : (
@@ -830,6 +834,14 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 )}
               </td>
             </tr>
+            <tr className="border border-gray-300">
+                  <td colSpan={1} className="border border-gray-300 p-1">
+                    <strong>Total cost of purchase</strong>
+                  </td>
+                  <td colSpan={1} className="p-1 w-64">
+                    <span>{application.TotalCostOfPurchase?.toString()}</span>
+                  </td>
+                </tr>
             {application.Application_Type == "TIP" && (
               <>
                 <tr className="border border-gray-300">
