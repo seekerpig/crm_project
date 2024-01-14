@@ -33,8 +33,8 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
   const [application, setApplication] = useState({
     ...initialApplication,
     TabletCost: initialApplication.TabletCost || 0,
-    PurchaseOfTabletCost: initialApplication.PurchaseOfTabletCost || 0,
-    SelectionCost: initialApplication.SelectionCost || 0,
+    PurchaseOfPlacementCost: initialApplication.PurchaseOfPlacementCost || 0,
+    SelectionOfPlacementCost: initialApplication.SelectionOfPlacementCost || 0,
   });
   const [oldApplication, setOldApplication] = useState({ ...initialApplication });
   const { toast } = useToast();
@@ -46,7 +46,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
   const [checkFields, setCheckFields] = useState(false);
   const handleCheckFields = () => {
     setCheckFields(true);
-    if (application.Applicant_Name_English != "" && application.Applicant_Name_English != "" && application.Applicant_Address != "" && application.Applicant_IdentifiedCode != "" && application.Applicant_Gender != "" && application.Applicant_Relationship != "" && application.Applicant_ContactNumber != "" && application.Officer_In_Charge != "" && Number(application.Amount_Received) > 0 && application.Receipt_No != "" && Number(application.PurchaseOfTabletCost) > 0 && Number(application.TabletCost) > 0) {
+    if (application.Applicant_Name_English != "" && application.Applicant_Name_English != "" && application.Applicant_Address != "" && application.Applicant_IdentifiedCode != "" && application.Applicant_Gender != "" && application.Applicant_Relationship != "" && application.Applicant_ContactNumber != "" && application.Officer_In_Charge != "" && Number(application.Amount_Received) > 0 && application.Receipt_No != "" && Number(application.PurchaseOfPlacementCost) > 0 && Number(application.TabletCost) > 0) {
       if (application.Application_Type === "TIP" && Number(application.Number_of_Months) > 0 && Number(application.Outstanding_Amount) >= 0) {
         setCheckFields(false);
         handleSaveClick();
@@ -148,9 +148,9 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
           SecondContact_Gender: "",
           Officer_In_Charge: "",
           Amount_Received: 0,
-          PurchaseOfTabletCost: 0,
+          PurchaseOfPlacementCost: 0,
           TabletCost: 0,
-          SelectionCost: 0,
+          SelectionOfPlacementCost: 0,
           Receipt_No: "",
           Payment_Comments: "",
           Remarks: "",
@@ -767,20 +767,20 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 {isEditing ? (
                   <Input
                     type="Number"
-                    value={application.PurchaseOfTabletCost?.toString()}
+                    value={application.PurchaseOfPlacementCost?.toString()}
                     onChange={(e) => {
                       const tabletCost = Number(application.TabletCost) || 0;
                       const purchaseCost = Number(e.target.value) || 0;
-                      const selectionCost = Number(application.SelectionCost) || 0;
+                      const SelectionOfPlacementCost = Number(application.SelectionOfPlacementCost) || 0;
                       const amountReceived = Number(application.Amount_Received) || 0;
-                      const outAmt = tabletCost + purchaseCost + selectionCost - amountReceived;
-                      setApplication({ ...application, PurchaseOfTabletCost: parseFloat(e.target.value), Outstanding_Amount: outAmt });
+                      const outAmt = tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
+                      setApplication({ ...application, PurchaseOfPlacementCost: parseFloat(e.target.value), Outstanding_Amount: outAmt });
                     }}
                   />
                 ) : (
-                  <span>{application.PurchaseOfTabletCost?.toString()}</span>
+                  <span>{application.PurchaseOfPlacementCost?.toString()}</span>
                 )}
-                {checkFields && (application.PurchaseOfTabletCost?.valueOf() ?? 0) <= 0 && <p className="text-sm text-red-500"> Please enter valid amount</p>}
+                {checkFields && (application.PurchaseOfPlacementCost?.valueOf() ?? 0) <= 0 && <p className="text-sm text-red-500"> Please enter valid amount</p>}
               </td>
             </tr>
             <tr className="border border-gray-300">
@@ -794,10 +794,10 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                     value={application.TabletCost?.toString()}
                     onChange={(e) => {
                       const tabletCost = Number(e.target.value) || 0;
-                      const purchaseCost = Number(application.PurchaseOfTabletCost) || 0;
-                      const selectionCost = Number(application.SelectionCost) || 0;
+                      const purchaseCost = Number(application.PurchaseOfPlacementCost) || 0;
+                      const SelectionOfPlacementCost = Number(application.SelectionOfPlacementCost) || 0;
                       const amountReceived = Number(application.Amount_Received) || 0;
-                      const outAmt = tabletCost + purchaseCost + selectionCost - amountReceived;
+                      const outAmt = tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
                       setApplication({ ...application, TabletCost: parseFloat(e.target.value), Outstanding_Amount: outAmt });
                     }}
                   />
@@ -815,18 +815,18 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 {isEditing ? (
                   <Input
                     type="Number"
-                    value={application.SelectionCost?.toString()}
+                    value={application.SelectionOfPlacementCost?.toString()}
                     onChange={(e) => {
                       const tabletCost = Number(application.TabletCost) || 0;
-                      const purchaseCost = Number(application.PurchaseOfTabletCost) || 0;
-                      const selectionCost = Number(e.target.value) || 0;
+                      const purchaseCost = Number(application.PurchaseOfPlacementCost) || 0;
+                      const SelectionOfPlacementCost = Number(e.target.value) || 0;
                       const amountReceived = Number(application.Amount_Received) || 0;
-                      const outAmt = tabletCost + purchaseCost + selectionCost - amountReceived;
-                      setApplication({ ...application, SelectionCost: parseFloat(e.target.value), Outstanding_Amount: outAmt });
+                      const outAmt = tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
+                      setApplication({ ...application, SelectionOfPlacementCost: parseFloat(e.target.value), Outstanding_Amount: outAmt });
                     }}
                   />
                 ) : (
-                  <span>{application.SelectionCost?.toString()}</span>
+                  <span>{application.SelectionOfPlacementCost?.toString()}</span>
                 )}
               </td>
             </tr>
@@ -874,10 +874,10 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                     value={application.Amount_Received.toString()}
                     onChange={(e) => {
                       const tabletCost = Number(application.TabletCost) || 0;
-                      const purchaseCost = Number(application.PurchaseOfTabletCost) || 0;
-                      const selectionCost = Number(application.SelectionCost) || 0;
+                      const purchaseCost = Number(application.PurchaseOfPlacementCost) || 0;
+                      const SelectionOfPlacementCost = Number(application.SelectionOfPlacementCost) || 0;
                       const amountReceived = Number(e.target.value) || 0;
-                      const outAmt = tabletCost + purchaseCost + selectionCost - amountReceived;
+                      const outAmt = tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
                       setApplication({ ...application, Amount_Received: parseFloat(e.target.value) , Outstanding_Amount: outAmt });
                     }}
                   />

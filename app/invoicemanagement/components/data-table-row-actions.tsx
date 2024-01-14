@@ -47,12 +47,12 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
       let desc = [];
       let costs = [];
       desc.push("Purchase of Tablet Leasing Cost");
-      costs.push(tablet.PurchaseOfTabletCost.valueOf());
+      costs.push(tablet.PurchaseOfPlacementCost.valueOf());
       costs.push(tablet.TabletCost.valueOf());
       desc.push("Cost of Tablet");
-      if (tablet.SelectionCost && tablet.SelectionCost.valueOf() > 0) {
+      if (tablet.SelectionOfPlacementCost && tablet.SelectionOfPlacementCost.valueOf() > 0) {
         desc.push("Cost of Selection");
-        costs.push(tablet.SelectionCost.valueOf());
+        costs.push(tablet.SelectionOfPlacementCost.valueOf());
       }
       setDescriptionDetails(desc);
       setPaymentTotals(costs);
@@ -60,24 +60,24 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
       let desc = [];
       let costs = [];
       desc.push("Purchase of Tablet Cost");
-      costs.push(tablet.PurchaseOfTabletCost.valueOf());
+      costs.push(tablet.PurchaseOfPlacementCost.valueOf());
       costs.push(tablet.TabletCost.valueOf());
       desc.push("Cost of Tablet");
-      if (tablet.SelectionCost && tablet.SelectionCost.valueOf() > 0) {
+      if (tablet.SelectionOfPlacementCost && tablet.SelectionOfPlacementCost.valueOf() > 0) {
         desc.push("Cost of Selection");
-        costs.push(tablet.SelectionCost.valueOf());
+        costs.push(tablet.SelectionOfPlacementCost.valueOf());
       }
       setDescriptionDetails(desc);
       setPaymentTotals(costs);
     } else if (invoice.Description == "Installment Downpayment") {
       let desc = [];
       let costs = [];
-      desc.push("Purchase of Tablet Cost ($" + tablet.PurchaseOfTabletCost.valueOf() + ")");
+      desc.push("Purchase of Tablet Cost ($" + tablet.PurchaseOfPlacementCost.valueOf() + ")");
       desc.push("Cost of Tablet ($" + tablet.TabletCost.valueOf() + ")");
       costs.push(0);
       costs.push(0);
-      if (tablet.SelectionCost && tablet.SelectionCost.valueOf() > 0) {
-        desc.push("Cost of Selection ($" + tablet.SelectionCost.valueOf() + ")");
+      if (tablet.SelectionOfPlacementCost && tablet.SelectionOfPlacementCost.valueOf() > 0) {
+        desc.push("Cost of Selection ($" + tablet.SelectionOfPlacementCost.valueOf() + ")");
         costs.push(0);
       }
       desc.push("Installment Downpayment");
@@ -96,12 +96,12 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
       let desc = [];
       let costs = [];
       desc.push("Purchase of Tablet Cost");
-      costs.push(tablet.PurchaseOfTabletCost.valueOf());
+      costs.push(tablet.PurchaseOfPlacementCost.valueOf());
       costs.push(tablet.TabletCost.valueOf());
       desc.push("Cost of Tablet");
-      if (tablet.SelectionCost && tablet.SelectionCost.valueOf() > 0) {
+      if (tablet.SelectionOfPlacementCost && tablet.SelectionOfPlacementCost.valueOf() > 0) {
         desc.push("Cost of Selection");
-        costs.push(tablet.SelectionCost.valueOf());
+        costs.push(tablet.SelectionOfPlacementCost.valueOf());
       }
       setDescriptionDetails(desc);
       setPaymentTotals(costs);
