@@ -37,6 +37,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
   const currentUser = useAuth();
   const [descriptionDetails, setDescriptionDetails] = React.useState<string[]>([]);
   const [paymentTotals, setPaymentTotals] = React.useState<number[]>([]);
+  const [currentInvoiceTabletApp, setCurrentInvoiceTabletApp] = React.useState<TabletApplication>();
 
   async function updateDescriptionAndPaymentDetails() {
     const tabletAppID = invoice.ApplicationID.toString();
@@ -80,6 +81,8 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
         desc.push("Cost of Selection ($" + tablet.SelectionOfPlacementCost.valueOf() + ")");
         costs.push(0);
       }
+      desc.push("Total Cost of Purchase ($" + tablet.TotalCostOfPurchase.valueOf() + ")");
+      costs.push(0);
       desc.push("Installment Downpayment");
       costs.push(invoice.Amount.valueOf());
 
@@ -125,7 +128,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
       setDescriptionDetails(desc);
       setPaymentTotals(costs);
     }
-
+    setCurrentInvoiceTabletApp(tablet);
     setViewInvoice(true);
   }
   async function updateInvoicePaymentData(): Promise<void> {
@@ -258,7 +261,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
               </div>
               <div className="invoice w-full flex flex-col items-center justify-center">
                 <h1 className="text-4xl mb-8 font-bold">Invoice</h1>
-                <div className="invoice-top grid grid-cols-2 gap-x-4 gap-y-12">
+                <div className="invoice-top grid grid-cols-2 gap-x-4 gap-y-12 mb-5">
                   <div className="invoice-payor p-3 w-[400px] flex flex-col items-center justify-start">
                     <p className="text-lg">{invoice.Payee_Name}</p>
                     <p>{invoice.Payee_Address}</p>
@@ -325,9 +328,11 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                     </div>
                   </div>
                 </div>
-                <p className="mt-5 mb-10"> Your early settlement is most appreciated</p>
+                {!invoice.IsPaid && invoice.Description == "Monthly Installment" ? <p> Outstanding Amount: {currentInvoiceTabletApp?.Outstanding_Amount ? "$" + (currentInvoiceTabletApp?.Outstanding_Amount.valueOf() - invoice.Amount.valueOf()) : ""}, Remaining Installment Months: {currentInvoiceTabletApp?.Number_of_Months ? currentInvoiceTabletApp?.Number_of_Months.valueOf() - 1 : ""}</p>: <p></p>}
+                {invoice.IsPaid && invoice.Description == "Installment Downpayment" ? <p> Outstanding Amount: {currentInvoiceTabletApp?.Outstanding_Amount ? "$" + currentInvoiceTabletApp?.Outstanding_Amount.valueOf() : ""}, Remaining Installment Months: {currentInvoiceTabletApp?.Number_of_Months ? currentInvoiceTabletApp?.Number_of_Months.valueOf() : ""}</p>: <p></p>}
+          
               </div>
-              <div className="contact-details w-full ml-[80px] flex flex-row">
+              <div className="contact-details w-full ml-[80px] flex flex-row mt-10">
                 <div>
                   <div className="signature w-[200px] border-black border-b-2"></div>
                   <p>Signature</p>
