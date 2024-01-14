@@ -306,364 +306,362 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
               </AlertDialogContent>
             </AlertDialog>
             <Dialog>
-        <DialogTrigger asChild>
-          <Button className="me-3">View PDF</Button>
-        </DialogTrigger>
-        <DialogContent className="w-full flex flex-row justify-center lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl overflow-y-scroll max-h-[80vh]">
-          <DialogHeader className="w-[1000px]">
-            <div className="w-full" id="downloadablepdf" ref={downloadablePdfRef}>
-              <div className="w-full temple-details flex flex-col justify-center mb-5">
-                <div className="w-full temple-details-icon-and-name flex flex-row items-center justify-center">
-                  <div className="temple-title flex flex-col items-center justify-center relative">
-                    {/*eslint-disable-next-line @next/next/no-img-element*/}
-                    <img src="/temple-icon.jpeg" alt="temple icon" className="h-[160px] w-[120px] mr-5 absolute -left-[150px]" />
-                    <p className="text-5xl mb-5 pt-10">真空教本元山道堂</p>
-                    <p className="text-2xl">CHIN KHONG POW POON GUAN SAN TOH TONG</p>
-                    <p className="text-1xl">369 Pasir Panjang Road, Singapore 118706</p>
-                    <p className="text-1xl">Tel: 67791237</p>
-                    <p className="text-2xl mt-2">Hall of Merits Application Form</p>
-                    <p className="text-2xl mb-2">功德堂申请表格</p>
+              <DialogTrigger asChild>
+                <Button className="me-3">View PDF</Button>
+              </DialogTrigger>
+              <DialogContent className="w-full flex flex-row justify-center lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl overflow-y-scroll max-h-[80vh]">
+                <DialogHeader className="w-[1000px]">
+                  <div className="w-full" id="downloadablepdf" ref={downloadablePdfRef}>
+                    <div className="w-full temple-details flex flex-col justify-center mb-5">
+                      <div className="w-full temple-details-icon-and-name flex flex-row items-center justify-center">
+                        {/*eslint-disable-next-line @next/next/no-img-element*/}
+                        <img src="/temple-icon.jpeg" alt="temple icon" className="h-[160px] w-[120px] mr-5" />
+                        <div className="temple-title flex flex-col items-center justify-center">
+                          <p className="text-5xl mb-5 pt-10">真空教本元山道堂</p>
+                          <p className="text-2xl">CHIN KHONG POW POON GUAN SAN TOH TONG</p>
+                          <p className="text-1xl">369 Pasir Panjang Road, Singapore 118706</p>
+                          <p className="text-1xl">Tel: 67791237</p>
+                          <p className="text-2xl mt-2">Hall of Merits Application Form</p>
+                          <p className="text-2xl mb-2">功德堂申请表格</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="invoice w-full flex flex-col items-center justify-center">
+                      <table className="w-3/4">
+                        <tbody>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Tablet Number / 神主号码</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Tablet_Number}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Leasing Date</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{String(application.Leasing_Date).substring(0, 10)}</span>
+                            </td>
+                          </tr>
+                          <tr className="h-5"></tr>
+                          <tr className="border border-gray-300 ">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>1) Beneficiary Name/英文名*</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Beneficiary1_Name_English}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>受益人姓名/ 中文名</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Beneficiary1_Name_Chinese}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>2) Beneficiary Name/英文名</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Beneficiary2_Name_English}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>受益人姓名/ 中文名</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Beneficiary2_Name_Chinese}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>3) Beneficiary Name/英文名</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Beneficiary3_Name_English}</span>
+                            </td>
+                          </tr>
+                          <tr className=" border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>受益人姓名/ 中文名</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Beneficiary3_Name_Chinese}</span>
+                            </td>
+                          </tr>
+                          <tr className="h-5"></tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Applicant Name/ 英文名*</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Applicant_Name_English}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>申请姓名/ 中文名</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Applicant_Name_Chinese}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Address/ 地址*</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Applicant_Address}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Indentified Code /*</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Applicant_IdentifiedCode}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Gender / 性别*</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Applicant_Gender}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Relationship/与受益人的关*</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Applicant_Relationship}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Telephone Nos/Home or Mobile*</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Applicant_ContactNumber}</span>
+                            </td>
+                          </tr>
+
+                          <tr className="h-5"></tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Second Contact Name/ 英文名</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.SecondContact_Name_English}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>第二联系姓名/ 中文名</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.SecondContact_Name_Chinese}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Address/ 地址</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.SecondContact_Address}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Indentified Code </strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.SecondContact_IdentifiedCode}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Gender / 性别</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.SecondContact_Gender}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Relationship/与受益人的关</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.SecondContact_Relationship}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Telephone Nos/Home or Mobile</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.SecondContact_ContactNumber}</span>
+                            </td>
+                          </tr>
+
+                          <tr className="h-5"></tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div className="invoice w-full flex flex-col items-center justify-center">
-                <table className="w-3/4">
-                  <tbody>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>Tablet Number / 神主号码</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.Tablet_Number}</span>
-                      </td>
-                    </tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>Leasing Date</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{String(application.Leasing_Date).substring(0, 10)}</span>
-                      </td>
-                    </tr>
-                    <tr className="h-5"></tr>
-                    <tr className="border border-gray-300 ">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>1) Beneficiary Name/英文名*</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.Beneficiary1_Name_English}</span>
-                      </td>
-                    </tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>受益人姓名/ 中文名</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.Beneficiary1_Name_Chinese}</span>
-                      </td>
-                    </tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>2) Beneficiary Name/英文名</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.Beneficiary2_Name_English}</span>
-                      </td>
-                    </tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>受益人姓名/ 中文名</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.Beneficiary2_Name_Chinese}</span>
-                      </td>
-                    </tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>3) Beneficiary Name/英文名</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.Beneficiary3_Name_English}</span>
-                      </td>
-                    </tr>
-                    <tr className=" border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>受益人姓名/ 中文名</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.Beneficiary3_Name_Chinese}</span>
-                      </td>
-                    </tr>
-                    <tr className="h-5"></tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>Applicant Name/ 英文名*</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.Applicant_Name_English}</span>
-                      </td>
-                    </tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>申请姓名/ 中文名</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.Applicant_Name_Chinese}</span>
-                      </td>
-                    </tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>Address/ 地址*</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.Applicant_Address}</span>
-                      </td>
-                    </tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>Indentified Code /*</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.Applicant_IdentifiedCode}</span>
-                      </td>
-                    </tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>Gender / 性别*</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.Applicant_Gender}</span>
-                      </td>
-                    </tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>Relationship/与受益人的关*</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.Applicant_Relationship}</span>
-                      </td>
-                    </tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>Telephone Nos/Home or Mobile*</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.Applicant_ContactNumber}</span>
-                      </td>
-                    </tr>
+                  <hr></hr>
+                  <div className="w-full" id="downloadablepdf2" ref={downloadablePdfRef2}>
+                    <div className="my-20"></div>
+                    <div className="invoice w-full flex flex-col items-center justify-center">
+                      <table className="w-3/4">
+                        <tbody>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>For Admin Use</strong>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Officer in Charge/ 管理员姓名*</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Officer_In_Charge}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Purchase of placement*</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.PurchaseOfPlacementCost?.toString()}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Tablet Cost*</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.TabletCost?.toString()}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Selection of placement</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.SelectionOfPlacementCost?.toString()}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Total cost of purchase</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.TotalCostOfPurchase?.toString()}</span>
+                            </td>
+                          </tr>
+                          {application.Application_Type == "TIP" && (
+                            <>
+                              <tr className="border border-gray-300">
+                                <td colSpan={1} className="border border-gray-300 p-2">
+                                  <strong>Number of Months*</strong>
+                                </td>
+                                <td colSpan={1} className="p-1 w-64">
+                                  <span>{application.Number_of_Months?.toString()}</span>
+                                </td>
+                              </tr>
+                            </>
+                          )}
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Outstanding Amount</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Outstanding_Amount?.toString()}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Amount received/收到金额*</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Amount_Received.toString()}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Receipt Nos/收据号码*</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Receipt_No}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Other</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Payment_Comments}</span>
+                            </td>
+                          </tr>
+                          <tr className="h-5"></tr>
+                        </tbody>
+                      </table>
 
-                    <tr className="h-5"></tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>Second Contact Name/ 英文名</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.SecondContact_Name_English}</span>
-                      </td>
-                    </tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>第二联系姓名/ 中文名</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.SecondContact_Name_Chinese}</span>
-                      </td>
-                    </tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>Address/ 地址</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.SecondContact_Address}</span>
-                      </td>
-                    </tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>Indentified Code </strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.SecondContact_IdentifiedCode}</span>
-                      </td>
-                    </tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>Gender / 性别</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.SecondContact_Gender}</span>
-                      </td>
-                    </tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>Relationship/与受益人的关</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.SecondContact_Relationship}</span>
-                      </td>
-                    </tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>Telephone Nos/Home or Mobile</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.SecondContact_ContactNumber}</span>
-                      </td>
-                    </tr>
-
-                    <tr className="h-5"></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div className="w-full " id="downloadablepdf2" ref={downloadablePdfRef2}>
-              <div className=" my-20">
-              </div>
-              <div className="invoice w-full flex flex-col items-center justify-center">
-                <table className="w-3/4">
-                  <tbody>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>For Admin Use</strong>
-                      </td>
-                    </tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>Officer in Charge/ 管理员姓名*</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.Officer_In_Charge}</span>
-                      </td>
-                    </tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>Purchase of placement*</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.PurchaseOfPlacementCost?.toString()}</span>
-                      </td>
-                    </tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>Tablet Cost*</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.TabletCost?.toString()}</span>
-                      </td>
-                    </tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>Selection of placement</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.SelectionOfPlacementCost?.toString()}</span>
-                      </td>
-                    </tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>Total cost of purchase</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.TotalCostOfPurchase?.toString()}</span>
-                      </td>
-                    </tr>
-                    {application.Application_Type == "TIP" && (
-                      <>
+                      <div className="w-3/4 flex mt-20 mb-5">
+                        <div className="text-center flex-auto">
+                          <div className="signature border-black border-b-2"></div>
+                          <p>Applicant&apos;s Signature</p>
+                          <p>申请人签名</p>
+                        </div>
+                        <div className="flex-auto text-center">
+                          <p>CKKPGSTT</p>
+                          <p>Stamp/ 道堂印章</p>
+                        </div>
+                        <div className="text-center flex-auto">
+                          <div className="signature border-black border-b-2"></div>
+                          <p>Applicant&apos;s Signature</p>
+                          <p>申请人签名</p>
+                        </div>
+                      </div>
+                      <table className="w-3/4">
                         <tr className="border border-gray-300">
                           <td colSpan={1} className="border border-gray-300 p-2">
-                            <strong>Number of Months*</strong>
-                          </td>
-                          <td colSpan={1} className="p-1 w-64">
-                            <span>{application.Number_of_Months?.toString()}</span>
+                            <strong>Remarks</strong>
                           </td>
                         </tr>
-                      </>
-                    )}
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>Outstanding Amount</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.Outstanding_Amount?.toString()}</span>
-                      </td>
-                    </tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>Amount received/收到金额*</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.Amount_Received.toString()}</span>
-                      </td>
-                    </tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>Receipt Nos/收据号码*</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.Receipt_No}</span>
-                      </td>
-                    </tr>
-                    <tr className="border border-gray-300">
-                      <td colSpan={1} className="border border-gray-300 p-2">
-                        <strong>Other</strong>
-                      </td>
-                      <td colSpan={1} className="p-1 w-64">
-                        <span>{application.Payment_Comments}</span>
-                      </td>
-                    </tr>
-                    <tr className="h-5"></tr>
-                  </tbody>
-                </table>
-
-                <div className="w-3/4 flex mt-20 mb-5">
-                  <div className="text-center flex-auto">
-                    <div className="signature border-black border-b-2"></div>
-                    <p>Applicant&apos;s Signature</p>
-                    <p>申请人签名</p>
+                        <tr className="border border-gray-300">
+                          <td colSpan={2} className="h-20 p-1 w-64">
+                            <span>{application.Remarks}</span>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
                   </div>
-                  <div className="flex-auto text-center">
-                    <p>CKKPGSTT</p>
-                    <p>Stamp/ 道堂印章</p>
+                  <div className="w-full pb-10">
+                    <div className="w-full mt-3 flex flex-col items-center">
+                      <Button
+                        onClick={() => {
+                          downloadPdf();
+                        }}
+                        className="w-[180px]"
+                      >
+                        Download PDF
+                      </Button>
+                    </div>
                   </div>
-                  <div className="text-center flex-auto">
-                    <div className="signature border-black border-b-2"></div>
-                    <p>Applicant&apos;s Signature</p>
-                    <p>申请人签名</p>
-                  </div>
-                </div>
-                <table className="w-3/4">
-                  <tr className="border border-gray-300">
-                    <td colSpan={1} className="border border-gray-300 p-2">
-                      <strong>Remarks</strong>
-                    </td>
-                  </tr>
-                  <tr className="border border-gray-300">
-                    <td colSpan={2} className="h-20 p-1 w-64">
-                      <span>{application.Remarks}</span>
-                    </td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-            <div className="w-full pb-10">
-              <div className="w-full mt-3 flex flex-col items-center">
-                <Button
-                  onClick={() => {
-                    downloadPdf();
-                  }}
-                  className="w-[180px]"
-                >
-                  Download PDF
-                </Button>
-              </div>
-            </div>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
           </div>
         )
       )}
-
 
       <div className="overflow-y-auto ">
         {application.Application_Type == "R" && application.ApplicationID && isEditing && (
