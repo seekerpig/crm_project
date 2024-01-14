@@ -249,7 +249,6 @@ function GenerateInstallmentInvoiceModal(props: any) {
               <TableCaption>A list of your invoices to be generated.</TableCaption>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Fiscal Year</TableHead>
                   <TableHead>Dated</TableHead>
                   <TableHead>Terms</TableHead>
                   <TableHead>Tablet Number</TableHead>
