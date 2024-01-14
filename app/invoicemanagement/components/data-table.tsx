@@ -92,12 +92,12 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   });
 
   return (
-    <div className="space-y-4">
+    <div className="">
       <GenerateMaintenanceInvoiceModal/>
       <GenerateInstallmentInvoiceModal/>
       <GenerateManualInvoiceModal/>
-      <DataTableToolbar table={table} />
-      <div className="rounded-md border">
+      <DataTableToolbar table={table}/>
+      <div className="rounded-md border mt-3">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

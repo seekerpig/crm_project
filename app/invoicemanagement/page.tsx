@@ -25,13 +25,10 @@ export default async function InvoiceManagement() {
   return (
     <>
     <ProtectedPage/>
-      <div className="h-full flex-col space-y-8 flex">
+      <div className="h-full flex-col flex">
         <div className="flex items-center justify-between space-y-2">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">Invoice Management</h2>
-            <p className="text-muted-foreground">
-              Manage all your invoices.
-            </p>
+            <h2 className="text-2xl font-bold tracking-tight mb-3">Invoice Management</h2>
           </div>
         </div>
         <DataTable data={invoices} columns={columns} />

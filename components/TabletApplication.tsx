@@ -852,6 +852,8 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                     {isEditing ? (
                       <Input
                         type="Number"
+                        min="0"
+                        step="1"
                         value={application.Number_of_Months?.toString()}
                         onChange={(e) => {
                           setApplication({ ...application, Number_of_Months: parseFloat(e.target.value) });
