@@ -228,7 +228,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
         const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
         pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-        pdf.save("document.pdf");
+        pdf.save("invoice.pdf");
       });
     } else {
       console.log("No content in downloadable pdf");
