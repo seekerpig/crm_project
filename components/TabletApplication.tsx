@@ -138,7 +138,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
         props.updateApplication(updatedApplication);
         props.onSave();
         console.log(`Document with ID ${docRef.id} written successfully.`);
-        CreateInvoiceAsPaid(updatedApplication.Tablet_Number.toString(), updatedApplication.Amount_Received.valueOf(), updatedApplication.Application_Type.toString());
+        CreateInvoiceAsPaid(updatedApplication.Tablet_Number.toString(), updatedApplication.Amount_Received.valueOf(), updatedApplication.Application_Type.toString(), updatedApplication.Leasing_Date);
       } catch (e) {
         console.error("Error adding document: ", e);
       }
