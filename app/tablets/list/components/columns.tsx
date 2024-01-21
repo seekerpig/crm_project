@@ -290,6 +290,20 @@ export const columns: ColumnDef<TabletApplication>[] = [
     enableHiding: true,
   },
   {
+    accessorKey: "JiLing",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="JiLing" />,
+    cell: ({ row }) => <div>{row.getValue("JiLing")}</div>,
+    enableSorting: true,
+    enableHiding: true,
+  },
+  {
+    accessorKey: "OtherCost",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="OtherCost" />,
+    cell: ({ row }) => <div>{row.getValue("OtherCost")}</div>,
+    enableSorting: true,
+    enableHiding: true,
+  },
+  {
     id: "actions",
     cell: ({ row }) => <DataTableRowActions row={row} />,
   },

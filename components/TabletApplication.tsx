@@ -59,17 +59,16 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
         const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
         pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      });
+        html2canvas(content2).then((canvas) => {
+          const imgData = canvas.toDataURL("image/png");
 
-      html2canvas(content2).then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
-
-        const imgProps = pdf.getImageProperties(imgData);
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-        pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-        pdf.save("document.pdf");
+          const imgProps = pdf.getImageProperties(imgData);
+          const pdfWidth = pdf.internal.pageSize.getWidth();
+          const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+          pdf.addPage();
+          pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+          pdf.save("document.pdf");
+        });
       });
     } else {
       console.log("No content in downloadable pdf");
@@ -192,6 +191,8 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
           Number_of_Months: 0,
           Outstanding_Amount: 0,
           TotalCostOfPurchase: 0,
+          JiLing: 0,
+          OtherCost: 0,
         };
         setApplication(data);
         props.updateApplication(data);
@@ -560,6 +561,22 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                           </tr>
                           <tr className="border border-gray-300">
                             <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Ji Ling</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.JiLing?.toString()}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Other Cost</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.OtherCost?.toString()}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
                               <strong>Total cost of purchase</strong>
                             </td>
                             <td colSpan={1} className="p-1 w-64">
@@ -617,7 +634,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                       <div className="w-3/4 flex mt-20 mb-5">
                         <div className="text-center flex-auto">
                           <div className="signature border-black border-b-2"></div>
-                          <p>Applicant&apos;s  Signature</p>
+                          <p>Applicant&apos;s Signature</p>
                           <p>申请人签名</p>
                         </div>
                         <div className="flex-auto text-center">
@@ -1171,8 +1188,10 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                       const purchaseCost = Number(e.target.value) || 0;
                       const SelectionOfPlacementCost = Number(application.SelectionOfPlacementCost) || 0;
                       const amountReceived = Number(application.Amount_Received) || 0;
-                      const outAmt = tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
-                      const totalcost = tabletCost + purchaseCost + SelectionOfPlacementCost;
+                      const JiLing = Number(application.JiLing) || 0;
+                      const OtherCost = Number(application.OtherCost) || 0;
+                      const outAmt = OtherCost + JiLing + tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
+                      const totalcost = tabletCost + purchaseCost + SelectionOfPlacementCost + JiLing + OtherCost;
                       setApplication({ ...application, PurchaseOfPlacementCost: parseFloat(e.target.value), Outstanding_Amount: outAmt, TotalCostOfPurchase: totalcost });
                     }}
                   />
@@ -1196,8 +1215,10 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                       const purchaseCost = Number(application.PurchaseOfPlacementCost) || 0;
                       const SelectionOfPlacementCost = Number(application.SelectionOfPlacementCost) || 0;
                       const amountReceived = Number(application.Amount_Received) || 0;
-                      const outAmt = tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
-                      const totalcost = tabletCost + purchaseCost + SelectionOfPlacementCost;
+                      const JiLing = Number(application.JiLing) || 0;
+                      const OtherCost = Number(application.OtherCost) || 0;
+                      const outAmt = OtherCost + JiLing + tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
+                      const totalcost = tabletCost + purchaseCost + SelectionOfPlacementCost + JiLing + OtherCost;
                       setApplication({ ...application, TabletCost: parseFloat(e.target.value), Outstanding_Amount: outAmt, TotalCostOfPurchase: totalcost });
                     }}
                   />
@@ -1221,13 +1242,67 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                       const purchaseCost = Number(application.PurchaseOfPlacementCost) || 0;
                       const SelectionOfPlacementCost = Number(e.target.value) || 0;
                       const amountReceived = Number(application.Amount_Received) || 0;
-                      const outAmt = tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
-                      const totalcost = tabletCost + purchaseCost + SelectionOfPlacementCost;
+                      const JiLing = Number(application.JiLing) || 0;
+                      const OtherCost = Number(application.OtherCost) || 0;
+                      const outAmt = OtherCost + JiLing + tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
+                      const totalcost = tabletCost + purchaseCost + SelectionOfPlacementCost + JiLing + OtherCost;
                       setApplication({ ...application, SelectionOfPlacementCost: parseFloat(e.target.value), Outstanding_Amount: outAmt, TotalCostOfPurchase: totalcost });
                     }}
                   />
                 ) : (
                   <span>{application.SelectionOfPlacementCost?.toString()}</span>
+                )}
+              </td>
+            </tr>
+            <tr className="border border-gray-300">
+              <td colSpan={1} className="border border-gray-300 p-1">
+                <strong>Ji Ling</strong>
+              </td>
+              <td colSpan={1} className="p-1 w-64">
+                {isEditing ? (
+                  <Input
+                    type="Number"
+                    value={application.JiLing?.toString()}
+                    onChange={(e) => {
+                      const tabletCost = Number(application.TabletCost) || 0;
+                      const purchaseCost = Number(application.PurchaseOfPlacementCost) || 0;
+                      const SelectionOfPlacementCost = Number(application.SelectionOfPlacementCost) || 0;
+                      const amountReceived = Number(application.Amount_Received) || 0;
+                      const JiLing = Number(e.target.value) || 0;
+                      const OtherCost = Number(application.OtherCost) || 0;
+                      const outAmt = OtherCost + JiLing + tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
+                      const totalcost = tabletCost + purchaseCost + SelectionOfPlacementCost + JiLing + OtherCost;
+                      setApplication({ ...application, JiLing: parseFloat(e.target.value), Outstanding_Amount: outAmt, TotalCostOfPurchase: totalcost });
+                    }}
+                  />
+                ) : (
+                  <span>{application.JiLing?.toString()}</span>
+                )}
+              </td>
+            </tr>
+            <tr className="border border-gray-300">
+              <td colSpan={1} className="border border-gray-300 p-1">
+                <strong>Other Cost</strong>
+              </td>
+              <td colSpan={1} className="p-1 w-64">
+                {isEditing ? (
+                  <Input
+                    type="Number"
+                    value={application.OtherCost?.toString()}
+                    onChange={(e) => {
+                      const tabletCost = Number(application.TabletCost) || 0;
+                      const purchaseCost = Number(application.PurchaseOfPlacementCost) || 0;
+                      const SelectionOfPlacementCost = Number(application.SelectionOfPlacementCost) || 0;
+                      const amountReceived = Number(application.Amount_Received) || 0;
+                      const JiLing = Number(application.JiLing) || 0;
+                      const OtherCost = Number(e.target.value) || 0;
+                      const outAmt = OtherCost + JiLing + tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
+                      const totalcost = tabletCost + purchaseCost + SelectionOfPlacementCost + JiLing + OtherCost;
+                      setApplication({ ...application, OtherCost: parseFloat(e.target.value), Outstanding_Amount: outAmt, TotalCostOfPurchase: totalcost });
+                    }}
+                  />
+                ) : (
+                  <span>{application.OtherCost?.toString()}</span>
                 )}
               </td>
             </tr>
@@ -1288,7 +1363,9 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                       const purchaseCost = Number(application.PurchaseOfPlacementCost) || 0;
                       const SelectionOfPlacementCost = Number(application.SelectionOfPlacementCost) || 0;
                       const amountReceived = Number(e.target.value) || 0;
-                      const outAmt = tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
+                      const JiLing = Number(application.JiLing) || 0;
+                      const OtherCost = Number(application.OtherCost) || 0;
+                      const outAmt = JiLing + OtherCost+ tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
                       setApplication({ ...application, Amount_Received: parseFloat(e.target.value), Outstanding_Amount: outAmt });
                     }}
                   />
