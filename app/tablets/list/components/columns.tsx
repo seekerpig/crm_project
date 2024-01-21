@@ -221,6 +221,24 @@ export const columns: ColumnDef<TabletApplication>[] = [
     enableHiding: true,
   },
   {
+    accessorKey: "JiLing",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="JiLing" />,
+    cell: ({ row }) => {
+      return <div>{row.getValue("JiLing")}</div>;
+    },
+    enableSorting: false,
+    enableHiding: true,
+  },
+  {
+    accessorKey: "OtherCost",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="OtherCost" />,
+    cell: ({ row }) => {
+      return <div>{row.getValue("OtherCost")}</div>;
+    },
+    enableSorting: false,
+    enableHiding: true,
+  },
+  {
     accessorKey: "TotalCostOfPurchase",
     header: ({ column }) => <DataTableColumnHeader column={column} title="TotalCostOfPurchase" />,
     cell: ({ row }) => {
