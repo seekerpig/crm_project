@@ -19,12 +19,12 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
   const task: TabletApplicationType = row.original as TabletApplicationType;
   const [applicationForm, setApplicationForm] = useState(task);
   const [dialogOpen, setDialogOpen] = useState(false);
-  function handleSaveTablet(){}
-  async function updateApplication(application: TabletApplicationType){
+  function handleSaveTablet() {}
+  async function updateApplication(application: TabletApplicationType) {
     setApplicationForm(application);
     // to do update the row
   }
-  
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -34,46 +34,50 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
         </Button>
       </DropdownMenuTrigger>
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogTrigger asChild>
-          </DialogTrigger>
-          <DialogContent className="w-full flex sm:max-w-[650px] sm:max-h-[800px]">
-            <DialogHeader className="w-full">
-              <TabletApplication
-                  ApplicationID={applicationForm?.ApplicationID || ""}
-                  Tablet_Number={applicationForm?.Tablet_Number || ""}
-                  Leasing_Date={applicationForm?.Leasing_Date || new Date()}
-                  Application_Type={applicationForm?.Application_Type || ""}
-                  Beneficiary1_Name_English={applicationForm?.Beneficiary1_Name_English || ""}
-                  Beneficiary1_Name_Chinese={applicationForm?.Beneficiary1_Name_Chinese || ""}
-                  Beneficiary2_Name_English={applicationForm?.Beneficiary2_Name_English || ""}
-                  Beneficiary2_Name_Chinese={applicationForm?.Beneficiary2_Name_Chinese || ""}
-                  Beneficiary3_Name_English={applicationForm?.Beneficiary3_Name_English || ""}
-                  Beneficiary3_Name_Chinese={applicationForm?.Beneficiary3_Name_Chinese || ""}
-                  Applicant_Name_English={applicationForm?.Applicant_Name_English || ""}
-                  Applicant_Name_Chinese={applicationForm?.Applicant_Name_Chinese || ""}
-                  Applicant_Gender={applicationForm?.Applicant_Gender || ""}
-                  Applicant_Address={applicationForm?.Applicant_Address || ""}
-                  Applicant_IdentifiedCode={applicationForm?.Applicant_IdentifiedCode || ""}
-                  Applicant_Relationship={applicationForm?.Applicant_Relationship || ""}
-                  Applicant_ContactNumber={applicationForm?.Applicant_ContactNumber || ""}
-                  Officer_In_Charge={applicationForm?.Officer_In_Charge || ""}
-                  Amount_Received={applicationForm?.Amount_Received || 0}
-                  PurchaseOfPlacementCost={applicationForm?.PurchaseOfPlacementCost || 0}
-                  TabletCost={applicationForm?.TabletCost || 0}
-                  SelectionOfPlacementCost={applicationForm?.SelectionOfPlacementCost || 0}
-                  Status={applicationForm?.Status || ""}
-                  Remarks={applicationForm?.Remarks || ""}
-                  Receipt_No={applicationForm?.Receipt_No || ""}
-                  onSave={handleSaveTablet}
-                  isEditable={false}
-                  updateApplication={updateApplication}
-                  Outstanding_Amount={applicationForm?.Outstanding_Amount || 0}
-                  Number_of_Months={applicationForm?.Number_of_Months || 0}
-                  TotalCostOfPurchase={applicationForm?.TotalCostOfPurchase || 0}
-              />
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
+        <DialogTrigger asChild></DialogTrigger>
+        <DialogContent
+          className="w-full flex sm:max-w-[650px] sm:max-h-[800px]"
+          onInteractOutside={(e) => {
+            e.preventDefault();
+          }}
+        >
+          <DialogHeader className="w-full">
+            <TabletApplication
+              ApplicationID={applicationForm?.ApplicationID || ""}
+              Tablet_Number={applicationForm?.Tablet_Number || ""}
+              Leasing_Date={applicationForm?.Leasing_Date || new Date()}
+              Application_Type={applicationForm?.Application_Type || ""}
+              Beneficiary1_Name_English={applicationForm?.Beneficiary1_Name_English || ""}
+              Beneficiary1_Name_Chinese={applicationForm?.Beneficiary1_Name_Chinese || ""}
+              Beneficiary2_Name_English={applicationForm?.Beneficiary2_Name_English || ""}
+              Beneficiary2_Name_Chinese={applicationForm?.Beneficiary2_Name_Chinese || ""}
+              Beneficiary3_Name_English={applicationForm?.Beneficiary3_Name_English || ""}
+              Beneficiary3_Name_Chinese={applicationForm?.Beneficiary3_Name_Chinese || ""}
+              Applicant_Name_English={applicationForm?.Applicant_Name_English || ""}
+              Applicant_Name_Chinese={applicationForm?.Applicant_Name_Chinese || ""}
+              Applicant_Gender={applicationForm?.Applicant_Gender || ""}
+              Applicant_Address={applicationForm?.Applicant_Address || ""}
+              Applicant_IdentifiedCode={applicationForm?.Applicant_IdentifiedCode || ""}
+              Applicant_Relationship={applicationForm?.Applicant_Relationship || ""}
+              Applicant_ContactNumber={applicationForm?.Applicant_ContactNumber || ""}
+              Officer_In_Charge={applicationForm?.Officer_In_Charge || ""}
+              Amount_Received={applicationForm?.Amount_Received || 0}
+              PurchaseOfPlacementCost={applicationForm?.PurchaseOfPlacementCost || 0}
+              TabletCost={applicationForm?.TabletCost || 0}
+              SelectionOfPlacementCost={applicationForm?.SelectionOfPlacementCost || 0}
+              Status={applicationForm?.Status || ""}
+              Remarks={applicationForm?.Remarks || ""}
+              Receipt_No={applicationForm?.Receipt_No || ""}
+              onSave={handleSaveTablet}
+              isEditable={false}
+              updateApplication={updateApplication}
+              Outstanding_Amount={applicationForm?.Outstanding_Amount || 0}
+              Number_of_Months={applicationForm?.Number_of_Months || 0}
+              TotalCostOfPurchase={applicationForm?.TotalCostOfPurchase || 0}
+            />
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
       <DropdownMenuContent align="end" className="w-[160px]">
         <DropdownMenuItem onClick={() => setDialogOpen(true)}>View Form</DropdownMenuItem>
       </DropdownMenuContent>

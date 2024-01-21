@@ -185,7 +185,9 @@ function Tablet(props: Tablet) {
               <div className={` ${props.Status === "Not Available" ? "w-[43px] h-[51px] px-3 pt-[25px] m-1" : `${statusColorClass} cursor-pointer w-[43px] h-[51px] px-3 pt-[25px] pb-1 border border-zinc-700 rounded shadow flex-col justify-end items-center inline-flex m-1 `}`}>{props.Status !== "Not Available" && <div>{props.Column_Number}</div>}</div>
             </div>
           </DialogTrigger>
-          <DialogContent className="w-full flex sm:max-w-[650px] sm:max-h-[800px]">
+          <DialogContent className="w-full flex sm:max-w-[650px] sm:max-h-[800px]" onInteractOutside={(e) => {
+          e.preventDefault();
+        }}>
             <DialogHeader className="w-full">
               <DialogTitle>
                 Selected tablet in row ({newTablet.Row_Number}) is currently {newTablet.Status}:{" "}
