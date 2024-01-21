@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { TabletApplication } from "@/app/data/dataTypes";
 import { useState, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,13 +14,14 @@ import { collection, query, where, getDocs, doc, setDoc, getDoc, updateDoc, addD
 import { CreateInvoiceAsPaid } from "@/app/invoicemanagement/components/generateManualInvoice";
 import { Input } from "@/components/ui/input";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/app/context/AuthProvider";
 import CheckEditPermission from "@/components/CheckEditPermission";
-
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
-
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -33,12 +34,47 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
   const [application, setApplication] = useState({
     ...initialApplication,
     TabletCost: initialApplication.TabletCost || 0,
-    PurchaseOfTabletCost: initialApplication.PurchaseOfTabletCost || 0,
-    SelectionCost: initialApplication.SelectionCost || 0,
+    PurchaseOfPlacementCost: initialApplication.PurchaseOfPlacementCost || 0,
+    SelectionOfPlacementCost: initialApplication.SelectionOfPlacementCost || 0,
   });
   const [oldApplication, setOldApplication] = useState({ ...initialApplication });
   const { toast } = useToast();
   const currentUser = useAuth();
+
+  const downloadablePdfRef = useRef(null);
+  const downloadablePdfRef2 = useRef(null);
+  function downloadPdf() {
+    const content = downloadablePdfRef.current;
+    const content2 = downloadablePdfRef2.current;
+
+    if (content && content2) {
+      const pdf = new jsPDF({
+        orientation: "portrait",
+      });
+      html2canvas(content).then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      });
+
+      html2canvas(content2).then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+        pdf.save("document.pdf");
+      });
+    } else {
+      console.log("No content in downloadable pdf");
+    }
+  }
   const handleEditClick = () => {
     setIsEditing(true);
   };
@@ -46,11 +82,11 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
   const [checkFields, setCheckFields] = useState(false);
   const handleCheckFields = () => {
     setCheckFields(true);
-    if (application.Applicant_Name_English != "" && application.Applicant_Name_English != "" && application.Applicant_Address != "" && application.Applicant_IdentifiedCode != "" && application.Applicant_Gender != "" && application.Applicant_Relationship != "" && application.Applicant_ContactNumber != "" && application.Officer_In_Charge != "" && Number(application.Amount_Received) > 0 && application.Receipt_No != "" && Number(application.PurchaseOfTabletCost) > 0 && Number(application.TabletCost) > 0) {
+    if (application.Applicant_Name_English != "" && application.Applicant_Name_English != "" && application.Applicant_Address != "" && application.Applicant_IdentifiedCode != "" && application.Applicant_Gender != "" && application.Applicant_Relationship != "" && application.Applicant_ContactNumber != "" && application.Officer_In_Charge != "" && Number(application.Amount_Received) > 0 && application.Receipt_No != "" && Number(application.PurchaseOfPlacementCost) > 0 && Number(application.TabletCost) > 0) {
       if (application.Application_Type === "TIP" && Number(application.Number_of_Months) > 0 && Number(application.Outstanding_Amount) >= 0) {
         setCheckFields(false);
         handleSaveClick();
-      } else if (application.Application_Type !== "TIP" && Number(application.Outstanding_Amount)==0) {
+      } else if (application.Application_Type !== "TIP" && Number(application.Outstanding_Amount) == 0) {
         setCheckFields(false);
         handleSaveClick();
       }
@@ -69,21 +105,19 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
           if (status === "Occupied (S)") {
             updatedApplication.Application_Type = "S";
             console.log("Occupied (S)");
-          }
-          else if (status === "Occupied (N)") {
+          } else if (status === "Occupied (N)") {
             updatedApplication.Application_Type = "N";
           }
           setApplication(updatedApplication);
         }
 
-        console.log(status)
-        console.log(updatedApplication.Application_Type)
+        console.log(status);
+        console.log(updatedApplication.Application_Type);
         console.log(updatedApplication.ApplicationID.toString());
         const tabletDocRef = doc(db, "tabletapplications", updatedApplication.ApplicationID.toString());
         await updateDoc(tabletDocRef, updatedApplication);
         console.log(`Document with ID ${updatedApplication.ApplicationID.toString()} written successfully.`);
         props.updateApplication(updatedApplication);
-        
       } catch (error) {
         console.error("Error updating document: ", error);
       }
@@ -104,7 +138,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
         props.updateApplication(updatedApplication);
         props.onSave();
         console.log(`Document with ID ${docRef.id} written successfully.`);
-        CreateInvoiceAsPaid(updatedApplication.Tablet_Number.toString(), updatedApplication.Amount_Received.valueOf(), updatedApplication.Application_Type.toString());
+        CreateInvoiceAsPaid(updatedApplication.Tablet_Number.toString(), updatedApplication.Amount_Received.valueOf(), updatedApplication.Application_Type.toString(), updatedApplication.Leasing_Date);
       } catch (e) {
         console.error("Error adding document: ", e);
       }
@@ -148,15 +182,16 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
           SecondContact_Gender: "",
           Officer_In_Charge: "",
           Amount_Received: 0,
-          PurchaseOfTabletCost: 0,
+          PurchaseOfPlacementCost: 0,
           TabletCost: 0,
-          SelectionCost: 0,
+          SelectionOfPlacementCost: 0,
           Receipt_No: "",
           Payment_Comments: "",
           Remarks: "",
           Status: "",
           Number_of_Months: 0,
           Outstanding_Amount: 0,
+          TotalCostOfPurchase: 0,
         };
         setApplication(data);
         props.updateApplication(data);
@@ -270,34 +305,397 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="me-3">View PDF</Button>
+              </DialogTrigger>
+              <DialogContent className="w-full flex flex-row justify-center lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl overflow-y-scroll max-h-[80vh]">
+                <DialogHeader className="w-[1000px]">
+                  <div className="w-full" id="downloadablepdf" ref={downloadablePdfRef}>
+                    <div className="w-full temple-details flex flex-col justify-center mb-5">
+                      <div className="w-full temple-details-icon-and-name flex flex-row items-center justify-center">
+                        {/*eslint-disable-next-line @next/next/no-img-element*/}
+                        <img src="/temple-icon.jpeg" alt="temple icon" className="h-[160px] w-[120px] mr-5" />
+                        <div className="temple-title flex flex-col items-center justify-center">
+                          <p className="text-5xl mb-5 pt-10">真空教本元山道堂</p>
+                          <p className="text-2xl">CHIN KHONG POW POON GUAN SAN TOH TONG</p>
+                          <p className="text-1xl">369 Pasir Panjang Road, Singapore 118706</p>
+                          <p className="text-1xl">Tel: 67791237</p>
+                          <p className="text-2xl mt-2">Hall of Merits Application Form</p>
+                          <p className="text-2xl mb-2">功德堂申请表格</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="invoice w-full flex flex-col items-center justify-center">
+                      <table className="w-3/4">
+                        <tbody>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Tablet Number / 神主号码</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Tablet_Number}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Leasing Date</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{String(application.Leasing_Date).substring(0, 10)}</span>
+                            </td>
+                          </tr>
+                          <tr className="h-5"></tr>
+                          <tr className="border border-gray-300 ">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>1) Beneficiary Name/英文名*</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Beneficiary1_Name_English}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>受益人姓名/ 中文名</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Beneficiary1_Name_Chinese}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>2) Beneficiary Name/英文名</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Beneficiary2_Name_English}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>受益人姓名/ 中文名</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Beneficiary2_Name_Chinese}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>3) Beneficiary Name/英文名</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Beneficiary3_Name_English}</span>
+                            </td>
+                          </tr>
+                          <tr className=" border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>受益人姓名/ 中文名</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Beneficiary3_Name_Chinese}</span>
+                            </td>
+                          </tr>
+                          <tr className="h-5"></tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Applicant Name/ 英文名*</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Applicant_Name_English}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>申请姓名/ 中文名</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Applicant_Name_Chinese}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Address/ 地址*</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Applicant_Address}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Indentified Code /*</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Applicant_IdentifiedCode}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Gender / 性别*</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Applicant_Gender}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Relationship/与受益人的关*</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Applicant_Relationship}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Telephone Nos/Home or Mobile*</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Applicant_ContactNumber}</span>
+                            </td>
+                          </tr>
+
+                          <tr className="h-5"></tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Second Contact Name/ 英文名</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.SecondContact_Name_English}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>第二联系姓名/ 中文名</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.SecondContact_Name_Chinese}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Address/ 地址</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.SecondContact_Address}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Indentified Code </strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.SecondContact_IdentifiedCode}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Gender / 性别</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.SecondContact_Gender}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Relationship/与受益人的关</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.SecondContact_Relationship}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Telephone Nos/Home or Mobile</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.SecondContact_ContactNumber}</span>
+                            </td>
+                          </tr>
+
+                          <tr className="h-5"></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <hr></hr>
+                  <div className="w-full" id="downloadablepdf2" ref={downloadablePdfRef2}>
+                    <div className="my-20"></div>
+                    <div className="invoice w-full flex flex-col items-center justify-center">
+                      <table className="w-3/4">
+                        <tbody>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>For Admin Use</strong>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Officer in Charge/ 管理员姓名*</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Officer_In_Charge}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Purchase of placement*</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.PurchaseOfPlacementCost?.toString()}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Tablet Cost*</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.TabletCost?.toString()}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Selection of placement</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.SelectionOfPlacementCost?.toString()}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Total cost of purchase</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.TotalCostOfPurchase?.toString()}</span>
+                            </td>
+                          </tr>
+                          {application.Application_Type == "TIP" && (
+                            <>
+                              <tr className="border border-gray-300">
+                                <td colSpan={1} className="border border-gray-300 p-2">
+                                  <strong>Number of Months*</strong>
+                                </td>
+                                <td colSpan={1} className="p-1 w-64">
+                                  <span>{application.Number_of_Months?.toString()}</span>
+                                </td>
+                              </tr>
+                            </>
+                          )}
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Outstanding Amount</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Outstanding_Amount?.toString()}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Amount received/收到金额*</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Amount_Received.toString()}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Receipt Nos/收据号码*</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Receipt_No}</span>
+                            </td>
+                          </tr>
+                          <tr className="border border-gray-300">
+                            <td colSpan={1} className="border border-gray-300 p-2">
+                              <strong>Other</strong>
+                            </td>
+                            <td colSpan={1} className="p-1 w-64">
+                              <span>{application.Payment_Comments}</span>
+                            </td>
+                          </tr>
+                          <tr className="h-5"></tr>
+                        </tbody>
+                      </table>
+
+                      <div className="w-3/4 flex mt-20 mb-5">
+                        <div className="text-center flex-auto">
+                          <div className="signature border-black border-b-2"></div>
+                          <p>Applicant&apos;s  Signature</p>
+                          <p>申请人签名</p>
+                        </div>
+                        <div className="flex-auto text-center">
+                          <p>CKKPGSTT</p>
+                          <p>Stamp/ 道堂印章</p>
+                        </div>
+                        <div className="text-center flex-auto">
+                          <div className="signature border-black border-b-2"></div>
+                          <p>Officer&apos;s Signature / Name</p>
+                          <p>管理员签名</p>
+                        </div>
+                      </div>
+                      <table className="w-3/4">
+                        <tr className="border border-gray-300">
+                          <td colSpan={1} className="border border-gray-300 p-2">
+                            <strong>Remarks</strong>
+                          </td>
+                        </tr>
+                        <tr className="border border-gray-300">
+                          <td colSpan={2} className="h-20 p-1 w-64">
+                            <span>{application.Remarks}</span>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                  <div className="w-full pb-10">
+                    <div className="w-full mt-3 flex flex-col items-center">
+                      <Button
+                        onClick={() => {
+                          downloadPdf();
+                        }}
+                        className="w-[180px]"
+                      >
+                        Download PDF
+                      </Button>
+                    </div>
+                  </div>
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
           </div>
         )
       )}
+
       <div className="overflow-y-auto ">
-        {(application.Application_Type == "R" && application.ApplicationID && isEditing) && <div className="my-2">
-          <Label htmlFor="changeStatus" className="mt-3 mb-1">
-            Change Status to:
-          </Label>
-            <Select defaultValue={status as string} onValueChange={(value : string) =>{ setStatus(value)}} value={status.toString()}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Select a Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Status</SelectLabel>
-                <SelectItem value="Reserved">
-                            <span className="bg-yellow-200 font-bold text-black px-2 py-1 rounded-full  ">Reserved</span>
-                          </SelectItem>
-                <SelectItem value="Occupied (S)">
-                  <span className="bg-red-300 font-bold text-black px-2 py-1 rounded-full  ">Occupied (S)</span>
-                </SelectItem>
-                <SelectItem value="Occupied (N)">
-                  <span className="bg-red-300 font-bold text-black px-2 py-1 rounded-full  ">Occupied (N)</span>
-                </SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>}
+        {application.Application_Type == "R" && application.ApplicationID && isEditing && (
+          <div className="my-2">
+            <Label htmlFor="changeStatus" className="mt-3 mb-1">
+              Change Status to:
+            </Label>
+            <Select
+              defaultValue={status as string}
+              onValueChange={(value: string) => {
+                setStatus(value);
+              }}
+              value={status.toString()}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Select a Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Status</SelectLabel>
+                  <SelectItem value="Reserved">
+                    <span className="bg-yellow-200 font-bold text-black px-2 py-1 rounded-full  ">Reserved</span>
+                  </SelectItem>
+                  <SelectItem value="Occupied (S)">
+                    <span className="bg-red-300 font-bold text-black px-2 py-1 rounded-full  ">Occupied (S)</span>
+                  </SelectItem>
+                  <SelectItem value="Occupied (N)">
+                    <span className="bg-red-300 font-bold text-black px-2 py-1 rounded-full  ">Occupied (N)</span>
+                  </SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+        )}
         <table className="w-full">
           <tbody>
             <tr className="border border-gray-300">
@@ -761,26 +1159,27 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
             </tr>
             <tr className="border border-gray-300">
               <td colSpan={1} className="border border-gray-300 p-1">
-                <strong>Purchase of Tablet Cost*</strong>
+                <strong>Purchase of placement*</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
                   <Input
                     type="Number"
-                    value={application.PurchaseOfTabletCost?.toString()}
+                    value={application.PurchaseOfPlacementCost?.toString()}
                     onChange={(e) => {
                       const tabletCost = Number(application.TabletCost) || 0;
                       const purchaseCost = Number(e.target.value) || 0;
-                      const selectionCost = Number(application.SelectionCost) || 0;
+                      const SelectionOfPlacementCost = Number(application.SelectionOfPlacementCost) || 0;
                       const amountReceived = Number(application.Amount_Received) || 0;
-                      const outAmt = tabletCost + purchaseCost + selectionCost - amountReceived;
-                      setApplication({ ...application, PurchaseOfTabletCost: parseFloat(e.target.value), Outstanding_Amount: outAmt });
+                      const outAmt = tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
+                      const totalcost = tabletCost + purchaseCost + SelectionOfPlacementCost;
+                      setApplication({ ...application, PurchaseOfPlacementCost: parseFloat(e.target.value), Outstanding_Amount: outAmt, TotalCostOfPurchase: totalcost });
                     }}
                   />
                 ) : (
-                  <span>{application.PurchaseOfTabletCost?.toString()}</span>
+                  <span>{application.PurchaseOfPlacementCost?.toString()}</span>
                 )}
-                {checkFields && (application.PurchaseOfTabletCost?.valueOf() ?? 0) <= 0 && <p className="text-sm text-red-500"> Please enter valid amount</p>}
+                {checkFields && (application.PurchaseOfPlacementCost?.valueOf() ?? 0) <= 0 && <p className="text-sm text-red-500"> Please enter valid amount</p>}
               </td>
             </tr>
             <tr className="border border-gray-300">
@@ -794,11 +1193,12 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                     value={application.TabletCost?.toString()}
                     onChange={(e) => {
                       const tabletCost = Number(e.target.value) || 0;
-                      const purchaseCost = Number(application.PurchaseOfTabletCost) || 0;
-                      const selectionCost = Number(application.SelectionCost) || 0;
+                      const purchaseCost = Number(application.PurchaseOfPlacementCost) || 0;
+                      const SelectionOfPlacementCost = Number(application.SelectionOfPlacementCost) || 0;
                       const amountReceived = Number(application.Amount_Received) || 0;
-                      const outAmt = tabletCost + purchaseCost + selectionCost - amountReceived;
-                      setApplication({ ...application, TabletCost: parseFloat(e.target.value), Outstanding_Amount: outAmt });
+                      const outAmt = tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
+                      const totalcost = tabletCost + purchaseCost + SelectionOfPlacementCost;
+                      setApplication({ ...application, TabletCost: parseFloat(e.target.value), Outstanding_Amount: outAmt, TotalCostOfPurchase: totalcost });
                     }}
                   />
                 ) : (
@@ -809,25 +1209,34 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
             </tr>
             <tr className="border border-gray-300">
               <td colSpan={1} className="border border-gray-300 p-1">
-                <strong>Selection Cost</strong>
+                <strong>Selection of placement</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
                   <Input
                     type="Number"
-                    value={application.SelectionCost?.toString()}
+                    value={application.SelectionOfPlacementCost?.toString()}
                     onChange={(e) => {
                       const tabletCost = Number(application.TabletCost) || 0;
-                      const purchaseCost = Number(application.PurchaseOfTabletCost) || 0;
-                      const selectionCost = Number(e.target.value) || 0;
+                      const purchaseCost = Number(application.PurchaseOfPlacementCost) || 0;
+                      const SelectionOfPlacementCost = Number(e.target.value) || 0;
                       const amountReceived = Number(application.Amount_Received) || 0;
-                      const outAmt = tabletCost + purchaseCost + selectionCost - amountReceived;
-                      setApplication({ ...application, SelectionCost: parseFloat(e.target.value), Outstanding_Amount: outAmt });
+                      const outAmt = tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
+                      const totalcost = tabletCost + purchaseCost + SelectionOfPlacementCost;
+                      setApplication({ ...application, SelectionOfPlacementCost: parseFloat(e.target.value), Outstanding_Amount: outAmt, TotalCostOfPurchase: totalcost });
                     }}
                   />
                 ) : (
-                  <span>{application.SelectionCost?.toString()}</span>
+                  <span>{application.SelectionOfPlacementCost?.toString()}</span>
                 )}
+              </td>
+            </tr>
+            <tr className="border border-gray-300">
+              <td colSpan={1} className="border border-gray-300 p-1">
+                <strong>Total cost of purchase</strong>
+              </td>
+              <td colSpan={1} className="p-1 w-64">
+                <span>{application.TotalCostOfPurchase?.toString()}</span>
               </td>
             </tr>
             {application.Application_Type == "TIP" && (
@@ -840,6 +1249,8 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                     {isEditing ? (
                       <Input
                         type="Number"
+                        min="0"
+                        step="1"
                         value={application.Number_of_Months?.toString()}
                         onChange={(e) => {
                           setApplication({ ...application, Number_of_Months: parseFloat(e.target.value) });
@@ -853,16 +1264,16 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 </tr>
               </>
             )}
-                            <tr className="border border-gray-300">
-                  <td colSpan={1} className="border border-gray-300 p-1">
-                    <strong>Outstanding Amount</strong>
-                  </td>
-                  <td colSpan={1} className="p-1 w-64">
-                    <span>{application.Outstanding_Amount?.toString()}</span>
-                    {checkFields && (application.Outstanding_Amount?.valueOf() ?? 0) < 0 && <p className="text-sm text-red-500">Not a vaild amount</p>}
-                    {checkFields && (application.Outstanding_Amount?.valueOf() ?? 0) > 0 && application.Application_Type!="TIP"  && <p className="text-sm text-red-500">Not a vaild amount</p>}
-                  </td>
-                </tr>
+            <tr className="border border-gray-300">
+              <td colSpan={1} className="border border-gray-300 p-1">
+                <strong>Outstanding Amount</strong>
+              </td>
+              <td colSpan={1} className="p-1 w-64">
+                <span>{application.Outstanding_Amount?.toString()}</span>
+                {checkFields && (application.Outstanding_Amount?.valueOf() ?? 0) < 0 && <p className="text-sm text-red-500">Not a vaild amount</p>}
+                {checkFields && (application.Outstanding_Amount?.valueOf() ?? 0) > 0 && application.Application_Type != "TIP" && <p className="text-sm text-red-500">Not a vaild amount</p>}
+              </td>
+            </tr>
             <tr className="border border-gray-300">
               <td colSpan={1} className="border border-gray-300 p-1">
                 <strong>Amount received/收到金额*</strong>
@@ -874,11 +1285,11 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                     value={application.Amount_Received.toString()}
                     onChange={(e) => {
                       const tabletCost = Number(application.TabletCost) || 0;
-                      const purchaseCost = Number(application.PurchaseOfTabletCost) || 0;
-                      const selectionCost = Number(application.SelectionCost) || 0;
+                      const purchaseCost = Number(application.PurchaseOfPlacementCost) || 0;
+                      const SelectionOfPlacementCost = Number(application.SelectionOfPlacementCost) || 0;
                       const amountReceived = Number(e.target.value) || 0;
-                      const outAmt = tabletCost + purchaseCost + selectionCost - amountReceived;
-                      setApplication({ ...application, Amount_Received: parseFloat(e.target.value) , Outstanding_Amount: outAmt });
+                      const outAmt = tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
+                      setApplication({ ...application, Amount_Received: parseFloat(e.target.value), Outstanding_Amount: outAmt });
                     }}
                   />
                 ) : (

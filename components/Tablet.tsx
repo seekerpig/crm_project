@@ -185,7 +185,9 @@ function Tablet(props: Tablet) {
               <div className={` ${props.Status === "Not Available" ? "w-[43px] h-[51px] px-3 pt-[25px] m-1" : `${statusColorClass} cursor-pointer w-[43px] h-[51px] px-3 pt-[25px] pb-1 border border-zinc-700 rounded shadow flex-col justify-end items-center inline-flex m-1 `}`}>{props.Status !== "Not Available" && <div>{props.Column_Number}</div>}</div>
             </div>
           </DialogTrigger>
-          <DialogContent className="w-full flex sm:max-w-[650px] sm:max-h-[800px]">
+          <DialogContent className="w-full flex sm:max-w-[650px] sm:max-h-[800px]" onInteractOutside={(e) => {
+          e.preventDefault();
+        }}>
             <DialogHeader className="w-full">
               <DialogTitle>
                 Selected tablet in row ({newTablet.Row_Number}) is currently {newTablet.Status}:{" "}
@@ -216,9 +218,9 @@ function Tablet(props: Tablet) {
                   Applicant_ContactNumber={applicationForm?.Applicant_ContactNumber || ""}
                   Officer_In_Charge={applicationForm?.Officer_In_Charge || ""}
                   Amount_Received={applicationForm?.Amount_Received || 0}
-                  PurchaseOfTabletCost={applicationForm?.PurchaseOfTabletCost || 0}
+                  PurchaseOfPlacementCost={applicationForm?.PurchaseOfPlacementCost || 0}
                   TabletCost={applicationForm?.TabletCost || 0}
-                  SelectionCost={applicationForm?.SelectionCost || 0}
+                  SelectionOfPlacementCost={applicationForm?.SelectionOfPlacementCost || 0}
                   Status={applicationForm?.Status || ""}
                   Remarks={applicationForm?.Remarks || ""}
                   Receipt_No={applicationForm?.Receipt_No || ""}
@@ -227,6 +229,7 @@ function Tablet(props: Tablet) {
                   updateApplication={updateApplication}
                   Outstanding_Amount={applicationForm?.Outstanding_Amount || 0}
                   Number_of_Months={applicationForm?.Number_of_Months || 0}
+                  TotalCostOfPurchase={applicationForm?.TotalCostOfPurchase || 0}
                 />
               ) : (
                 hasEditPermission && (
@@ -295,9 +298,9 @@ function Tablet(props: Tablet) {
                   Applicant_ContactNumber={applicationForm?.Applicant_ContactNumber || ""}
                   Officer_In_Charge={applicationForm?.Officer_In_Charge || ""}
                   Amount_Received={applicationForm?.Amount_Received || 0}
-                  PurchaseOfTabletCost={applicationForm?.PurchaseOfTabletCost || 0}
+                  PurchaseOfPlacementCost={applicationForm?.PurchaseOfPlacementCost || 0}
                   TabletCost={applicationForm?.TabletCost || 0}
-                  SelectionCost={applicationForm?.SelectionCost || 0}
+                  SelectionOfPlacementCost={applicationForm?.SelectionOfPlacementCost || 0}
                   Status={applicationForm?.Status || ""}
                   Remarks={applicationForm?.Remarks || ""}
                   Receipt_No={applicationForm?.Receipt_No || ""}
@@ -306,6 +309,7 @@ function Tablet(props: Tablet) {
                   updateApplication={updateApplication}
                   Outstanding_Amount={applicationForm?.Outstanding_Amount || 0}
                   Number_of_Months={applicationForm?.Number_of_Months || 0}
+                  TotalCostOfPurchase={applicationForm?.TotalCostOfPurchase || 0}
                 />
               )}
               {/* if select Occupied a form to fill in */}
@@ -330,9 +334,9 @@ function Tablet(props: Tablet) {
                   Applicant_ContactNumber={applicationForm?.Applicant_ContactNumber || ""}
                   Officer_In_Charge={applicationForm?.Officer_In_Charge || ""}
                   Amount_Received={applicationForm?.Amount_Received || 0}
-                  PurchaseOfTabletCost={applicationForm?.PurchaseOfTabletCost || 0}
+                  PurchaseOfPlacementCost={applicationForm?.PurchaseOfPlacementCost || 0}
                   TabletCost={applicationForm?.TabletCost || 0}
-                  SelectionCost={applicationForm?.SelectionCost || 0}
+                  SelectionOfPlacementCost={applicationForm?.SelectionOfPlacementCost || 0}
                   Status={applicationForm?.Status || ""}
                   Remarks={applicationForm?.Remarks || ""}
                   Receipt_No={applicationForm?.Receipt_No || ""}
@@ -341,6 +345,7 @@ function Tablet(props: Tablet) {
                   updateApplication={updateApplication}
                   Outstanding_Amount={applicationForm?.Outstanding_Amount || 0}
                   Number_of_Months={applicationForm?.Number_of_Months || 0}
+                  TotalCostOfPurchase={applicationForm?.TotalCostOfPurchase || 0}
                 />
               )}
               {status === "Occupied (N)" && applicationForm?.ApplicationID == undefined && (
@@ -364,9 +369,9 @@ function Tablet(props: Tablet) {
                   Applicant_ContactNumber={applicationForm?.Applicant_ContactNumber || ""}
                   Officer_In_Charge={applicationForm?.Officer_In_Charge || ""}
                   Amount_Received={applicationForm?.Amount_Received || 0}
-                  PurchaseOfTabletCost={applicationForm?.PurchaseOfTabletCost || 0}
+                  PurchaseOfPlacementCost={applicationForm?.PurchaseOfPlacementCost || 0}
                   TabletCost={applicationForm?.TabletCost || 0}
-                  SelectionCost={applicationForm?.SelectionCost || 0}
+                  SelectionOfPlacementCost={applicationForm?.SelectionOfPlacementCost || 0}
                   Status={applicationForm?.Status || ""}
                   Remarks={applicationForm?.Remarks || ""}
                   Receipt_No={applicationForm?.Receipt_No || ""}
@@ -375,6 +380,7 @@ function Tablet(props: Tablet) {
                   updateApplication={updateApplication}
                   Outstanding_Amount={applicationForm?.Outstanding_Amount || 0}
                   Number_of_Months={applicationForm?.Number_of_Months || 0}
+                  TotalCostOfPurchase={applicationForm?.TotalCostOfPurchase || 0}
                 />
               )}
               {status === "Reserved" && applicationForm?.ApplicationID == undefined && (
@@ -398,9 +404,9 @@ function Tablet(props: Tablet) {
                   Applicant_ContactNumber={applicationForm?.Applicant_ContactNumber || ""}
                   Officer_In_Charge={applicationForm?.Officer_In_Charge || ""}
                   Amount_Received={applicationForm?.Amount_Received || 0}
-                  PurchaseOfTabletCost={applicationForm?.PurchaseOfTabletCost || 0}
+                  PurchaseOfPlacementCost={applicationForm?.PurchaseOfPlacementCost || 0}
                   TabletCost={applicationForm?.TabletCost || 0}
-                  SelectionCost={applicationForm?.SelectionCost || 0}
+                  SelectionOfPlacementCost={applicationForm?.SelectionOfPlacementCost || 0}
                   Status={applicationForm?.Status || ""}
                   Remarks={applicationForm?.Remarks || ""}
                   Receipt_No={applicationForm?.Receipt_No || ""}
@@ -409,6 +415,7 @@ function Tablet(props: Tablet) {
                   updateApplication={updateApplication}
                   Outstanding_Amount={applicationForm?.Outstanding_Amount || 0}
                   Number_of_Months={applicationForm?.Number_of_Months || 0}
+                  TotalCostOfPurchase={applicationForm?.TotalCostOfPurchase || 0}
                 />
               )}
             </DialogHeader>

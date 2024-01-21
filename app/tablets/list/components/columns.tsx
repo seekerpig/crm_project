@@ -10,13 +10,6 @@ import { DataTableRowActions } from "./data-table-row-actions";
 
 export const columns: ColumnDef<TabletApplication>[] = [
   {
-    id: "select",
-    header: ({ table }) => <Checkbox checked={table.getIsAllPageRowsSelected()} onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)} aria-label="Select all" className="translate-y-[2px]" />,
-    cell: ({ row }) => <Checkbox checked={row.getIsSelected()} onCheckedChange={(value) => row.toggleSelected(!!value)} aria-label="Select row" className="translate-y-[2px]" />,
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
     accessorKey: "ApplicationID",
     header: ({ column }) => <DataTableColumnHeader column={column} title="ID" />,
     cell: ({ row }) => <div>{row.getValue("ApplicationID")}</div>,
@@ -201,10 +194,10 @@ export const columns: ColumnDef<TabletApplication>[] = [
     enableHiding: true,
   },
   {
-    accessorKey: "PurchaseOfTabletCost",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="PurchaseOfTabletCost" />,
+    accessorKey: "PurchaseOfPlacementCost",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="PurchaseOfPlacementCost" />,
     cell: ({ row }) => {
-      return <div>{row.getValue("PurchaseOfTabletCost")}</div>;
+      return <div>{row.getValue("PurchaseOfPlacementCost")}</div>;
     },
     enableSorting: false,
     enableHiding: true,
@@ -219,10 +212,19 @@ export const columns: ColumnDef<TabletApplication>[] = [
     enableHiding: true,
   },
   {
-    accessorKey: "SelectionCost",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="SelectionCost" />,
+    accessorKey: "SelectionOfPlacementCost",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="SelectionOfPlacementCost" />,
     cell: ({ row }) => {
-      return <div>{row.getValue("SelectionCost")}</div>;
+      return <div>{row.getValue("SelectionOfPlacementCost")}</div>;
+    },
+    enableSorting: false,
+    enableHiding: true,
+  },
+  {
+    accessorKey: "TotalCostOfPurchase",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="TotalCostOfPurchase" />,
+    cell: ({ row }) => {
+      return <div>{row.getValue("TotalCostOfPurchase")}</div>;
     },
     enableSorting: false,
     enableHiding: true,

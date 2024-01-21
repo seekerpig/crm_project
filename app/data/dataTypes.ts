@@ -24,9 +24,10 @@ export interface TabletApplication {
   SecondContact_IdentifiedCode?: String,
   SecondContact_Gender?: String,
   Officer_In_Charge: String,
-  PurchaseOfTabletCost: Number;
+  PurchaseOfPlacementCost: Number;
   TabletCost: Number,
-  SelectionCost?: Number,
+  SelectionOfPlacementCost?: Number,
+  TotalCostOfPurchase: Number,
   Amount_Received: Number,
   Receipt_No?: String,
   Outstanding_Amount?: Number,
@@ -61,6 +62,8 @@ export interface Invoice {
   Month?: Number,
   IsPaid: Boolean,
   AdditionalRemarks?: String,
+  OutstandingPayment?: Number,
+  OutstandingMonth?: Number,
 }
 
 export interface User {

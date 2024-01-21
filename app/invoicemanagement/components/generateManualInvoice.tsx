@@ -17,7 +17,7 @@ import { db } from "@/lib/firebase/firebase";
 import { collection, query, where, getDocs, doc, getDoc, writeBatch, addDoc, setDoc, updateDoc } from "firebase/firestore";
 
 // Must be called after the tablet application itself is created.
-export async function CreateInvoiceAsPaid(tablet_number: string, amt: number, app_type: string) {
+export async function CreateInvoiceAsPaid(tablet_number: string, amt: number, app_type: string, invoiceDate: string) {
   // First need to find the tabletNo with the Current status and see if it exists.
   const queryTabletApplication = query(collection(db, "tabletapplications"), where("Tablet_Number", "==", tablet_number.toUpperCase()), where("Status", "==", "Current"));
   const querySnapshotTabletApplication = await getDocs(queryTabletApplication);
@@ -62,7 +62,7 @@ export async function CreateInvoiceAsPaid(tablet_number: string, amt: number, ap
         const newInvoice: Invoice = {
           InvoiceNo: new Date().getFullYear().toString().substring(2) + currentLatestInvoiceNumber.toString().padStart(3, "0"),
           ApplicationID: tabletApp.ApplicationID,
-          Dated: new Date().toISOString(),
+          Dated: new Date(invoiceDate).toISOString(),
           Terms: "",
           Tablet_Number: tabletApp.Tablet_Number,
           Payee_Name: tabletApp.Applicant_Name_English,
@@ -72,6 +72,8 @@ export async function CreateInvoiceAsPaid(tablet_number: string, amt: number, ap
           Amount: amt,
           Year_Positioned: new Date().getFullYear(),
           IsPaid: true,
+          OutstandingMonth: tabletApp.Number_of_Months,
+          OutstandingPayment: tabletApp.Outstanding_Amount,
         };
 
         const invoiceDocRef = doc(db, "invoices", newInvoice.InvoiceNo.toString());
@@ -96,6 +98,8 @@ export async function CreateInvoiceAsPaid(tablet_number: string, amt: number, ap
           Amount: amt,
           Year_Positioned: new Date().getFullYear(),
           IsPaid: true,
+          OutstandingMonth: tabletApp.Number_of_Months || 0,
+          OutstandingPayment: tabletApp.Outstanding_Amount || 0,
         };
 
         const invoiceDocRef = doc(db, "invoices", newInvoice.InvoiceNo.toString());

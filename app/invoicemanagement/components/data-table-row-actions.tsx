@@ -28,6 +28,7 @@ interface DataTableRowActionsProps<TData> {
 
 export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TData>) {
   const invoice: Invoice = row.original as Invoice;
+  const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [viewInvoice, setViewInvoice] = React.useState(false);
   const [alertDialog, setAlertDialog] = React.useState(false);
@@ -37,6 +38,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
   const currentUser = useAuth();
   const [descriptionDetails, setDescriptionDetails] = React.useState<string[]>([]);
   const [paymentTotals, setPaymentTotals] = React.useState<number[]>([]);
+  const [currentInvoiceTabletApp, setCurrentInvoiceTabletApp] = React.useState<TabletApplication>();
 
   async function updateDescriptionAndPaymentDetails() {
     const tabletAppID = invoice.ApplicationID.toString();
@@ -47,12 +49,12 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
       let desc = [];
       let costs = [];
       desc.push("Purchase of Tablet Leasing Cost");
-      costs.push(tablet.PurchaseOfTabletCost.valueOf());
+      costs.push(tablet.PurchaseOfPlacementCost.valueOf());
       costs.push(tablet.TabletCost.valueOf());
       desc.push("Cost of Tablet");
-      if (tablet.SelectionCost && tablet.SelectionCost.valueOf() > 0) {
+      if (tablet.SelectionOfPlacementCost && tablet.SelectionOfPlacementCost.valueOf() > 0) {
         desc.push("Cost of Selection");
-        costs.push(tablet.SelectionCost.valueOf());
+        costs.push(tablet.SelectionOfPlacementCost.valueOf());
       }
       setDescriptionDetails(desc);
       setPaymentTotals(costs);
@@ -60,26 +62,28 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
       let desc = [];
       let costs = [];
       desc.push("Purchase of Tablet Cost");
-      costs.push(tablet.PurchaseOfTabletCost.valueOf());
+      costs.push(tablet.PurchaseOfPlacementCost.valueOf());
       costs.push(tablet.TabletCost.valueOf());
       desc.push("Cost of Tablet");
-      if (tablet.SelectionCost && tablet.SelectionCost.valueOf() > 0) {
+      if (tablet.SelectionOfPlacementCost && tablet.SelectionOfPlacementCost.valueOf() > 0) {
         desc.push("Cost of Selection");
-        costs.push(tablet.SelectionCost.valueOf());
+        costs.push(tablet.SelectionOfPlacementCost.valueOf());
       }
       setDescriptionDetails(desc);
       setPaymentTotals(costs);
     } else if (invoice.Description == "Installment Downpayment") {
       let desc = [];
       let costs = [];
-      desc.push("Purchase of Tablet Cost ($" + tablet.PurchaseOfTabletCost.valueOf() + ")");
+      desc.push("Purchase of Tablet Cost ($" + tablet.PurchaseOfPlacementCost.valueOf() + ")");
       desc.push("Cost of Tablet ($" + tablet.TabletCost.valueOf() + ")");
       costs.push(0);
       costs.push(0);
-      if (tablet.SelectionCost && tablet.SelectionCost.valueOf() > 0) {
-        desc.push("Cost of Selection ($" + tablet.SelectionCost.valueOf() + ")");
+      if (tablet.SelectionOfPlacementCost && tablet.SelectionOfPlacementCost.valueOf() > 0) {
+        desc.push("Cost of Selection ($" + tablet.SelectionOfPlacementCost.valueOf() + ")");
         costs.push(0);
       }
+      desc.push("Total Cost of Purchase ($" + tablet.TotalCostOfPurchase.valueOf() + ")");
+      costs.push(0);
       desc.push("Installment Downpayment");
       costs.push(invoice.Amount.valueOf());
 
@@ -96,19 +100,25 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
       let desc = [];
       let costs = [];
       desc.push("Purchase of Tablet Cost");
-      costs.push(tablet.PurchaseOfTabletCost.valueOf());
+      costs.push(tablet.PurchaseOfPlacementCost.valueOf());
       costs.push(tablet.TabletCost.valueOf());
       desc.push("Cost of Tablet");
-      if (tablet.SelectionCost && tablet.SelectionCost.valueOf() > 0) {
+      if (tablet.SelectionOfPlacementCost && tablet.SelectionOfPlacementCost.valueOf() > 0) {
         desc.push("Cost of Selection");
-        costs.push(tablet.SelectionCost.valueOf());
+        costs.push(tablet.SelectionOfPlacementCost.valueOf());
       }
       setDescriptionDetails(desc);
       setPaymentTotals(costs);
     } else if (invoice.Description == "Monthly Installment") {
       let desc = [];
       let costs = [];
-      desc.push("Monthly Installment for Tablet");
+      if (invoice?.Month != undefined) {
+        desc.push("Monthly Installment (" + monthNames[invoice.Month?.valueOf() - 1] + ") for Tablet");
+      }
+      else {
+        desc.push("Monthly Installment for Tablet");
+      }
+      
       costs.push(invoice.Amount.valueOf());
       setDescriptionDetails(desc);
       setPaymentTotals(costs);
@@ -125,7 +135,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
       setDescriptionDetails(desc);
       setPaymentTotals(costs);
     }
-
+    setCurrentInvoiceTabletApp(tablet);
     setViewInvoice(true);
   }
   async function updateInvoicePaymentData(): Promise<void> {
@@ -225,7 +235,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
         const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
         pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-        pdf.save("document.pdf");
+        pdf.save("invoice.pdf");
       });
     } else {
       console.log("No content in downloadable pdf");
@@ -258,7 +268,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
               </div>
               <div className="invoice w-full flex flex-col items-center justify-center">
                 <h1 className="text-4xl mb-8 font-bold">Invoice</h1>
-                <div className="invoice-top grid grid-cols-2 gap-x-4 gap-y-12">
+                <div className="invoice-top grid grid-cols-2 gap-x-4 gap-y-12 mb-5">
                   <div className="invoice-payor p-3 w-[400px] flex flex-col items-center justify-start">
                     <p className="text-lg">{invoice.Payee_Name}</p>
                     <p>{invoice.Payee_Address}</p>
@@ -325,9 +335,11 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                     </div>
                   </div>
                 </div>
-                <p className="mt-5 mb-10"> Your early settlement is most appreciated</p>
+                {invoice.OutstandingMonth && invoice.OutstandingPayment && invoice.Description == "Monthly Installment" ? <p> Outstanding Amount: {invoice?.OutstandingPayment ? "$" + invoice?.OutstandingPayment.valueOf() : ""}, Remaining Installment Months: {invoice?.OutstandingMonth ? invoice?.OutstandingMonth.valueOf() : ""}</p>: <p></p>}
+                {invoice.IsPaid && invoice.OutstandingMonth && invoice.OutstandingPayment && invoice.Description == "Installment Downpayment" ? <p> Outstanding Amount: {invoice?.OutstandingPayment ? "$" + invoice?.OutstandingPayment.valueOf() : ""}, Remaining Installment Months: {invoice?.OutstandingMonth ? invoice?.OutstandingMonth.valueOf() : ""}</p>: <p></p>}
+          
               </div>
-              <div className="contact-details w-full ml-[80px] flex flex-row">
+              <div className="contact-details w-full ml-[80px] flex flex-row mt-10">
                 <div>
                   <div className="signature w-[200px] border-black border-b-2"></div>
                   <p>Signature</p>
