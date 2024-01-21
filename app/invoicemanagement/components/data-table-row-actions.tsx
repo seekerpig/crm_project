@@ -348,7 +348,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                         <div className="col-1 h-full w-2/6 border-r-2 border-black">
                         {paymentTotals.map((cost, index) => (
                           <div key={index}>
-                            {cost == 0 ? <p className="pl-2 pb-2" key={index}>&nbsp;</p> : <p className="pl-2" key={index}>${cost}</p>}
+                            {cost == 0 ? <p className="pl-2 pb-2" key={index}>&nbsp;</p> : <p className="pl-2 pb-2" key={index}>${cost}</p>}
                       </div>
                     ))}
                         </div>
