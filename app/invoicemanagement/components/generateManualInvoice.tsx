@@ -72,6 +72,8 @@ export async function CreateInvoiceAsPaid(tablet_number: string, amt: number, ap
           Amount: amt,
           Year_Positioned: new Date().getFullYear(),
           IsPaid: true,
+          OutstandingMonth: tabletApp.Number_of_Months,
+          OutstandingPayment: tabletApp.Outstanding_Amount,
         };
 
         const invoiceDocRef = doc(db, "invoices", newInvoice.InvoiceNo.toString());
@@ -96,6 +98,8 @@ export async function CreateInvoiceAsPaid(tablet_number: string, amt: number, ap
           Amount: amt,
           Year_Positioned: new Date().getFullYear(),
           IsPaid: true,
+          OutstandingMonth: tabletApp.Number_of_Months || 0,
+          OutstandingPayment: tabletApp.Outstanding_Amount || 0,
         };
 
         const invoiceDocRef = doc(db, "invoices", newInvoice.InvoiceNo.toString());

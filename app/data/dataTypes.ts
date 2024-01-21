@@ -62,6 +62,8 @@ export interface Invoice {
   Month?: Number,
   IsPaid: Boolean,
   AdditionalRemarks?: String,
+  OutstandingPayment?: Number,
+  OutstandingMonth?: Number,
 }
 
 export interface User {

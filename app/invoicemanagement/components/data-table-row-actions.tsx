@@ -28,6 +28,7 @@ interface DataTableRowActionsProps<TData> {
 
 export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TData>) {
   const invoice: Invoice = row.original as Invoice;
+  const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [viewInvoice, setViewInvoice] = React.useState(false);
   const [alertDialog, setAlertDialog] = React.useState(false);
@@ -111,7 +112,13 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
     } else if (invoice.Description == "Monthly Installment") {
       let desc = [];
       let costs = [];
-      desc.push("Monthly Installment for Tablet");
+      if (invoice?.Month != undefined) {
+        desc.push("Monthly Installment (" + monthNames[invoice.Month?.valueOf() - 1] + ") for Tablet");
+      }
+      else {
+        desc.push("Monthly Installment for Tablet");
+      }
+      
       costs.push(invoice.Amount.valueOf());
       setDescriptionDetails(desc);
       setPaymentTotals(costs);
@@ -328,8 +335,8 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                     </div>
                   </div>
                 </div>
-                {!invoice.IsPaid && invoice.Description == "Monthly Installment" ? <p> Outstanding Amount: {currentInvoiceTabletApp?.Outstanding_Amount ? "$" + (currentInvoiceTabletApp?.Outstanding_Amount.valueOf() - invoice.Amount.valueOf()) : ""}, Remaining Installment Months: {currentInvoiceTabletApp?.Number_of_Months ? currentInvoiceTabletApp?.Number_of_Months.valueOf() - 1 : ""}</p>: <p></p>}
-                {invoice.IsPaid && invoice.Description == "Installment Downpayment" ? <p> Outstanding Amount: {currentInvoiceTabletApp?.Outstanding_Amount ? "$" + currentInvoiceTabletApp?.Outstanding_Amount.valueOf() : ""}, Remaining Installment Months: {currentInvoiceTabletApp?.Number_of_Months ? currentInvoiceTabletApp?.Number_of_Months.valueOf() : ""}</p>: <p></p>}
+                {invoice.OutstandingMonth && invoice.OutstandingPayment && invoice.Description == "Monthly Installment" ? <p> Outstanding Amount: {invoice?.OutstandingPayment ? "$" + invoice?.OutstandingPayment.valueOf() : ""}, Remaining Installment Months: {invoice?.OutstandingMonth ? invoice?.OutstandingMonth.valueOf() : ""}</p>: <p></p>}
+                {invoice.IsPaid && invoice.OutstandingMonth && invoice.OutstandingPayment && invoice.Description == "Installment Downpayment" ? <p> Outstanding Amount: {invoice?.OutstandingPayment ? "$" + invoice?.OutstandingPayment.valueOf() : ""}, Remaining Installment Months: {invoice?.OutstandingMonth ? invoice?.OutstandingMonth.valueOf() : ""}</p>: <p></p>}
           
               </div>
               <div className="contact-details w-full ml-[80px] flex flex-row mt-10">

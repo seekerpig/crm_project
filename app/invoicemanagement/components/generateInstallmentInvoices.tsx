@@ -61,6 +61,8 @@ function GenerateInstallmentInvoiceModal(props: any) {
           Year_Positioned: Number(year),
           Month: month,
           IsPaid: false,
+          OutstandingMonth: tabletApplication.Number_of_Months.valueOf() - 1,
+          OutstandingPayment: tabletApplication.Outstanding_Amount.valueOf() - parseFloat((parseFloat(tabletApplication.Outstanding_Amount.toString()) / parseInt(tabletApplication.Number_of_Months.toString())).toFixed(2))
         };
 
         // Need to check whether invoice of this month for this appID exists. If so, don't allow create.
