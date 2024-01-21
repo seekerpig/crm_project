@@ -1281,28 +1281,30 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
               </td>
             </tr>
             <tr className="border border-gray-300">
-              <td colSpan={2} className="p-1 w-64">
+              <td colSpan={1} className="border border-gray-300 p-1">
                 <strong>Other Cost</strong>
               </td>
-              {isEditing ? (
-                <Input
-                  type="Number"
-                  value={application.OtherCost?.toString()}
-                  onChange={(e) => {
-                    const tabletCost = Number(application.TabletCost) || 0;
-                    const purchaseCost = Number(application.PurchaseOfPlacementCost) || 0;
-                    const SelectionOfPlacementCost = Number(application.SelectionOfPlacementCost) || 0;
-                    const amountReceived = Number(application.Amount_Received) || 0;
-                    const JiLing = Number(application.OtherCost) || 0;
-                    const OtherCost = Number(e.target.value) || 0;
-                    const outAmt = OtherCost + JiLing + tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
-                    const totalcost = tabletCost + purchaseCost + SelectionOfPlacementCost + JiLing + OtherCost;
-                    setApplication({ ...application, OtherCost: parseFloat(e.target.value), Outstanding_Amount: outAmt, TotalCostOfPurchase: totalcost });
-                  }}
-                />
-              ) : (
-                <span>{application.OtherCost?.toString()}</span>
-              )}
+              <td colSpan={1} className="p-1 w-64">
+                {isEditing ? (
+                  <Input
+                    type="Number"
+                    value={application.OtherCost?.toString()}
+                    onChange={(e) => {
+                      const tabletCost = Number(application.TabletCost) || 0;
+                      const purchaseCost = Number(application.PurchaseOfPlacementCost) || 0;
+                      const SelectionOfPlacementCost = Number(application.SelectionOfPlacementCost) || 0;
+                      const amountReceived = Number(application.Amount_Received) || 0;
+                      const JiLing = Number(application.JiLing) || 0;
+                      const OtherCost = Number(e.target.value) || 0;
+                      const outAmt = OtherCost + JiLing + tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
+                      const totalcost = tabletCost + purchaseCost + SelectionOfPlacementCost + JiLing + OtherCost;
+                      setApplication({ ...application, OtherCost: parseFloat(e.target.value), Outstanding_Amount: outAmt, TotalCostOfPurchase: totalcost });
+                    }}
+                  />
+                ) : (
+                  <span>{application.OtherCost?.toString()}</span>
+                )}
+              </td>
             </tr>
             <tr className="border border-gray-300">
               <td colSpan={1} className="border border-gray-300 p-1">
@@ -1361,7 +1363,9 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                       const purchaseCost = Number(application.PurchaseOfPlacementCost) || 0;
                       const SelectionOfPlacementCost = Number(application.SelectionOfPlacementCost) || 0;
                       const amountReceived = Number(e.target.value) || 0;
-                      const outAmt = tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
+                      const JiLing = Number(application.JiLing) || 0;
+                      const OtherCost = Number(application.OtherCost) || 0;
+                      const outAmt = JiLing + OtherCost+ tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
                       setApplication({ ...application, Amount_Received: parseFloat(e.target.value), Outstanding_Amount: outAmt });
                     }}
                   />
