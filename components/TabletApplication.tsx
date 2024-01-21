@@ -59,18 +59,19 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
         const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
         pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+        html2canvas(content2).then((canvas) => {
+          const imgData = canvas.toDataURL("image/png");
+  
+          const imgProps = pdf.getImageProperties(imgData);
+          const pdfWidth = pdf.internal.pageSize.getWidth();
+          const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+          pdf.addPage();
+          pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+          pdf.save("document.pdf");
+        });
       });
 
-      html2canvas(content2).then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
 
-        const imgProps = pdf.getImageProperties(imgData);
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-        pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-        pdf.save("document.pdf");
-      });
     } else {
       console.log("No content in downloadable pdf");
     }
