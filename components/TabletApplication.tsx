@@ -1262,6 +1262,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 {isEditing ? (
                   <Input
                     type="Number"
+                    min="0"
                     value={application.JiLing?.toString()}
                     onChange={(e) => {
                       const tabletCost = Number(application.TabletCost) || 0;
@@ -1288,6 +1289,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 {isEditing ? (
                   <Input
                     type="Number"
+                    min="0"
                     value={application.OtherCost?.toString()}
                     onChange={(e) => {
                       const tabletCost = Number(application.TabletCost) || 0;
