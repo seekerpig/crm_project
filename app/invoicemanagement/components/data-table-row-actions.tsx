@@ -56,6 +56,14 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
         desc.push("Cost of Selection");
         costs.push(tablet.SelectionOfPlacementCost.valueOf());
       }
+      if (tablet.JiLing && tablet.JiLing.valueOf() > 0) {
+        desc.push("Cost of Ji Ling");
+        costs.push(tablet.JiLing.valueOf());
+      }
+      if (tablet.OtherCost && tablet.OtherCost.valueOf() > 0) {
+        desc.push("Others Cost");
+        costs.push(tablet.OtherCost.valueOf());
+      }
       setDescriptionDetails(desc);
       setPaymentTotals(costs);
     } else if (invoice.Description == "Purchase of Tablet (Special)") {
@@ -69,6 +77,14 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
         desc.push("Cost of Selection");
         costs.push(tablet.SelectionOfPlacementCost.valueOf());
       }
+      if (tablet.JiLing && tablet.JiLing.valueOf() > 0) {
+        desc.push("Cost of Ji Ling");
+        costs.push(tablet.JiLing.valueOf());
+      }
+      if (tablet.OtherCost && tablet.OtherCost.valueOf() > 0) {
+        desc.push("Others Cost");
+        costs.push(tablet.OtherCost.valueOf());
+      }
       setDescriptionDetails(desc);
       setPaymentTotals(costs);
     } else if (invoice.Description == "Installment Downpayment") {
@@ -80,6 +96,14 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
       costs.push(0);
       if (tablet.SelectionOfPlacementCost && tablet.SelectionOfPlacementCost.valueOf() > 0) {
         desc.push("Cost of Selection ($" + tablet.SelectionOfPlacementCost.valueOf() + ")");
+        costs.push(0);
+      }
+      if (tablet.JiLing && tablet.JiLing.valueOf() > 0) {
+        desc.push("Cost of Ji Ling ($" + tablet.JiLing.valueOf() + ")");
+        costs.push(0);
+      }
+      if (tablet.OtherCost && tablet.OtherCost.valueOf() > 0) {
+        desc.push("Other Costs ($" + tablet.OtherCost.valueOf() + ")");
         costs.push(0);
       }
       desc.push("Total Cost of Purchase ($" + tablet.TotalCostOfPurchase.valueOf() + ")");
@@ -106,6 +130,14 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
       if (tablet.SelectionOfPlacementCost && tablet.SelectionOfPlacementCost.valueOf() > 0) {
         desc.push("Cost of Selection");
         costs.push(tablet.SelectionOfPlacementCost.valueOf());
+      }
+      if (tablet.JiLing && tablet.JiLing.valueOf() > 0) {
+        desc.push("Cost of Ji Ling");
+        costs.push(tablet.JiLing.valueOf());
+      }
+      if (tablet.OtherCost && tablet.OtherCost.valueOf() > 0) {
+        desc.push("Others Cost");
+        costs.push(tablet.OtherCost.valueOf());
       }
       setDescriptionDetails(desc);
       setPaymentTotals(costs);
@@ -293,8 +325,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                     </div>
                     {descriptionDetails.map((description, index) => (
                       <div key={index}>
-                      <p className="pl-2" key={index}>{description}</p>
-                      <br/>
+                      <p className="pl-2 pb-2" key={index}>{description}</p>
                       </div>
                     ))}
                     <br />
@@ -317,9 +348,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                         <div className="col-1 h-full w-2/6 border-r-2 border-black">
                         {paymentTotals.map((cost, index) => (
                           <div key={index}>
-                            {cost == 0 ? <p className="pl-2" key={index}>&nbsp;</p> : <p className="pl-2" key={index}>${cost}</p>}
-                      
-                      <br />
+                            {cost == 0 ? <p className="pl-2 pb-2" key={index}>&nbsp;</p> : <p className="pl-2 pb-2" key={index}>${cost}</p>}
                       </div>
                     ))}
                         </div>

@@ -221,6 +221,24 @@ export const columns: ColumnDef<TabletApplication>[] = [
     enableHiding: true,
   },
   {
+    accessorKey: "JiLing",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="JiLing" />,
+    cell: ({ row }) => {
+      return <div>{row.getValue("JiLing")}</div>;
+    },
+    enableSorting: false,
+    enableHiding: true,
+  },
+  {
+    accessorKey: "OtherCost",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="OtherCost" />,
+    cell: ({ row }) => {
+      return <div>{row.getValue("OtherCost")}</div>;
+    },
+    enableSorting: false,
+    enableHiding: true,
+  },
+  {
     accessorKey: "TotalCostOfPurchase",
     header: ({ column }) => <DataTableColumnHeader column={column} title="TotalCostOfPurchase" />,
     cell: ({ row }) => {
@@ -286,6 +304,20 @@ export const columns: ColumnDef<TabletApplication>[] = [
     accessorKey: "Number_of_Months",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Number_of_Months" />,
     cell: ({ row }) => <div>{row.getValue("Number_of_Months")}</div>,
+    enableSorting: true,
+    enableHiding: true,
+  },
+  {
+    accessorKey: "JiLing",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="JiLing" />,
+    cell: ({ row }) => <div>{row.getValue("JiLing")}</div>,
+    enableSorting: true,
+    enableHiding: true,
+  },
+  {
+    accessorKey: "OtherCost",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="OtherCost" />,
+    cell: ({ row }) => <div>{row.getValue("OtherCost")}</div>,
     enableSorting: true,
     enableHiding: true,
   },

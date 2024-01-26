@@ -74,6 +74,8 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
               Outstanding_Amount={applicationForm?.Outstanding_Amount || 0}
               Number_of_Months={applicationForm?.Number_of_Months || 0}
               TotalCostOfPurchase={applicationForm?.TotalCostOfPurchase || 0}
+              JiLing={applicationForm?.JiLing || 0}
+              OtherCost={applicationForm?.OtherCost || 0}
             />
           </DialogHeader>
         </DialogContent>
