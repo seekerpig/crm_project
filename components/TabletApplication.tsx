@@ -27,6 +27,8 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { stat } from "fs";
 import { set } from "lodash";
+import ReactDatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 function TabletApplication(props: TabletApplication & { onSave: () => void } & { isEditable: boolean } & { updateApplication: (application: TabletApplication) => void }) {
   const { onSave, updateApplication, isEditable, ...initialApplication } = props;
@@ -319,7 +321,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                         <img src="/temple-icon.jpeg" alt="temple icon" className="h-[160px] w-[120px] mr-5" />
                         <div className="temple-title flex flex-col items-center justify-center">
                           <p className="text-5xl mb-5 pt-10">真空教本元山道堂</p>
-                          <p className="text-2xl">CHIN KHONG POW POON GUAN SAN TOH TONG</p>
+                          <p className="text-2xl">CHIN KHONG KOW POON GUAN SAN TOH TONG</p>
                           <p className="text-1xl">369 Pasir Panjang Road, Singapore 118706</p>
                           <p className="text-1xl">Tel: 67791237</p>
                           <p className="text-2xl mt-2">Hall of Merits Application Form</p>
@@ -332,7 +334,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                         <tbody>
                           <tr className="border border-gray-300">
                             <td colSpan={1} className="border border-gray-300 p-2">
-                              <strong>Tablet Number / 神主号码</strong>
+                              <strong>Tablet Number / 神主牌号码</strong>
                             </td>
                             <td colSpan={1} className="p-1 w-64">
                               <span>{application.Tablet_Number}</span>
@@ -343,7 +345,14 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                               <strong>Leasing Date</strong>
                             </td>
                             <td colSpan={1} className="p-1 w-64">
-                              <span>{String(application.Leasing_Date).substring(0, 10)}</span>
+                              <span>
+                                {" "}
+                                {new Date(String(application.Leasing_Date)).toLocaleDateString("en-GB", {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric",
+                                })}
+                              </span>
                             </td>
                           </tr>
                           <tr className="h-5"></tr>
@@ -438,7 +447,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                           </tr>
                           <tr className="border border-gray-300">
                             <td colSpan={1} className="border border-gray-300 p-2">
-                              <strong>Relationship/与受益人的关*</strong>
+                              <strong>Relationship/与受益人的关系*</strong>
                             </td>
                             <td colSpan={1} className="p-1 w-64">
                               <span>{application.Applicant_Relationship}</span>
@@ -496,7 +505,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                           </tr>
                           <tr className="border border-gray-300">
                             <td colSpan={1} className="border border-gray-300 p-2">
-                              <strong>Relationship/与受益人的关</strong>
+                              <strong>Relationship/与受益人的关系</strong>
                             </td>
                             <td colSpan={1} className="p-1 w-64">
                               <span>{application.SecondContact_Relationship}</span>
@@ -717,7 +726,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
           <tbody>
             <tr className="border border-gray-300">
               <td colSpan={1} className="border border-gray-300 p-1">
-                <strong>Tablet Number / 神主号码</strong>
+                <strong>Tablet Number / 神主牌号码</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
                 <span>{application.Tablet_Number}</span>
@@ -729,19 +738,16 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button variant={"outline"} className={cn("w-[240px] justify-start text-left font-normal", !application.Leasing_Date && "text-muted-foreground")}>
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {application.Leasing_Date ? format(new Date(application.Leasing_Date as string), "PPP") : <span>Pick a date</span>}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0 z-50" align="start">
-                      <Calendar mode="single" selected={application.Leasing_Date ? new Date(application.Leasing_Date as string) : undefined} onSelect={(date) => setApplication({ ...application, Leasing_Date: date?.toString() || "" })} initialFocus />
-                    </PopoverContent>
-                  </Popover>
+                  <ReactDatePicker className="border rounded p-1 w-64" selected={application.Leasing_Date ? new Date(application.Leasing_Date as string) : undefined} onChange={(date) => setApplication({ ...application, Leasing_Date: date?.toString() || "" })} dateFormat="dd/MM/yyyy" showYearDropdown dropdownMode="select" />
                 ) : (
-                  <span>{String(application.Leasing_Date).substring(0, 10)}</span>
+                  <span>
+                    {" "}
+                    {new Date(String(application.Leasing_Date)).toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </span>
                 )}
               </td>
             </tr>
@@ -968,7 +974,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
             </tr>
             <tr className="border border-gray-300">
               <td colSpan={1} className="border border-gray-300 p-1">
-                <strong>Relationship/与受益人的关*</strong>
+                <strong>Relationship/与受益人的关系*</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
@@ -1114,7 +1120,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
             </tr>
             <tr className="border border-gray-300">
               <td colSpan={1} className="border border-gray-300 p-1">
-                <strong>Relationship/与受益人的关</strong>
+                <strong>Relationship/与受益人的关系</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
                 {isEditing ? (
@@ -1367,7 +1373,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                       const amountReceived = Number(e.target.value) || 0;
                       const JiLing = Number(application.JiLing) || 0;
                       const OtherCost = Number(application.OtherCost) || 0;
-                      const outAmt = JiLing + OtherCost+ tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
+                      const outAmt = JiLing + OtherCost + tabletCost + purchaseCost + SelectionOfPlacementCost - amountReceived;
                       setApplication({ ...application, Amount_Received: parseFloat(e.target.value), Outstanding_Amount: outAmt });
                     }}
                   />

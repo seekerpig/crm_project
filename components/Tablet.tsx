@@ -232,6 +232,13 @@ function Tablet(props: Tablet) {
                   TotalCostOfPurchase={applicationForm?.TotalCostOfPurchase || 0}
                   JiLing={applicationForm?.JiLing || 0}
                   OtherCost={applicationForm?.OtherCost || 0}
+                  SecondContact_Address={applicationForm?.SecondContact_Address || ""}
+                  SecondContact_ContactNumber={applicationForm?.SecondContact_ContactNumber || ""}
+                  SecondContact_Gender={applicationForm?.SecondContact_Gender || ""}
+                  SecondContact_IdentifiedCode={applicationForm?.SecondContact_IdentifiedCode || ""}
+                  SecondContact_Name_English={applicationForm?.SecondContact_Name_English || ""}
+                  SecondContact_Name_Chinese={applicationForm?.SecondContact_Name_Chinese || ""}
+                  SecondContact_Relationship={applicationForm?.SecondContact_Relationship || ""}
                 />
               ) : (
                 hasEditPermission && (
@@ -314,6 +321,13 @@ function Tablet(props: Tablet) {
                   TotalCostOfPurchase={applicationForm?.TotalCostOfPurchase || 0}
                   JiLing={applicationForm?.JiLing || 0}
                   OtherCost={applicationForm?.OtherCost || 0}
+                  SecondContact_Address={applicationForm?.SecondContact_Address || ""}
+                  SecondContact_ContactNumber={applicationForm?.SecondContact_ContactNumber || ""}
+                  SecondContact_Gender={applicationForm?.SecondContact_Gender || ""}
+                  SecondContact_IdentifiedCode={applicationForm?.SecondContact_IdentifiedCode || ""}
+                  SecondContact_Name_English={applicationForm?.SecondContact_Name_English || ""}
+                  SecondContact_Name_Chinese={applicationForm?.SecondContact_Name_Chinese || ""}
+                  SecondContact_Relationship={applicationForm?.SecondContact_Relationship || ""}
                 />
               )}
               {/* if select Occupied a form to fill in */}
@@ -352,6 +366,13 @@ function Tablet(props: Tablet) {
                   TotalCostOfPurchase={applicationForm?.TotalCostOfPurchase || 0}
                   JiLing={applicationForm?.JiLing || 0}
                   OtherCost={applicationForm?.OtherCost || 0}
+                  SecondContact_Address={applicationForm?.SecondContact_Address || ""}
+                  SecondContact_ContactNumber={applicationForm?.SecondContact_ContactNumber || ""}
+                  SecondContact_Gender={applicationForm?.SecondContact_Gender || ""}
+                  SecondContact_IdentifiedCode={applicationForm?.SecondContact_IdentifiedCode || ""}
+                  SecondContact_Name_English={applicationForm?.SecondContact_Name_English || ""}
+                  SecondContact_Name_Chinese={applicationForm?.SecondContact_Name_Chinese || ""}
+                  SecondContact_Relationship={applicationForm?.SecondContact_Relationship || ""}
                 />
               )}
               {status === "Occupied (N)" && applicationForm?.ApplicationID == undefined && (
@@ -389,6 +410,13 @@ function Tablet(props: Tablet) {
                   TotalCostOfPurchase={applicationForm?.TotalCostOfPurchase || 0}
                   JiLing={applicationForm?.JiLing || 0}
                   OtherCost={applicationForm?.OtherCost || 0}
+                  SecondContact_Address={applicationForm?.SecondContact_Address || ""}
+                  SecondContact_ContactNumber={applicationForm?.SecondContact_ContactNumber || ""}
+                  SecondContact_Gender={applicationForm?.SecondContact_Gender || ""}
+                  SecondContact_IdentifiedCode={applicationForm?.SecondContact_IdentifiedCode || ""}
+                  SecondContact_Name_English={applicationForm?.SecondContact_Name_English || ""}
+                  SecondContact_Name_Chinese={applicationForm?.SecondContact_Name_Chinese || ""}
+                  SecondContact_Relationship={applicationForm?.SecondContact_Relationship || ""}
                 />
               )}
               {status === "Reserved" && applicationForm?.ApplicationID == undefined && (
@@ -426,6 +454,13 @@ function Tablet(props: Tablet) {
                   TotalCostOfPurchase={applicationForm?.TotalCostOfPurchase || 0}
                   JiLing={applicationForm?.JiLing || 0}
                   OtherCost={applicationForm?.OtherCost || 0}
+                  SecondContact_Address={applicationForm?.SecondContact_Address || ""}
+                  SecondContact_ContactNumber={applicationForm?.SecondContact_ContactNumber || ""}
+                  SecondContact_Gender={applicationForm?.SecondContact_Gender || ""}
+                  SecondContact_IdentifiedCode={applicationForm?.SecondContact_IdentifiedCode || ""}
+                  SecondContact_Name_English={applicationForm?.SecondContact_Name_English || ""}
+                  SecondContact_Name_Chinese={applicationForm?.SecondContact_Name_Chinese || ""}
+                  SecondContact_Relationship={applicationForm?.SecondContact_Relationship || ""}
                 />
               )}
             </DialogHeader>
