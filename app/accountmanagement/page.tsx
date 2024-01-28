@@ -35,7 +35,7 @@ async function AccountManagement() {
     <div>
       <ProtectedPage />
       <Link href="/signup"><Button className="mr-5">Create New User</Button></Link>
-      <a href="https://console.firebase.google.com/u/0/project/temple-de382/authentication/users" target="_blank">
+      <a href="https://console.firebase.google.com/u/1/project/templeapp-8078f/authentication/users" target="_blank">
         <Button className="mb-5">Link to Delete User in Authentication</Button>
       </a>
       
