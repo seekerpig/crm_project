@@ -300,7 +300,9 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                 <h1 className="text-4xl mb-8 font-bold">Invoice</h1>
                 <div className="invoice-top grid grid-cols-2 gap-x-4 gap-y-12 mb-5">
                   <div className="invoice-payor p-3 w-[400px] flex flex-col justify-start">
-                    <p className="text-lg "><b>ATTN:</b> {invoice.Payee_Name}</p>
+                    <p className="text-lg ">
+                      <b>ATTN:</b> {invoice.Payee_Name}
+                    </p>
                     <p>{invoice.Payee_Address}</p>
                   </div>
                   <div className="invoice-metadata border-2 border-black p-3 w-[300px]">
@@ -399,9 +401,13 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                   <p></p>
                 )}
               </div>
-              <div className="contact-details w-full ml-[80px] flex flex-row mt-10">
+              <div className="contact-details w-full ml-[80px] flex flex-row mt-1">
                 <div>
+                  <div>
+                    <img src="/Chop.jpeg" alt="temple icon" className="h-[100px] w-[100px]" />
+                  </div>
                   <div className="signature w-[200px] border-black border-b-2"></div>
+
                   <p>Signature</p>
                   <br />
                   <p>
