@@ -405,7 +405,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                   <p>Signature</p>
                   <br />
                   <p>
-                    <b>Treasurer:</b> Cha Yoke Ping
+                    <b>Vice Chairman:</b> Cha Yoke Ping
                   </p>
                   <p>
                     <b>Mobile Phone:</b> 91783287
