@@ -640,18 +640,21 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                         </tbody>
                       </table>
 
-                      <div className="w-3/4 flex mt-20 mb-5">
+                      <div className="w-3/4 flex mb-5">
                         <div className="text-center flex-auto">
-                          <div className="signature border-black border-b-2"></div>
+                          <div className="signature border-black border-b-2 h-[120px]"></div>
                           <p>Applicant&apos;s Signature</p>
                           <p>申请人签名</p>
                         </div>
-                        <div className="flex-auto text-center">
+                        <div className="flex flex-col items-center justify-center">
+                          <div>
+                            <img src="/Chop.jpeg" alt="temple icon" className="h-[120px] w-[120px]" />
+                          </div>
                           <p>CKKPGSTT</p>
                           <p>Stamp/ 道堂印章</p>
                         </div>
                         <div className="text-center flex-auto">
-                          <div className="signature border-black border-b-2"></div>
+                          <div className="signature border-black border-b-2 h-[120px] "></div>
                           <p>Officer&apos;s Signature / Name</p>
                           <p>管理员签名</p>
                         </div>
