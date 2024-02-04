@@ -409,7 +409,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                   <div className="signature w-[200px] border-black border-b-2"></div>
 
                   <p>Signature</p>
-                  <br />
+         
                   <p>
                     <b>Vice Chairman:</b> Cha Yoke Ping
                   </p>
