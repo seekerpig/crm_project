@@ -27,6 +27,10 @@ interface DataTableRowActionsProps<TData> {
 }
 
 export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TData>) {
+  const [name, setName] = React.useState("");
+  const [role, setRole] = React.useState("");
+  const [phoneNo, setPhoneNo] = React.useState("");
+  const isDisabled = !role || !name || !phoneNo;
   const invoice: Invoice = row.original as Invoice;
   const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const [dialogOpen, setDialogOpen] = React.useState(false);
@@ -407,17 +411,46 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                     <img src="/Chop.jpeg" alt="temple icon" className="h-[100px] w-[100px]" />
                   </div>
                   <div className="signature w-[200px] border-black border-b-2"></div>
-
-                  <p>Signature</p>
-         
+                  <p>Stamp/ Signature</p>
                   <p>
-                    <b>Vice Chairman:</b> Cha Yoke Ping
+                    <div className="flex flex-row mt-2">
+                      <b>
+                        {" "}
+                        <Input
+                          className="p-0  border-zinc-50 mb-1 w-[110px]"
+                          placeholder="eg.Chairman"
+                          value={role}
+                          onChange={(event) => {
+                            setRole(event.target.value);
+                          }}
+                        />
+                      </b>
+                      <b className="pe-1">:</b>
+                      <Input
+                        className="p-0  border-zinc-50 mb-1  w-[120px]"
+                        placeholder="eg.Cha Yoke Ping"
+                        value={name}
+                        onChange={(event) => {
+                          setName(event.target.value);
+                        }}
+                      />
+                    </div>
                   </p>
                   <p>
-                    <b>Mobile Phone:</b> 91783287
+                    <div className="flex flex-row">
+                      <b className=" w-[115px] pt-2">Mobile Phone:</b>
+                      <Input
+                        className="p-0 mt-2 w-[100px] border-zinc-50 "
+                        placeholder="eg. 91234567"
+                        value={phoneNo}
+                        onChange={(event) => {
+                          setPhoneNo(event.target.value);
+                        }}
+                      />
+                    </div>
                   </p>
                 </div>
-                <div className="ml-[50px] max-w-[300px]">
+                <div className="ml-[20px] max-w-[300px]">
                   <p className="mb-3">
                     <b>Bank Details</b>
                   </p>
@@ -435,7 +468,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                     <b>PayNow UEN:</b> S99SS0091G
                   </p>
                 </div>
-                <div className="ml-[50px]">
+                <div className="ml-[20px]">
                   <p className="mb-3">Paynow QR Code:</p>
 
                   {/*eslint-disable-next-line @next/next/no-img-element*/}
@@ -449,9 +482,10 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                   onClick={() => {
                     downloadPdf();
                   }}
-                  className="w-[180px]"
+                  className={`w-[180px] ${isDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
+                  disabled={isDisabled} // This will conditionally disable the button
                 >
-                  Download PDF
+                  {isDisabled ? "Please fill in all fields" : "Download PDF"}
                 </Button>
               </div>
             </div>
