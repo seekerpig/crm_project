@@ -34,7 +34,7 @@ export function DataTableToolbar<TData>({
           <DataTableFacetedFilter
             column={table.getColumn("IsPaid")}
             title="Paid"
-            options={paymentSuccess}
+            options={paymentSuccess.map(option => ({ label: option.label, value: option.value.toString() }))}
           />
         )}
         {table.getColumn("Description") && (
