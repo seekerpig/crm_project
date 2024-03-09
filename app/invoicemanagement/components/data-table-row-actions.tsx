@@ -347,7 +347,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                     <br />
 
                     <div className="w-full flex flex-row justify-end py-2 pr-3 border-t-2 border-black absolute bottom-0">
-                      <p className="font-bold">Total Amount:</p>
+                      <p className="font-bold">Total Amount (SGD):</p>
                     </div>
                   </div>
                   <div className="amount h-[320px] w-[300px] border-2 border-black relative">
