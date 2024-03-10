@@ -27,8 +27,12 @@ interface DataTableRowActionsProps<TData> {
 }
 
 export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TData>) {
+  const [name, setName] = React.useState("");
+  const [role, setRole] = React.useState("");
+  const [phoneNo, setPhoneNo] = React.useState("");
+  const isDisabled = !role || !name || !phoneNo;
   const invoice: Invoice = row.original as Invoice;
-  const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+  const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [viewInvoice, setViewInvoice] = React.useState(false);
   const [alertDialog, setAlertDialog] = React.useState(false);
@@ -146,11 +150,10 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
       let costs = [];
       if (invoice?.Month != undefined) {
         desc.push("Monthly Installment (" + monthNames[invoice.Month?.valueOf() - 1] + ") for Tablet");
-      }
-      else {
+      } else {
         desc.push("Monthly Installment for Tablet");
       }
-      
+
       costs.push(invoice.Amount.valueOf());
       setDescriptionDetails(desc);
       setPaymentTotals(costs);
@@ -159,11 +162,10 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
       let costs = [];
       if (invoice.AdditionalRemarks && invoice.AdditionalRemarks != "") {
         desc.push(invoice.AdditionalRemarks.toString());
-      }
-      else {
+      } else {
         desc.push("Custom Payment");
       }
-      costs.push(invoice.Amount.valueOf())
+      costs.push(invoice.Amount.valueOf());
       setDescriptionDetails(desc);
       setPaymentTotals(costs);
     }
@@ -292,7 +294,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                     {/*eslint-disable-next-line @next/next/no-img-element*/}
                     <img src="/temple-icon.jpeg" alt="temple icon" className="h-[160px] w-[120px] mr-5 absolute -left-[150px]" />
                     <p className="text-5xl mb-5 pt-10">真空教本元山道堂</p>
-                    <p className="text-2xl">CHIN KHONG POW POON GUAN SAN TOH TONG</p>
+                    <p className="text-2xl">CHIN KHONG KOW POON GUAN SAN TOH TONG</p>
                     <p className="text-1xl">369 Pasir Panjang Road, Singapore 118706</p>
                     <p className="text-1xl">Tel: 67791237</p>
                   </div>
@@ -301,8 +303,10 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
               <div className="invoice w-full flex flex-col items-center justify-center">
                 <h1 className="text-4xl mb-8 font-bold">Invoice</h1>
                 <div className="invoice-top grid grid-cols-2 gap-x-4 gap-y-12 mb-5">
-                  <div className="invoice-payor p-3 w-[400px] flex flex-col items-center justify-start">
-                    <p className="text-lg">{invoice.Payee_Name}</p>
+                  <div className="invoice-payor p-3 w-[400px] flex flex-col justify-start">
+                    <p className="text-lg ">
+                      <b>ATTN:</b> {invoice.Payee_Name}
+                    </p>
                     <p>{invoice.Payee_Address}</p>
                   </div>
                   <div className="invoice-metadata border-2 border-black p-3 w-[300px]">
@@ -310,10 +314,20 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                       <b>Invoice No:</b> {invoice.InvoiceNo}
                     </p>
                     <p>
-                      <b>Dated:</b> {new Date(invoice.Dated.toString()).toDateString()}
+                      <b>Dated:</b>{" "}
+                      {new Date(invoice.Dated.toString())
+                        .toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        })
+                        .replace(/ /g, " ")}
                     </p>
-                    <p>
+                    {/* <p>
                       <b>Terms:</b> {invoice.Terms}
+                    </p> */}
+                    <p>
+                      <b>Terms:</b> Cash
                     </p>
                     <p>
                       <b>LOTS No:</b> {invoice.Tablet_Number}
@@ -325,13 +339,15 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                     </div>
                     {descriptionDetails.map((description, index) => (
                       <div key={index}>
-                      <p className="pl-2 pb-2" key={index}>{description}</p>
+                        <p className="pl-2 pb-2" key={index}>
+                          {description}
+                        </p>
                       </div>
                     ))}
                     <br />
 
                     <div className="w-full flex flex-row justify-end py-2 pr-3 border-t-2 border-black absolute bottom-0">
-                      <p className="font-bold">Total Amount:</p>
+                      <p className="font-bold">Total Amount (SGD):</p>
                     </div>
                   </div>
                   <div className="amount h-[320px] w-[300px] border-2 border-black relative">
@@ -346,11 +362,19 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                       </div>
                       <div className="two-col h-full w-full flex flex-row">
                         <div className="col-1 h-full w-2/6 border-r-2 border-black">
-                        {paymentTotals.map((cost, index) => (
-                          <div key={index}>
-                            {cost == 0 ? <p className="pl-2 pb-2" key={index}>&nbsp;</p> : <p className="pl-2 pb-2" key={index}>${cost}</p>}
-                      </div>
-                    ))}
+                          {paymentTotals.map((cost, index) => (
+                            <div key={index}>
+                              {cost == 0 ? (
+                                <p className="pl-2 pb-2" key={index}>
+                                  &nbsp;
+                                </p>
+                              ) : (
+                                <p className="pl-2 pb-2" key={index}>
+                                  ${cost}
+                                </p>
+                              )}
+                            </div>
+                          ))}
                         </div>
                         <div className="col-2 h-full pb-[42px] w-4/6">
                           <div className="w-full h-full flex flex-row items-center justify-center">
@@ -364,23 +388,69 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                     </div>
                   </div>
                 </div>
-                {invoice.OutstandingMonth && invoice.OutstandingPayment && invoice.Description == "Monthly Installment" ? <p> Outstanding Amount: {invoice?.OutstandingPayment ? "$" + invoice?.OutstandingPayment.valueOf() : ""}, Remaining Installment Months: {invoice?.OutstandingMonth ? invoice?.OutstandingMonth.valueOf() : ""}</p>: <p></p>}
-                {invoice.IsPaid && invoice.OutstandingMonth && invoice.OutstandingPayment && invoice.Description == "Installment Downpayment" ? <p> Outstanding Amount: {invoice?.OutstandingPayment ? "$" + invoice?.OutstandingPayment.valueOf() : ""}, Remaining Installment Months: {invoice?.OutstandingMonth ? invoice?.OutstandingMonth.valueOf() : ""}</p>: <p></p>}
-          
-              </div>
-              <div className="contact-details w-full ml-[80px] flex flex-row mt-10">
-                <div>
-                  <div className="signature w-[200px] border-black border-b-2"></div>
-                  <p>Signature</p>
-                  <br />
+                {invoice.OutstandingMonth && invoice.OutstandingPayment && invoice.Description == "Monthly Installment" ? (
                   <p>
-                    <b>Treasurer:</b> Tan Hock Ann
+                    {" "}
+                    Outstanding Amount: {invoice?.OutstandingPayment ? "$" + invoice?.OutstandingPayment.valueOf() : ""}, Remaining Installment Months: {invoice?.OutstandingMonth ? invoice?.OutstandingMonth.valueOf() : ""}
+                  </p>
+                ) : (
+                  <p></p>
+                )}
+                {invoice.IsPaid && invoice.OutstandingMonth && invoice.OutstandingPayment && invoice.Description == "Installment Downpayment" ? (
+                  <p>
+                    {" "}
+                    Outstanding Amount: {invoice?.OutstandingPayment ? "$" + invoice?.OutstandingPayment.valueOf() : ""}, Remaining Installment Months: {invoice?.OutstandingMonth ? invoice?.OutstandingMonth.valueOf() : ""}
+                  </p>
+                ) : (
+                  <p></p>
+                )}
+              </div>
+              <div className="contact-details w-full ml-[80px] flex flex-row mt-1">
+                <div>
+                  <div>
+                    <img src="/Chop.jpeg" alt="temple icon" className="h-[100px] w-[100px]" />
+                  </div>
+                  <div className="signature w-[200px] border-black border-b-2"></div>
+                  <p>Stamp/ Signature</p>
+                  <p>
+                    <div className="flex flex-row mt-2">
+                      <b>
+                        {" "}
+                        <Input
+                          className="p-0  border-zinc-50 mb-1 w-[110px]"
+                          placeholder="eg.Chairman"
+                          value={role}
+                          onChange={(event) => {
+                            setRole(event.target.value);
+                          }}
+                        />
+                      </b>
+                      <b className="pe-1">:</b>
+                      <Input
+                        className="p-0  border-zinc-50 mb-1  w-[120px]"
+                        placeholder="eg.Cha Yoke Ping"
+                        value={name}
+                        onChange={(event) => {
+                          setName(event.target.value);
+                        }}
+                      />
+                    </div>
                   </p>
                   <p>
-                    <b>Mobile Phone:</b> 91052737
+                    <div className="flex flex-row">
+                      <b className=" w-[115px] pt-2">Mobile Phone:</b>
+                      <Input
+                        className="p-0 mt-2 w-[100px] border-zinc-50 "
+                        placeholder="eg. 91234567"
+                        value={phoneNo}
+                        onChange={(event) => {
+                          setPhoneNo(event.target.value);
+                        }}
+                      />
+                    </div>
                   </p>
                 </div>
-                <div className="ml-[50px] max-w-[300px]">
+                <div className="ml-[20px] max-w-[300px]">
                   <p className="mb-3">
                     <b>Bank Details</b>
                   </p>
@@ -398,7 +468,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                     <b>PayNow UEN:</b> S99SS0091G
                   </p>
                 </div>
-                <div className="ml-[50px]">
+                <div className="ml-[20px]">
                   <p className="mb-3">Paynow QR Code:</p>
 
                   {/*eslint-disable-next-line @next/next/no-img-element*/}
@@ -412,9 +482,10 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                   onClick={() => {
                     downloadPdf();
                   }}
-                  className="w-[180px]"
+                  className={`w-[180px] ${isDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
+                  disabled={isDisabled} // This will conditionally disable the button
                 >
-                  Download PDF
+                  {isDisabled ? "Please fill in all fields" : "Download PDF"}
                 </Button>
               </div>
             </div>
