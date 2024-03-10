@@ -549,7 +549,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                               <strong>Purchase of placement*</strong>
                             </td>
                             <td colSpan={1} className="p-1 w-64">
-                              <span>{application.PurchaseOfPlacementCost?.toString()}</span>
+                              <span>S${application.PurchaseOfPlacementCost?.toString()}</span>
                             </td>
                           </tr>
                           <tr className="border border-gray-300">
@@ -557,7 +557,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                               <strong>Tablet Cost*</strong>
                             </td>
                             <td colSpan={1} className="p-1 w-64">
-                              <span>{application.TabletCost?.toString()}</span>
+                              <span>S${application.TabletCost?.toString()}</span>
                             </td>
                           </tr>
                           <tr className="border border-gray-300">
@@ -565,7 +565,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                               <strong>Selection of placement</strong>
                             </td>
                             <td colSpan={1} className="p-1 w-64">
-                              <span>{application.SelectionOfPlacementCost?.toString()}</span>
+                              <span>S${application.SelectionOfPlacementCost?.toString()}</span>
                             </td>
                           </tr>
                           <tr className="border border-gray-300">
@@ -573,7 +573,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                               <strong>Ji Ling</strong>
                             </td>
                             <td colSpan={1} className="p-1 w-64">
-                              <span>{application.JiLing?.toString()}</span>
+                              <span>S${application.JiLing?.toString()}</span>
                             </td>
                           </tr>
                           <tr className="border border-gray-300">
@@ -581,7 +581,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                               <strong>Other Cost</strong>
                             </td>
                             <td colSpan={1} className="p-1 w-64">
-                              <span>{application.OtherCost?.toString()}</span>
+                              <span>S${application.OtherCost?.toString()}</span>
                             </td>
                           </tr>
                           <tr className="border border-gray-300">
@@ -589,7 +589,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                               <strong>Total cost of purchase</strong>
                             </td>
                             <td colSpan={1} className="p-1 w-64">
-                              <span>{application.TotalCostOfPurchase?.toString()}</span>
+                              <span>S${application.TotalCostOfPurchase?.toString()}</span>
                             </td>
                           </tr>
                           {application.Application_Type == "TIP" && (
@@ -609,7 +609,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                               <strong>Outstanding Amount</strong>
                             </td>
                             <td colSpan={1} className="p-1 w-64">
-                              <span>{application.Outstanding_Amount?.toString()}</span>
+                              <span>S${application.Outstanding_Amount?.toString()}</span>
                             </td>
                           </tr>
                           <tr className="border border-gray-300">
@@ -617,7 +617,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                               <strong>Amount received/收到金额*</strong>
                             </td>
                             <td colSpan={1} className="p-1 w-64">
-                              <span>{application.Amount_Received.toString()}</span>
+                              <span>S${application.Amount_Received.toString()}</span>
                             </td>
                           </tr>
                           <tr className="border border-gray-300">
@@ -1188,7 +1188,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 <strong>Purchase of placement*</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
-                {isEditing ? (
+                S${isEditing ? (
                   <Input
                     type="Number"
                     value={application.PurchaseOfPlacementCost?.toString()}
@@ -1215,7 +1215,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 <strong>Tablet Cost*</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
-                {isEditing ? (
+              S${isEditing ? (
                   <Input
                     type="Number"
                     value={application.TabletCost?.toString()}
@@ -1242,7 +1242,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 <strong>Selection of placement</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
-                {isEditing ? (
+              S${isEditing ? (
                   <Input
                     type="Number"
                     value={application.SelectionOfPlacementCost?.toString()}
@@ -1268,7 +1268,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 <strong>Ji Ling</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
-                {isEditing ? (
+              S${isEditing ? (
                   <Input
                     type="Number"
                     min="0"
@@ -1295,7 +1295,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 <strong>Other Cost</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
-                {isEditing ? (
+              S${isEditing ? (
                   <Input
                     type="Number"
                     min="0"
@@ -1322,7 +1322,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 <strong>Total cost of purchase</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
-                <span>{application.TotalCostOfPurchase?.toString()}</span>
+              S$<span>{application.TotalCostOfPurchase?.toString()}</span>
               </td>
             </tr>
             {application.Application_Type == "TIP" && (
@@ -1355,7 +1355,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 <strong>Outstanding Amount</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
-                <span>{application.Outstanding_Amount?.toString()}</span>
+              S$<span>{application.Outstanding_Amount?.toString()}</span>
                 {checkFields && (application.Outstanding_Amount?.valueOf() ?? 0) < 0 && <p className="text-sm text-red-500">Not a vaild amount</p>}
                 {checkFields && (application.Outstanding_Amount?.valueOf() ?? 0) > 0 && application.Application_Type != "TIP" && <p className="text-sm text-red-500">Not a vaild amount</p>}
               </td>
@@ -1365,7 +1365,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 <strong>Amount received/收到金额*</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
-                {isEditing ? (
+              S${isEditing ? (
                   <Input
                     type="Number"
                     value={application.Amount_Received.toString()}
