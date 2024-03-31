@@ -22,15 +22,25 @@ const Home = () => {
     setTabletApplications([]);
     setError("");
     const tabApplications = [] as TabletApplicationType[];
-    const queryTabletApplications = query(collection(db, "tabletapplications"), where("Applicant_IdentifiedCode", "==", nric), where("Status", "==", "Current"));
-    const queryTabletApplicationsSnapshot = await getDocs(queryTabletApplications);
-    if (queryTabletApplicationsSnapshot.empty) {
+    const queryTabletApplications1 = query(collection(db, "tabletapplications"), where("Applicant_IdentifiedCode", "==", nric), where("Status", "==", "Current"));
+    const queryTabletApplicationsSnapshot1 = await getDocs(queryTabletApplications1);
+
+    const queryTabletApplications2 = query(collection(db, "tabletapplications"), where("SecondContact_IdentifiedCode", "==", nric), where("Status", "==", "Current"));
+    const queryTabletApplicationsSnapshot2 = await getDocs(queryTabletApplications2);
+
+    if (queryTabletApplicationsSnapshot1.empty && queryTabletApplicationsSnapshot2.empty) {
       setError("No matching documents.");
       return;
     }
-    queryTabletApplicationsSnapshot.forEach((doc) => {
+
+    queryTabletApplicationsSnapshot1.forEach((doc) => {
       tabApplications.push(doc.data() as TabletApplicationType);
     });
+
+    queryTabletApplicationsSnapshot2.forEach((doc) => {
+      tabApplications.push(doc.data() as TabletApplicationType);
+    });
+    
     setTabletApplications(tabApplications);
     if (tabApplications.length > 0) {
       setDialogOpen(true);
