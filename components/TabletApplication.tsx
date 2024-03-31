@@ -83,7 +83,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
   const [checkFields, setCheckFields] = useState(false);
   const handleCheckFields = () => {
     setCheckFields(true);
-    if (application.Applicant_Name_English != "" && application.Applicant_Name_English != "" && application.Applicant_Address != "" && application.Applicant_IdentifiedCode != "" && application.Applicant_Gender != "" && application.Applicant_Relationship != "" && application.Applicant_ContactNumber != "" && application.Officer_In_Charge != "" && Number(application.Amount_Received) > 0 && application.Receipt_No != "" && Number(application.PurchaseOfPlacementCost) > 0 && Number(application.TabletCost) > 0) {
+    if (application.Applicant_Name_English != "" && application.Applicant_Name_English != "" && application.Applicant_Address != "" && application.Applicant_IdentifiedCode != "" && application.Applicant_Gender != "" && application.Applicant_Relationship != "" && application.Applicant_ContactNumber != "" && application.Officer_In_Charge != "" && Number(application.Amount_Received) > 0 && application.Receipt_No != "" && Number(application.PurchaseOfPlacementCost) >= 0 && Number(application.TabletCost) > 0) {
       if (application.Application_Type === "TIP" && Number(application.Number_of_Months) > 0 && Number(application.Outstanding_Amount) >= 0) {
         setCheckFields(false);
         handleSaveClick();
@@ -1188,7 +1188,8 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 <strong>Purchase of placement*</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
-                S${isEditing ? (
+                S$
+                {isEditing ? (
                   <Input
                     type="Number"
                     value={application.PurchaseOfPlacementCost?.toString()}
@@ -1207,7 +1208,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 ) : (
                   <span>{application.PurchaseOfPlacementCost?.toString()}</span>
                 )}
-                {checkFields && (application.PurchaseOfPlacementCost?.valueOf() ?? 0) <= 0 && <p className="text-sm text-red-500"> Please enter valid amount</p>}
+                {checkFields && (application.PurchaseOfPlacementCost?.valueOf() ?? 0) < 0 && <p className="text-sm text-red-500"> Please enter valid amount</p>}
               </td>
             </tr>
             <tr className="border border-gray-300">
@@ -1215,7 +1216,8 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 <strong>Tablet Cost*</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
-              S${isEditing ? (
+                S$
+                {isEditing ? (
                   <Input
                     type="Number"
                     value={application.TabletCost?.toString()}
@@ -1242,7 +1244,8 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 <strong>Selection of placement</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
-              S${isEditing ? (
+                S$
+                {isEditing ? (
                   <Input
                     type="Number"
                     value={application.SelectionOfPlacementCost?.toString()}
@@ -1268,7 +1271,8 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 <strong>Ji Ling</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
-              S${isEditing ? (
+                S$
+                {isEditing ? (
                   <Input
                     type="Number"
                     min="0"
@@ -1295,7 +1299,8 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 <strong>Other Cost</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
-              S${isEditing ? (
+                S$
+                {isEditing ? (
                   <Input
                     type="Number"
                     min="0"
@@ -1322,7 +1327,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 <strong>Total cost of purchase</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
-              S$<span>{application.TotalCostOfPurchase?.toString()}</span>
+                S$<span>{application.TotalCostOfPurchase?.toString()}</span>
               </td>
             </tr>
             {application.Application_Type == "TIP" && (
@@ -1355,7 +1360,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 <strong>Outstanding Amount</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
-              S$<span>{application.Outstanding_Amount?.toString()}</span>
+                S$<span>{application.Outstanding_Amount?.toString()}</span>
                 {checkFields && (application.Outstanding_Amount?.valueOf() ?? 0) < 0 && <p className="text-sm text-red-500">Not a vaild amount</p>}
                 {checkFields && (application.Outstanding_Amount?.valueOf() ?? 0) > 0 && application.Application_Type != "TIP" && <p className="text-sm text-red-500">Not a vaild amount</p>}
               </td>
@@ -1365,7 +1370,8 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 <strong>Amount received/收到金额*</strong>
               </td>
               <td colSpan={1} className="p-1 w-64">
-              S${isEditing ? (
+                S$
+                {isEditing ? (
                   <Input
                     type="Number"
                     value={application.Amount_Received.toString()}
