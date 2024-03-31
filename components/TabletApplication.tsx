@@ -83,7 +83,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
   const [checkFields, setCheckFields] = useState(false);
   const handleCheckFields = () => {
     setCheckFields(true);
-    if (application.Applicant_Name_English != "" && application.Applicant_Name_English != "" && application.Applicant_Address != "" && application.Applicant_IdentifiedCode != "" && application.Applicant_Gender != "" && application.Applicant_Relationship != "" && application.Applicant_ContactNumber != "" && application.Officer_In_Charge != "" && Number(application.Amount_Received) > 0 && application.Receipt_No != "" && Number(application.PurchaseOfPlacementCost) >= 0 && Number(application.TabletCost) > 0) {
+    if (application.Applicant_Name_English != "" && application.Applicant_Name_English != "" && application.Applicant_Address != "" && application.Applicant_IdentifiedCode != "" && application.Applicant_Gender != "" && application.Applicant_Relationship != "" && application.Applicant_ContactNumber != "" && application.Officer_In_Charge != "" && Number(application.Amount_Received) >= 0 && application.Receipt_No != "" && Number(application.PurchaseOfPlacementCost) >= 0 && Number(application.TabletCost) >= 0) {
       if (application.Application_Type === "TIP" && Number(application.Number_of_Months) > 0 && Number(application.Outstanding_Amount) >= 0) {
         setCheckFields(false);
         handleSaveClick();
@@ -1236,7 +1236,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 ) : (
                   <span>{application.TabletCost?.toString()}</span>
                 )}
-                {checkFields && (application.TabletCost?.valueOf() ?? 0) <= 0 && <p className="text-sm text-red-500"> Please enter valid amount</p>}
+                {checkFields && (application.TabletCost?.valueOf() ?? 0) < 0 && <p className="text-sm text-red-500"> Please enter valid amount</p>}
               </td>
             </tr>
             <tr className="border border-gray-300">
@@ -1389,7 +1389,7 @@ function TabletApplication(props: TabletApplication & { onSave: () => void } & {
                 ) : (
                   <span>{application.Amount_Received.toString()}</span>
                 )}
-                {checkFields && application.Amount_Received.valueOf() <= 0 && <p className="text-sm text-red-500"> Please enter valid amount</p>}
+                {checkFields && application.Amount_Received.valueOf() < 0 && <p className="text-sm text-red-500"> Please enter valid amount</p>}
               </td>
             </tr>
             <tr className="border border-gray-300">
